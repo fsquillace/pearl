@@ -1,0 +1,8 @@
+pyshell 0.9.3
+- Added new functionality for sync with --exclude option
+- Updated the pyshell manual page: bootapp
+- Updated the manual adding the emacs and git dict
+- Added the ranger chooser in Vim
+- Added this ChangeLog file in pyshell
+- Fixed PS1 problem when connecting in remote server (for example using tramp of emacs)
+- Fixed trash to  make a backup of each existing destination file or directory

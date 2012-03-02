@@ -1,0 +1,403 @@
+" vimrc file.
+"
+" Maintainer:	Filippo Squillace <sqoox85@gmail.com>
+" Last change:	2011 Feb 17
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"	      for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
+
+
+"""""""""""""""""""""""""""""""""""
+" GLOBAL VIM SETTINGS
+"""""""""""""""""""""""""""""""""""
+
+set encoding=utf8
+
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
+endif
+
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+else
+  set nobackup		" do not keep a backup file
+endif
+
+set history=5000	" keep 5000 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
+endif
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+  filetype on
+  filetype plugin on
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+set background=dark     " define background
+set number              " show te line numbers
+"color the line number in a different color
+"highlight LineNr guibg=lightblue ctermbg=lightgray
+"highlight LineNr ctermfg=darkcyan ctermbg=black
+
+
+set thesaurus+=~/.vim/thesaurus/mthesaur.txt
+" When vimrc is edited, reload it!
+autocmd bufwritepost vimrc source ~/.vimrc
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  Text, tab and indent related
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set expandtab
+set textwidth=500
+set tabstop=8
+set softtabstop=4
+set shiftwidth=4
+set smarttab
+set lbr
+set ai "Auto indent
+set si "Smart indet
+set wrap "Wrap lines
+
+" Choose the fold method depending of the file type 
+" and unfold when opening it
+autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax
+autocmd Syntax python setlocal foldmethod=indent
+autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Searching, substitutions
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" make search case-insensitive. Used for Cntrl-N
+set ignorecase
+set smartcase
+"show the `best match so far' as search strings are typed:
+set incsearch
+set hlsearch
+
+" Set the dictionaries
+set complete +=k
+set dictionary=~/.vim/dict/*  "/usr/share/dict/*
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autocompletion
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+autocmd FileType c set omnifunc=ccomplete#Complete
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smart Home
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+function! SmartHome()
+    let s:col = col(".")
+    normal! ^
+    if s:col == col(".")
+        normal! 0
+    endif
+endfunction
+nnoremap <silent> <Home> :call SmartHome()<CR>
+inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General mappings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" To switch between windows
+map <silent> <C-h> <C-w>h
+map <silent> <C-j> <C-W>j
+map <silent> <C-k> <C-W>k
+map <silent> <C-l> <C-w>l
+
+
+" Maps to resizing a window split
+if bufwinnr(1)
+  map <silent> < <C-w><
+  map <silent> - <C-W>-
+  map <silent> + <C-W>+
+  map <silent> > <C-w>>
+endif
+
+" Maximize a window
+map <silent> _ <C-w>_<C-w><Bar>
+" Spell keybindings
+map <silent> <Leader>os i<C-x>s
+map <Leader>of :set spellfile=~/.vim/spell/
+map <Leader>ol :set spell spelllang=
+map <silent> <Leader>or :set nospell<cr>
+map <silent> <Leader>oa zg
+map <silent> <Leader>on ]s
+map <silent> <Leader>op [s
+
+
+"" to disable the indentation when paste codes
+"nnoremap D :set invpaste paste?<CR>
+"set pastetoggle=D
+"set showmode
+
+
+" Use tabs like Firefox
+map <C-t> :tabnew<cr>
+map <C-p> :tabprevious<cr>
+map <C-n> :tabnext<cr>
+map <C-q> :tabclose<cr>
+
+" Search, replace
+map <Leader>r :%s/old/new/gc
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Explore
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" to browse filesystem
+nnoremap <silent> <Leader>e :Explore<CR>
+
+" hide .pyc and hidden files
+let g:explHideFiles='^\.,.*\.pyc$'
+let g:netrw_list_hide='^\.,.*\.pyc$'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ranger Chooser
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+fun! RangerChooser()
+    silent !ranger --choosefile=/tmp/chosenfile `[ -z '%' ] && echo -n . || dirname %`
+    if filereadable('/tmp/chosenfile')
+        exec 'edit ' . system('cat /tmp/chosenfile')
+        call system('rm /tmp/chosenfile')
+    endif
+    redraw!
+endfun
+map <Leader>o :call RangerChooser()<CR>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+" Session
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"nmap SQ <ESC>:mksession! ~/vim/Session.vim<CR>:wqa<CR>
+"function! RestoreSession()
+    "if argc() == 0 "vim called without arguments
+        "execute 'source ~/.vim/Session.vim'
+    "end
+"endfunction
+"autocmd VimEnter * call RestoreSession()
+
+nmap <Leader>sa :wa<CR>:mksession! ~/.vim/sessions/
+nmap <Leader>so :wa<CR>:so ~/.vim/sessions/
+nmap <Leader>sr :!rm ~/.vim/sessions/
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGINS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""
+" Nerd Commenter
+"""""""""""""""""""
+map <C-,> <Leader>c<Space>
+
+""""""""""""""""""""
+" Minibuffer plugin
+""""""""""""""""""""
+"let g:miniBufExplMapWindowNavVim = 1
+"let g:miniBufExplMapWindowNavArrows = 1
+"let g:miniBufExplMapCTabSwitchBufs = 1
+"let g:miniBufExplModSelTarget = 1
+
+"""""""""""""""""""
+" TaskList
+"""""""""""""""""""
+" TaskList already has leader keybinding
+"map \t :TaskList<CR>
+
+""""""""""""""""""
+" TagList
+""""""""""""""""""
+map <Leader>p :TlistToggle<CR>
+
+let g:Tlist_Ctags_Cmd = "/usr/bin/ctags" "~/.vim/plugin/ctags/bin/ctags
+
+""""""""""""""""""
+" BufExplorer
+""""""""""""""""""
+map <Leader>b :BufExplorer<CR>
+map <Leader>v :BufExplorerVerticalSplit<CR>
+map <Leader>h :BufExplorerHorizontalSplit<CR>
+
+"""""""""""""""""""
+" OmniComplete
+"""""""""""""""""""
+" Popup menu hightLight Group
+"highlight Pmenu ctermbg=13 guibg=LightGray
+"highlight PmenuSel ctermbg=7 guibg=DarkBlue guifg=White
+"highlight PmenuSbar ctermbg=7 guibg=DarkGray
+"highlight PmenuThumb guibg=Black
+
+"" Allows tab completion for files, plugin and context (but not dictionary)
+"function! Smart_TabComplete()
+  "let line = getline('.')                         " curline
+  "let substr = strpart(line, -1, col('.')+1)      " from start to cursor
+  "let substr = matchstr(substr, "[^ \t]*$")       " word till cursor
+  "if (strlen(substr)==0)                          " nothing to match on empty string
+    "return "\<tab>"
+  "endif
+  "let has_period = match(substr, '\.') != -1      " position of period, if any
+  "let has_slash = match(substr, '\/') != -1       " position of slash, if any
+  "if (!has_period && !has_slash)
+    "return "\<C-X>\<C-P>"                         " existing text matching
+  "elseif ( has_slash )
+    "return "\<C-X>\<C-F>"                         " file matching
+  "else
+    "return "\<C-X>\<C-O>"                         " plugin matching
+  "endif
+"endfunction
+
+"inoremap <tab> <c-r>=Smart_TabComplete()<CR>
+
+
+" Mappings used for completions when type . char
+"imap <silent> <buffer> . .<C-X><C-O>
+"imap <silent> <expr> <buffer> <CR> pumvisible() ? "<CR><C-R>=(col('.')-1&&match(getline(line('.')), '\\.',
+      "\ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>"
+      "\ : "<CR>"
+
+
+"""""""""""""""""""""""""""""
+" ConqueTerm
+"""""""""""""""""""""""""""""
+"map Z :ConqueTerm bash<CR>
+
+""""""""""""""""""""""""""""
+" SuperTab
+""""""""""""""""""""""""""""
+" Makes all types of completions!!
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-n>" " for spell correction <c-x>s or for thesaurus <c-x><c-t>
+
+""""""""""""""""""""""""""""
+" Pylint
+"""""""""""""""""""""""""""
+autocmd FileType python compiler pylint
+
+"""""""""""""""""""""""""""""
+" Latex-suite
+""""""""""""""""""""""""""""
+" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
+"filetype plugin on
+" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
+" can be called correctly.
+" set shellslash
+
+" IMPORTANT: grep will sometimes skip displaying the file name if you
+" search in a singe file. This will confuse Latex-Suite. Set your grep
+" program to always generate a file-name.
+set grepprg=grep\ -nH\ $*
+
+" OPTIONAL: This enables automatic indentation as you type.
+"filetype indent on
+
+" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
+" The following changes the default filetype back to 'tex':
+" let g:tex_flavor='latex'
+
+
+"""""""""""""""""""""""""""""
+" PyDiction
+""""""""""""""""""""""""""""
+let g:pydiction_location = '/usr/share/pydiction/complete-dict'
+
+
+""""""""""""""""""""""""""""""""""""""
+" Project
+""""""""""""""""""""""""""""""""""""""
+"let g:proj_flags = "imstgc"
+
+
+
+
+""""""""""""""""""""""""""""""""""""""
+" CUDA highlighting
+""""""""""""""""""""""""""""""""""""""
+au BufNewFile,BufRead *.cu set ft=cu
+au BufNewFile,BufRead *.cu.h set ft=cu
+
+
+
+
+
+

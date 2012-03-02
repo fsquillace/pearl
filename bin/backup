@@ -1,0 +1,190 @@
+#!/usr/bin/python
+#
+# Author: Filippo Squillace <sqoox85@gmail.com>
+#
+# Copyright 2010
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 3, as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranties of
+# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''Script for backup files and directories towards a mailbox.
+'''
+__author__ = 'Filippo Squillace'
+__date__ = '12/05/2010'
+__license__   = 'GPL v3'
+__copyright__ = '2010'
+__docformat__ = 'restructuredtext en'
+__version__ = "1.1.2"
+
+import util.mail
+import util.net
+from util.logger import info, error, debug, warn
+from util.io import Property
+
+
+import os
+import subprocess
+import time
+#import tarfile
+import datetime
+
+import sys
+from optparse import OptionParser
+
+
+    
+if os.path.exists(os.environ["PYSHELL_HOME"]+'/etc/backup.conf'):
+    bkp_conf_path = os.environ["PYSHELL_HOME"]+'/etc/backup.conf'
+        
+elif os.path.exists(os.environ["PYSHELL_ROOT"]+'/etc/backup.conf'):
+    bkp_conf_path = os.environ["PYSHELL_ROOT"]+'/etc/backup.conf'
+        
+else:
+    warn('The config file doesn\'t exist. Put it into '+\
+         os.environ["PYSHELL_HOME"]+'/etc/backup.conf')
+    exit(1)
+        
+conf = Property(bkp_conf_path, True)
+
+
+# To default it corresponds to os.environ["PYSHELL_HOME"]+'/bkp/'
+bkp_dir = conf.get('bkp_dir')
+
+#----------------------------------------------------------------------
+def do_backup(session_name, mail):
+    """
+    The function make a tar.gz file that contains all the file and directory
+    described in the configuration file.
+    If session_name is None the function will use the default session.
+    The boolean variable mail indicate if the compress file has to be sent by email.
+    """
+    paths = conf.get('paths', session_name)
+    if paths:
+        # Check out if the paths contained in paths exist. Delete the paths if one
+        # of them doesn't exists.
+        existing_paths = []
+        for p in paths:
+            if not os.access(p,os.F_OK):
+                error('Impossible to do backup for '+p+'. It doesn\'t exist.')
+            else:
+                existing_paths.append(p)
+            #if os.access(p,os.R_OK):
+                #existing_paths.append(p)
+                ##(s,o) = subprocess.getstatusoutput('sudo cp -v --update --remove-destination --parents --preserve=all -r '+p+' '+bkp_dir+' 2> /dev/null') # --parents define full source name
+            #else:
+                #error('Impossible to do backup for '+p+'. You don\'t have the permission to read it')
+    
+        
+        existing_paths_string = ' '.join(existing_paths)
+        debug('String of existing paths: '+existing_paths_string)
+    
+    
+    # Exclude some dirs/files
+    exclude_paths = conf.get('exclude_paths', session_name)
+    existing_exclude_paths_string = ''
+    if exclude_paths:
+        existing_exclude_paths = []
+        for path,ex_paths in exclude_paths.items():
+            for ex_path in ex_paths:
+                abs_ex_path = os.path.normpath(path+'/'+ex_path)
+                if not os.access(abs_ex_path,os.F_OK):
+                    error('Impossible to do backup for '+abs_ex_path+'. It doesn\'t exist.')
+                else:
+                    existing_exclude_paths.append(abs_ex_path)
+                    
+        existing_exclude_paths_string = '--exclude '+' --exclude '.join(existing_exclude_paths)
+    debug('String of existing excluded paths: '+existing_exclude_paths_string)
+
+
+    # Check out for executions
+    execs = conf.get('execs', session_name)
+    execs_paths = []
+    if execs:
+        tmp_path = os.getenv('TEMPORARY')
+        for f,e in execs.items():
+            execs_paths.append(os.path.normpath(tmp_path+'/'+f))
+            os.system(e+' > '+os.path.normpath(tmp_path+'/'+f))
+            info('"'+e+'" -> "'+os.path.normpath(bkp_dir+'/'+f)+'"')
+    execs_paths_string = ' '.join(execs_paths)
+    debug('String of the file name containing the output of the commands:'+ \
+            execs_paths_string)
+
+    # Build the file name according to the timestamp
+    tim = str(datetime.datetime.fromtimestamp(time.time()))
+    tim = tim[:len(tim)-7]
+    tim = tim.replace(" ","-")
+    if session_name is None or session_name=='':
+        tar_filename = bkp_dir+"/bkp-"+tim+"-main.tar.gz"
+    else:
+        tar_filename = bkp_dir+"/bkp-"+tim+"-"+session_name+".tar.gz"
+    debug('TAR filename: '+tar_filename)
+
+    (s,o) = subprocess.getstatusoutput('tar -vczpf '+tar_filename+' \
+            '+existing_exclude_paths_string+' '+existing_paths_string+' \
+            '+execs_paths_string)
+    if o!="":
+        info(o)
+
+
+
+
+    if mail:
+        smtp_user = conf.get('smtp_user')
+        smtp_pass =  conf.get('smtp_pass')
+        user = conf.get('user')
+        if not smtp_user or not smtp_pass or not user:
+            error('Impossible to send a backup mail. You didn\'t specify user and password in the configuration file.')
+        else:
+            mail_from = smtp_user
+            mail_to = [user]
+            subject = "Backup "+tim
+            text = "This email was automatically sent by the application "+sys.argv[0]+"."
+            files=[tar_filename]
+            util.mail.send_gmail(smtp_user, smtp_pass, mail_from, mail_to, subject, text, files)
+
+if __name__ == '__main__':
+
+    usage = "%prog [options] [session1 [session2...]]\n"+\
+          "If you don't specify sessions, the program call the session of the main config file.\n"+\
+          "Use cron command if you want to backup periodically."
+    
+    parser = OptionParser(usage=usage)
+
+    parser.add_option("-m","--mail", dest="mail",default=False, action="store_true", \
+                      help="It allows to send backup folder by email.")
+    parser.add_option("-s","--sessions", dest="sessions", default=False, action="store_true", \
+                      help="List the sessions in the config directory.")
+
+    options, args = parser.parse_args() # by default it takes sys.argv[1:]
+
+
+    #if len(args)>0:
+        #parser.error("Error: "+sys.argv[0]+" doesn't accept arguments without options.")
+        #exit(128)
+        
+    debug(options)
+
+   
+    ls = conf.list_sessions()
+    if options.sessions:
+        for s in ls:
+            print(s)
+    else:
+        if len(args)==0:
+            do_backup(None, options.mail)
+        else:
+            for s in args:
+                if s in ls:
+                    do_backup(s, options.mail)
+                else:
+                    error(s+" is not a session.")
+

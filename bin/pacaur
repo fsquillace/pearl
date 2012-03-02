@@ -1,0 +1,124 @@
+#!/usr/bin/python
+#
+# Author: Filippo Squillace <sqoox85@gmail.com>
+#
+# Copyright 2011
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 3, as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranties of
+# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''
+This script allow to search and download packages in AUR Repository.
+This script is independent for the framework PyShell so as, it doesn't
+depend on its library and could be used easier.
+Instead of the PyShell logging system pacaur uses the stdout and stderr to
+print the information.
+'''
+__author__ = 'Filippo Squillace'
+__date__ = '12/03/2011'
+__license__   = 'GPL v3'
+__copyright__ = '2011'
+__docformat__ = 'restructuredtext en'
+__version__ = "0.1.2"
+
+
+
+import urllib.request
+import urllib.parse
+import subprocess
+import json
+from optparse import OptionParser
+import sys
+
+AUR_SEARCH_URL='http://aur.archlinux.org/rpc.php?'
+AUR_URL='http://aur.archlinux.org/'
+
+
+def query(type, arg):
+    query={'type':type, 'arg':arg}
+    enc_query =  urllib.parse.urlencode(query)
+    f = urllib.request.urlopen( AUR_SEARCH_URL + enc_query )
+
+    # str convertion is necessary for Py3K
+    res = str(f.read(), encoding='utf-8')
+    f.close()
+
+    return json.loads(res)
+
+
+def search(pack):
+    res = query('search',pack)['results']
+    if type(res)==str:
+        # It'll show a message error
+        sys.stderr.write(res+'\n')
+        exit(1)
+
+    for r in res:
+        sys.stdout.write('\033[1;29m'+r['Name']+'\033[1;m \033[1;32m'+r['Version']+'\033[1;m \033[1;31m'+r['NumVotes']+'\033[1;m\n\t'+r['Description']+'\n')
+
+
+def download(pack):
+    res = query('info',pack)['results']
+    if type(res)==str:
+        # It'll show a message error
+        sys.stderr.write(res+'\n')
+        exit(1)
+
+    (s, o) = subprocess.getstatusoutput('wget '+AUR_URL+res['URLPath'])
+    sys.stdout.write(o+'\n')
+    if s!=0:
+        sys.stderr.write('Error to download the package '+pack+'\n')
+        exit(1)
+
+def information(pack):
+    res = query('info',pack)['results']
+    if type(res)==str:
+        # It'll show a message error
+        sys.stderr.write(res+'\n')
+        exit(1)
+    for k,v in res.items():
+        sys.stdout.write(k+': '+v+'\n')
+
+
+if __name__ == '__main__':
+    usage = "%prog option package..."
+    parser = OptionParser(usage=usage)
+    
+    parser.add_option("-s","--search", dest="search",\
+            default=False, action="store_true", help="Search for a package.")
+    
+    parser.add_option("-d","--download", dest="download",\
+            default=False, action="store_true", help="Downloads a specified package.")
+    
+    parser.add_option("-i","--information", dest="information",\
+            default=False, action="store_true", help="Get more detail information about a package.")
+    
+    options, args = parser.parse_args() # di default prende sys.argv[1:]
+    
+    # Only one option can be active
+    exist_opt =False
+    for k,v in options.__dict__.items():
+        if v:
+            if exist_opt:
+                parser.error('Error: only one option can be specified.')
+            else:
+                exist_opt = True
+
+
+    for pack in args:
+        if options.search:
+            search(pack)
+        elif options.download:
+            download(pack)
+        elif options.information:
+            information(pack)
+

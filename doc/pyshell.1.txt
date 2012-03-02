@@ -1,0 +1,540 @@
+pyshell(1)
+==========
+
+NAME
+----
+pyshell - An Enhanced Bash Shell Framework
+
+SYNOPSIS
+--------
+*source* *<path/to/pyshell>/pyshell* 
+
+*bash --rcfile <path/to/pyshell>/pyshell*
+
+DESCRIPTION
+-----------
+*pyshell* is an enhanced and lightweight shell framework in Python that allow
+to get better the use of the shell Bash GNU/Linux and automate many daily
+activities of the system administrator.
+
+*pyshell* configures several bash shell options, aliases that helps to improve
+the experience of using the shell. The next sections show all the options and
+aliases enabled in *pyshell*.
+
+*pyshell* also configures three important configurations files vimrc, bashrc,
+inputrc. In particular, vimrc applies a sequence of key bindings for built-in
+functions and main plugins. Finally, bashrc is used to startup *pyshell* and
+inputrc extremely simplify the way of typing the commands. 
+
+INSTALLATION
+------------
+Once you extracted the .tar.gz file, type:
+-------------------------------
+$ cd pyshell
+$ source pyshell/pyshell
+-------------------------------
+
+If you are using *pyshell* for the first time you probably do not have the
+configuration directory in '$$~$$/.config/.pyshell'.
+If so, *pyshell* create the configuration directory and apply some modification
+of your config file appending a 'source' in .vimrc, .bashrc and .inputrc (do not
+worry you have just to uncomment them if you do not want any of these features ;))
+
+NO ROOT PERMISSION (SVN REPOSITORY)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you do not have root permission, you can directly install *pyshell* by the
+svn repository. Type the following commands:
+.................................
+$ cd '$HOME'
+$ svn checkout 'http://pyshell.googlecode.com/svn/trunk/' '.'
+$ source pyshell/pyshell
+.................................
+
+You can install *pyshell* in other place different from your home.
+
+When opening a new terminal the sequence of script that are sourced is the following:
+	. '.bashrc'::
+	*pyshell* append a new line in '.bashrc' in order to startup *pyshell* once a terminal is opened.
+	. 'pyshell'
+	*pyshell* introduce every alias, variable and script that the commands need for the correct execution.
+	. 'pyshellrc'::
+	Contains all the configuration that you need to set after the execution of *pyshell*.
+	This can be useful when you want directly edit some alias, variable or script of *pyshell*.  
+
+CONFIGURATIONS
+--------------
+*pyshell* applies several new configuration for vim, bash and inputrc. This
+operation allows to get better experience of your shell. 
+
+Vimrc
+~~~~~
+*pyshell* introduces a sourcing into your own .vimrc file configuration at the
+end of the file. You can just uncomment it if you do not want this *pyshell*
+feature.
+This configuration allow to have all the functionality you need in 
+This is particular useful when you want to type file in remote server so as
+having all the feature you are used to. Here is a small list of the
+feature enabled in VIM:
+
+*Highlights and autocompletion::
+    For java, python, javascript, html, css, c/c++,xml and more..
+*Smart Home*::
+    The key 'Home' has the special power of moving the cursor to the
+    first character of the line;
+*Indent Folding*::
+    Allows to use folding when the file is indented. Use 'za' to toggle 
+    a fold it's the only command worth it;
+*Moving among windows*::
+    - *Up* -> 'Cntrl+k'
+    - *Down* -> 'Cntrl+j'
+    - *Left* -> 'Cntrl+h'
+    - *Right* -> 'Cntrl+l'
+*Resizing current window*::
+    - *Increase vertically* -> '+'
+    - *Decrease vertically* -> '-'
+    - *Increase horizontally* -> '>'
+    - *Decrease vertically* -> '<'
+    - *Maximize* -> '_'
+*Spelling*::
+    - *Select Language* -> '\ol'
+    - *Select spell file* -> '\of'
+    - *Correct word* -> '\os' or 'Cntrl+x s' (in insert mode)
+    - *Remove spelling* -> '\or'
+    - *Add word in dict* -> '\oa'
+    - *Go to next error* -> '\on'
+    - *Go to previous error* -> '\op'
+*Search and replace*::
+    - *Search and replace* -> '\r'
+*File choosers*::
+    - *Explore* -> '\e'
+    - *Ranger* -> '\o'
+*Session*::
+    - *New session* -> '\sa' (automatically saved in ~/.vim/sessions)
+    - *Open session* -> '\so'
+    - *Remove session* -> '\sr'
+*Nerd Commenter*
+    - *Comment* -> 'Cntrl-,'
+*TaskList*::
+    - *View task window* -> '\t'
+*TagList*::
+    - *View outline window* -> '\p'
+*Buffer explorer*::
+    - *Select buffer* -> '\b'
+    - *Open vertical window* -> '\v'
+    - *Open horizontal window* -> '\h'
+
+To get improved the VIM configuration you have to install some
+optional plugins:
+
+*Nerd Commenter*::
+    To comment lines for all file types;
+*TaskList*::
+    Look for TODOs in the current file;
+*TagList*::
+    It's an outline for all the signature of function,
+    class,etc;
+*Buffer Explorer*::
+    Allow easily to change between buffers;
+*Super Tab*::
+    Integrate all the VIM feature using only the TAB key;
+*PyLint*::
+    Analyzes Python code looking for bugs;
+*PyFlakes*::
+    Vim plugin which highlights common Python errors;
+*PyDiction*::
+    For a list of keyword in Python.
+
+Bashrc
+~~~~~~
+*pyshell* introduces a sourcing into your own .bashrc file configuration at the
+end of the file. You can just uncomment it if you do not want this *pyshell*
+feature.
+
+In this way *pyshell* automatically startup when opening a new shell.
+
+Inputrc
+~~~~~~~
+*pyshell* introduces a sourcing into your own '.inputrc' file configuration at the
+end of the file. You can just uncomment it if you do not want this *pyshell*
+feature.
+The most important feature applied with inputrc are:
+
+    - Case insensitive typing directories;
+    - Typing the prefix of an old command you will get the entire command once
+      typing the up arrow.
+
+Ranger/commands.py
+~~~~~~~~~~~~~~~~~~
+*pyshell* introduces a sourcing into the config file of ranger commands.py
+There are several commands for ranger that *pyshell* introduces:
+
+*:trash*::
+    Move to trash the selected files
+*:trash* [*-s* || *--show*]::
+    Show the trash
+*:trash* [*-e* || *--empty*]::
+    Empty the trash
+
+*:sync*::
+    Sync the selected files
+*:sync* [*-s* || *--show*]::
+    Show the sync directory
+    Allows to sync the files selected moving them into the SYNC_HOME specified
+    in $$~$$/.config/pyshell/pyshellrc. For more details see the SYNC section
+    below.
+
+*:extracthere*::
+    Extract the files contained into the selected compress file.
+
+*:compress* 'FILE.EXT'::
+    Compress the selected files into FILE.EXT where EXT can be any compress
+    extension (.tar.gz .zip .rar ...).
+
+COMMANDS
+--------
+Here there is a list of the most important commands of *pyshell*. There are
+also other useful commands for Archlinux such as:
+*pacaur*::
+    Very small program similar to yaourt.
+*paclist*::
+    Lists all the installed package ordered by the size or the installation
+    date.
+
+Please, check out in the 'bin' directory of *pyshell* root directory to see
+all the available commands.
+
+CD/CD2
+~~~~~~
+Allows to list all your favorite bookmark paths. It is aliased in the classical
+cd built-in command. Type *cd --help* to see all the available options.
+
+Example of using:
+
+    *$ cd -g* 4::
+    Changes to the directory in the fourth entry.
+
+    *$ cd*::
+    Lists all the entries.
+
+    *$ cd -a* .::
+    Adds the current directory into the table.
+
+    *$ cd -r* 4::
+    Removes the fourth entry.
+
+Integration with Ranger application
+CD stores the entries in '$$~$$/.config/ranger/bookmark' to be integrated with
+Ranger. So, if you add an entry directly with ranger you will see it in cd
+command too.
+
+TODO
+~~~~
+Allows recursively to search for TODOs inside every files in the directories
+specified by the user. It is also possible to add new generics TODOs in the
+default file. Type *todo --help* to see all the available options.
+
+Example of using:
+
+    *$ todo*::
+    Lists the generics TODOs and the TODOs contained into every files in the
+    directories specified by the user.
+
+    *$ todo* 'This is a new TODO'::
+    Adds a new TODO into the default file.
+
+    *$ todo -r* 'NUM'::
+    Removes the TODO specified by the user.
+
+    *$ todo -a* '<new/path>'::
+    Adds a new path to look for TODOs.
+
+    *$ todo -l*::
+    Lists the available paths.
+
+    *$ todo -d* 'NUM'::
+    Removes the paths specified by the entry.
+
+
+Integration with Ranger and Remind application
+TODO stores TODOs the entries into '$$~$$/reminders' to be integrated with Remind.
+So, you can see the same TODOs in Remind too. TODO also stores all the scan
+paths in '$$~$$/.config/ranger/bookmark' to be integrated with Ranger. The user can
+sign a directory to be scanned for TODOs directly from ranger program by
+marking the directory (using the command ':m') with a digit from 0 to 9.
+
+CMD
+~~~
+Allows to list your own favorite commands. Type *cmd --help* to see all the
+available options.
+
+Example of using:
+
+    *$ cmd*::
+    Lists all the commands
+
+    *$ cmd -a* "ls -l" "This is the corresponding comment"::
+    Adds a new command
+
+    *$ cmd* 'NUM'::
+    Stores the corresponding command specified by the entry. Then, you just
+    need to type Cntrl-h to put it in the command line. 
+
+MAN2
+~~~~
+MAN2 is a minimal manual to get essentials snippet information about all the
+important commands. In man2.conf you can specify the path or url where is
+located the source manual.
+Type *man2 --help* to see all the available options.
+
+Example of using:
+
+    *$ man2* 'keyword'::
+    Search "keyword" into the db.
+
+EYE
+~~~
+EYE searches words, also recursively, into each text or pdf file.
+
+Example of using:
+
+    *$ eye -r* . "python"::
+    Searches recursively into the current directory the text files which contain the
+    word "python"
+
+    *$ eye -r -p* . "python"::
+    Same as above but also search for pdf files.
+
+SYNC
+~~~~
+SYNC is an awesome command that allows you to synchronize your data
+using a synchronization system such as Dropbox/Ubuntu One in a very fashion
+way. You need to install rsync to use this command.
+SYNC build the same filesystem structure starting from the sync directory
+specified by the environment variable '$SYNC_HOME'. For instance, if you want to
+sync the file '$$~$$/.bashrc' it will be copied in '$SYNC_HOME/$$~$$/.bashrc' by rsync
+command. rsync allows to create a perfect mirror updating the sync directory
+with only the modified files.
+
+Like to rsync you can exclude some files or directories that match with a
+pattern. For example if you don't want sync makefiles:
+------------------------------------------------
+sync --exclude=Makefile --exclude=makefile mydir
+------------------------------------------------
+
+In '$$~$$/.pyshell/pyshellrc' you can specify your sync directory in the environment
+variable '$SYNC_HOME' (to default is '$$~$$/Dropbox').
+
+You could change the variable every time by setting '$SYNC_HOME'. For example,
+you can synchronize files or directory directly on another remote machine:
+----------------------------------
+$ export SYNC_HOME=user@domain.com:
+$ sync . '/home/user/myfile'
+----------------------------------
+NOTE: Don't forget to use *colon* if you specify a machine location.
+See sync --help to know all the details of how using this command.
+
+Example of using:
+
+    *$ sync* /home/david/ /etc/::
+    Synchronizes all the files in the '/home/david' and '/etc/' respectively into
+    '$SYNC_HOME/home/david' and '$SYNC_HOME/etc'.
+
+BACKUP
+~~~~~~
+BACKUP command makes sessions of backup including files and directories.
+Each backup can be sent to a mailbox by specifying the account credentials
+into your config file. The config file is located in
+'$$~$$/.config/pyshell/etc/backup.conf'. If it doesn't exist the program BACKUP will
+find backup.conf in the etc directory of pyshell root (to default is
+'/opt/pyshell/etc/backup.conf').
+It's possible to create several sessions instead of using only one config
+file. Moreover, you can create files directly in a directory called 'backup.d'
+and recall them by the BACKUP program to apply backups of the corresponding
+file and directories reported into the session.
+The backup will be stored according to the variable 'bkp_dir' specified into
+backup.conf file (to default the directory is '$$~$$/.config/pyshell/backups').
+See backup --help to know all the details of how using this command.
+
+Example of using:
+    *$ backup -s*::
+    Lists all the sessions created by the user in 'etc/backup.d' directory.
+
+    *$ backup*::
+    Applies a backup for the main session in 'backup.conf' file. The backup
+    will be stored in 'bkp_dir'.
+
+    *$ backup -m mysession1*::
+    Applies a backup of the session contained in 'backup.d/mysession1' and
+    send an email attaching it.
+
+BASH OPTIONS
+------------
+*cdspell*::
+    Minor  errors  in  the  spelling  of  a
+    directory  component  in  a  cd command will be
+    corrected.
+*autocd*::
+    A command name that is the  name  of  a
+    directory  is  executed as if it were the 
+    argument to the cd command.
+*dirspell*::
+    Bash attempts  spelling  correction  on
+    directory  names  during word completion if the
+    directory  name  initially  supplied  does  not
+    exist.
+*histappend*::
+    The history list  is  appended  to  the
+    file  named  by the value of the 'HISTFILE' 
+    variable when the shell exits,  rather  than
+    overwriting the file.
+*checkwinsize*::
+    Check the window size after each command and,
+    if necessary, update the values of LINES 
+    and COLUMNS.
+
+
+MAIN ALIASES
+------------
+    - *~* - is your Home
+    - *q*=exit
+    - *f*=fg
+    - *b*=bg
+    - *j*=jobs
+    - *l*="ls -h --color"
+    - *ll*="l -l"
+    - *la*="l -a"
+    - *goo*=ping www.google.com
+    - *isconnect* - check whether the computer is connected
+
+
+TIPS & TRICKS
+-------------
+DEFAULT PERMISSIONS
+~~~~~~~~~~~~~~~~~~~
+When you create a new file or directory it will get some default permissions.
+You will be the owner. Your default group will be used as the group. And the
+mode will normally be world readable or private depending on your umask. The
+following values make sense for a umask:
+
+[width="15%"]
+|=================================
+|umask |file mode  |directory mode
+|0022  |-rw-r--r-- |drwxr-xr-x
+|0077  |-rw------- |drwx------
+|=================================
+*pyshell* uses the '0077' for security reasons. If you do not want it, you can
+specify the other by in '$$~$$/.config/pyshellrc' typing: *umask* '0022'
+
+
+REMOVING FILES WITH TRASH COMMAND
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*pyshell* provides an useful command that allows moving to a trash directory
+unneeded files instead of removing directly them using rm command. The
+interface used is the same of the command implemented in ranger by *pyshell*.
+Each shell creates its own trash directory located in
+$$~$$/.config/.pyshell/tmp/`tty`. The command trash will make a backup of each
+existing destination file or directory.
+Usage:
+
+    *$ trash* 'FILE1' 'FILE2' ...::
+    Move the files into trash
+
+    *$ trash* [*-s* || *--show*]::
+    Show the trash
+
+    *$ trash* [*-e* || *--empty*]::
+    Empty the trash
+
+The trash directory will be removed when exiting from the shell.
+
+BIND FOR RANGER
+~~~~~~~~~~~~~~~
+Cntrl-o starts ranger command
+
+
+CHANGING DIRECTORY EXITING FROM RANGER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There is a function that allows to change automatically the directory as soon
+as the user quit from ranger programm. Note that you can return to the original
+directory by typing "cd -".
+
+RANGER FILE CHOOSER IN VIM
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Instead of using the Explorer of Vim to select files in the filysystem, you can
+even use ranger. In particular, when you type \o you will see an instance of
+ranger that allow you to select files. See all the functionality of *pyshell*
+for Vim in the Vim configuration section.
+
+BOOT GRAPHICAL APPLICATION AT STARTUP OF X SEVER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+You can specify in your ~/.xinitrc your applications you want to startup
+with some delay with the following bash function:
+-----------------------------------
+source /path/to/pyshell/lib/misc.sh
+bootapp pidgin 23
+-----------------------------------
+It will boot pidgin after 23 seconds. This function allow to reduce the
+overhead of booting the X Server with a lot of application at startup.
+
+
+CONFIG FILES
+------------
+The config files touched by *pyshell* are:
+
+* '$$~$$/.config/ranger/commands.py'
+* '$$~$$/.bashrc'
+* '$$~$$/.vimrc'
+* '$$~$$/.inputrc'
+
+FILES
+-----
+*pyshell* creates a config directory in '$$~$$/.config/pyshell' which include 
+several config files. All the temporary directories of the associated shell 
+are stored in '$$~$$/.config/pyshell/tmp'.
+
+The bookmark paths are stored into '$$~$$/.config/ranger/bookmarks'. The TODOs 
+are stored into '$$~$$/.reminders'.
+
+COPYRIGHT
+---------
+       Copyright  (C) 2008, 2009, 2010, 2011 Free  Software 
+       Foundation, Inc.
+
+       Permission  is  granted to make and distribute verbatim copies
+       of this document provided the copyright notice and  this  per‐
+       mission notice are preserved on all copies.
+
+       Permission is granted to copy and distribute modified versions
+       of this document under the conditions  for  verbatim  copying,
+       provided that the entire resulting derived work is distributed
+       under the terms of a permission notice identical to this one.
+
+       Permission is granted to copy and distribute  translations  of
+       this  document  into  another language, under the above condi‐
+       tions for  modified  versions,  except  that  this  permission
+       notice  may  be  stated  in a translation approved by the Free
+       Software Foundation.
+
+BUGS
+----
+	Of course there is no bug in *pyshell*. But there may be unexpected behaviors.
+	Go to 'http://code.google.com/p/pyshell/issues/list' you can report directly
+	this unexpected behaviors.
+
+AUTHORS
+-------
+Filippo Squillace <sqoox85@gmail.com>.
+
+WWW
+---
+'http://pyshell.googlecode.com'
+
+Last words
+----------
+[verse, Dante Alighieri, from Divine Comedy]
+____________________________________________
+Consider your origins:
+You were not born to live like brutes
+but to follow virtue and knowledge.
+____________________________________________
+

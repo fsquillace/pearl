@@ -1,0 +1,142 @@
+#!/usr/bin/python
+#
+# Author: Filippo Squillace <sqoox85@gmail.com>
+#
+# Copyright 2010
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 3, as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranties of
+# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''This script allows to put a list of favourite commands in a file. So, you
+can quickly execute one of these commands just typing the related entry. ;)
+This script was based on this recipe:
+http://www.linuxjournal.com/article/10815?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+LinuxJournalHowtos+%28Linux+Journal+-+HOWTOs%29
+It talks about the signals to send at processes with kill command.
+I just used the USR1 signal appropriately catched in the framework by the init
+script so as when typing the related entry it's stored into the history the
+whished command.
+
+'''
+__author__ = 'Filippo Squillace'
+__date__ = '12/09/2010'
+__license__   = 'GPL v3'
+__copyright__ = '2011'
+__docformat__ = 'restructuredtext en'
+__version__ = "1.1.2"
+
+import os
+import sys
+import pickle
+
+path_res = os.environ["PYSHELL_HOME"]
+
+def add_cmd(new_cmd, comment=''):
+        
+    if os.path.exists(path_res+"/commands"):
+        l = pickle.load(open(path_res+"/commands",'rb'))
+    else:
+        l=[]
+
+    l.append((new_cmd,comment))
+    print("added: "+new_cmd)
+    pickle.dump(l,open(path_res+"/commands",'wb'))
+    pass
+
+def remove_cmd(num):
+    if os.path.exists(path_res+"/commands"):
+        l = pickle.load(open(path_res+"/commands",'rb'))
+        if len(l)==0 or num<0 or num>len(l)-1:
+            return
+        (cmd, comm) = l[num]
+        print("removed: "+cmd)
+        l.remove(l[num])
+        pickle.dump(l,open(path_res+"/commands",'wb'))
+    pass
+
+def print_cmd(num):
+    if os.path.exists(path_res+"/commands"):
+        l = pickle.load(open(path_res+"/commands",'rb'))
+        if len(l)==0 or num<0 or num>len(l)-1:
+            return
+        (cmd, comment) = l[num]
+        print(cmd)
+    pass
+
+def store_cmd(num):
+    if num.isdigit():
+        if os.path.exists(path_res+"/commands"):
+            l = pickle.load(open(path_res+"/commands",'rb'))
+            i=0
+            for tupl in l:
+                if i==int(num):
+                    (cmd, comm) = tupl
+                    f = open(os.environ['PYSHELL_TEMPORARY']+'/new_cmd', 'w')
+                    f.write('bind \'\"\C-h\":\"' +cmd+ '\"\'\n')
+                    f.close()
+                    os.system('chmod +x $PYSHELL_TEMPORARY/new_cmd')
+                    os.kill(os.getppid(), 12) # 12 is USR2
+                    print('type Cntrl-h')
+                    break
+                i=i+1
+     
+
+def print_list():
+    if os.path.exists(path_res+"/commands"):
+        l = pickle.load(open(path_res+"/commands",'rb'))
+        i=0
+        for tupl in l:
+            (cmd, comm) = tupl
+            # If the comment doesn't exist then don't show the # char
+            if comm!='':
+                comm = '#'+comm
+                print(comm)
+            print(str(i)+") "+cmd)
+            print("")
+            i=i+1
+    pass
+
+
+
+def help():
+    print("Usage: "+sys.argv[0]+" [OPT] [num]")
+    print("Description:")
+    print("List, add, remove commands in a list and execute them using Cntrl-h combination.")
+    print("So, if you type the number of entry then you can type Cntrl-h to put it in the command line.")
+    print("Options:")
+    print("-h --help\t\tDisplay this")
+    print("-r --remove num\t\tRemove a entry")
+    print("-a --add cmd [comment]\t\tAdd a command")
+    print("-p --print cmd\t\tJust print the path directory (Very useful when you're using `` notation).")
+    pass
+
+
+
+if __name__ == "__main__":
+
+    if len(sys.argv)==2 and (sys.argv[1]=="-h" or sys.argv[1]=="--help"):
+        help()
+    elif (len(sys.argv)==3 or len(sys.argv)==4) and (sys.argv[1]=="-a" or sys.argv[1]=="--add"):
+        if len(sys.argv)==3:
+            add_cmd(sys.argv[2])
+        else:
+            add_cmd(sys.argv[2], sys.argv[3])
+    elif len(sys.argv)==2:
+        store_cmd(sys.argv[1])
+    elif len(sys.argv)==3 and (sys.argv[1]=="-r" or sys.argv[1]=="--remove"):
+        remove_cmd(int(sys.argv[2]))
+    elif len(sys.argv)==3 and (sys.argv[1]=="-p" or sys.argv[1]=="--print"):
+        print_cmd(int(sys.argv[2]))
+    elif len(sys.argv)==1:
+        print_list()
+    else:
+        help()
+

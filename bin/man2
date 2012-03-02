@@ -1,0 +1,501 @@
+#!/usr/bin/python
+#
+# Author: Filippo Squillace <sqoox85@gmail.com>
+#
+# Copyright 2010
+#
+# This program is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License version 3, as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranties of
+# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+# PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+'''Script to read the manual in resource directory
+'''
+__author__ = 'Filippo Squillace'
+__date__ = '05/12/2009'
+__license__   = 'GPL v3'
+__copyright__ = '2010'
+__docformat__ = 'restructuredtext en'
+__version__ = "1.1.3"
+
+   
+import string
+import os
+import sys
+from util.io import Property
+from util.logger import warn, debug
+
+#from lxml import etree
+#from xml.sax.handler import ContentHandler
+#from xml.sax import make_parser
+import xml.dom.minidom
+
+
+import util.painter as painter
+
+if os.path.exists(os.environ["PYSHELL_HOME"]+'/etc/man2.conf'):
+    conf_path = os.environ["PYSHELL_HOME"]+'/etc/man2.conf'
+        
+elif os.path.exists(os.environ["PYSHELL_ROOT"]+'/etc/man2.conf'):
+    conf_path = os.environ["PYSHELL_ROOT"]+'/etc/man2.conf'
+        
+else:
+    warn('The config file doesn\'t exist. Put it into '+\
+         os.environ["PYSHELL_HOME"]+'/etc/man2.conf')
+    exit(1)
+
+
+conf = Property(conf_path, False)
+
+# To default it corresponds to os.environ["PYSHELL_ROOT"]+"/share/mans.xml"'
+url_xml = conf.get('url_xml')
+
+#dtd = etree.DTD(StringIO("""
+        #<!ELEMENT dicts (dict*)>
+        #<!ELEMENT dict (item*)>
+        #<!ELEMENT item (#PCDATA)>
+        #<!ATTLIST dict name CDATA #REQUIRED>
+        #<!ATTLIST item name CDATA #REQUIRED>"""))
+
+
+#def check_validation_on_string(doc, dtd):
+    #"""
+    #Check the validation of a XML document by a DTD Document
+    #Arguments: doc XML Document, dtd DTD Document
+    #Return: True if the document is correct, False otherwise
+    #"""
+    #root = etree.XML(doc)
+    #res = dtd.validate(root)
+    #if res == True:
+        #print "The document is valid"
+    #else:
+        #print "The document is not valid"
+    #print(dtd.error_log.filter_from_errors())
+    #return res
+
+#def check_validation_on_file(url_xml, dtd):
+    #"""
+    #Check the validation of a XML document by a DTD Document
+    #Arguments: url_xml path of a XML Document, dtd DTD Document
+    #Return: True if the document is correct, False otherwise
+    #"""
+    #file = open(url_xml, "r")
+    #return check_validation_on_string(file.read(), dtd)
+    
+   
+
+#def check_well_formedness(url_xml):
+    #""" 
+    #Check the well-formedness of a XML Document
+    #Arguments: url_xml path of a XML Document
+    #Return: True if the document is well-formed, False otherwise
+    #"""
+    #try:
+        #parser = make_parser()
+        #parser.setContentHandler(ContentHandler())
+        #parser.parse(url_xml)
+        #print "%s is well-formed" % url_xml
+        #return True
+    #except Exception, e:
+        #print "%s is NOT well-formed! %s" % (url_xml, e)
+        #return False
+
+#def insert_element():
+    #""" 
+    #Add item or a new dictionary in the document
+    
+    #"""
+##    Take into account this for add items. 
+##   1.  & - &amp;
+##   2. < - &lt;
+##   3. > - &gt;
+##   4. " - &quot;
+##   5. ' - &#39;
+##   This substitution is made by minidom.py
+
+
+    #xml_doc = read_document()
+    ## Check validation of the document
+    #if not check_well_formedness(url_xml):
+        #return
+    #if not check_validation_on_file(url_xml, dtd):
+        #return
+    
+    ## Show what we have to do: add item o dictionary?
+    #res = raw_input("What operation do you want to do?\n1\tAdd item.\n2\tAdd dictionary.\n")
+    #if res == "1":
+        #view_dictionaries()
+        ## Choose the dictionary
+        #index_dict = raw_input("Select the dictionary where do you want add item: ")
+        #name_item = raw_input("Item name: ")
+        #desc_item = raw_input("Item description: ")
+        #i = 1
+        #found = False
+        #for node in xml_doc.getElementsByTagName("dict"):
+            #if i == int(index_dict):
+                #item_element = xml_doc.createElement("item")
+                #item_element.setAttribute("name", name_item)
+                #ptext = xml_doc.createTextNode(desc_item)
+                #item_element.appendChild(ptext)
+                #node.appendChild(item_element)
+                #found = True
+                
+                #break
+            #i+=1
+        #if found:
+            ## Check if exists an error due to some special char
+            #if not check_validation_on_string(xml_doc.toprettyxml, dtd):
+                 #return
+            #else:
+                #write_document(xml_doc)
+                #print "Operation done successfully"
+        #else:
+            #print "Dictionary not found"
+    #elif res == "2":
+        
+        #res = raw_input("Dictionary name: ")
+        
+        #dict_element = xml_doc.createElement("dict")
+        #dict_element.setAttribute("name", res)
+        #L = xml_doc.getElementsByTagName("dicts")
+        #for dicts_element in L:
+            #dicts_element.appendChild(dict_element)
+            #break
+        
+        #print xml_doc.toprettyxml
+        ## Check if exists an error due to some special char
+        #if not check_validation_on_string(xml_doc.toprettyxml, dtd):
+             #return
+        #else:
+            #print xml_doc.toprettyxml
+            #write_document(xml_doc)
+            #print "Operation done successfully"
+            
+    #else:
+        #print "Error"
+        #pass
+
+#def write_document(doc):
+    #"""
+    #Write a document in RESOURCE path
+    #Arguments: doc XML Document
+    #"""
+    ##xml.dom.ext.PrettyPrint(doc, open(url_xml, "w"))
+    #doc.writexml(open(url_xml,"w"))
+
+def read_document():
+    """ 
+    Return: the XML document from RESOURCE path
+    """
+    print(url_xml)
+    xml_doc = xml.dom.minidom.parse(url_xml)
+    return xml_doc
+
+def view_dictionaries():
+    """
+    List all dictionaries of the XML Document
+    """
+    doc = read_document()
+    i = 1
+    for node in doc.getElementsByTagName("dict"):
+        name = node.getAttribute("name")
+        print(str(i)+"\t"+name)
+        i+=1
+    pass
+    
+        
+
+
+
+def print_item(item, keyword):
+    name = item.getAttribute("name")
+    painter.green()
+    painter.bold()
+    highlighted(name, keyword)
+    painter.undo()
+    painter.undo()
+    for child in item.childNodes:
+        if child.nodeType == child.TEXT_NODE:
+            desc = child.data
+            highlighted(desc, keyword)
+        elif child.nodeType == child.CDATA_SECTION_NODE:
+            desc = child.nodeValue
+            highlighted(desc, keyword)
+        elif child.tagName=="command":
+            cmd = child.getAttribute("name")
+            painter.bgblue()
+            painter.bold()
+            sys.stdout.write(cmd)
+            painter.undo()
+            painter.undo()
+        elif child.tagName=="code":
+            cod = ""
+            for little_child in child.childNodes:
+                if little_child.nodeType == child.TEXT_NODE:
+                    cod = cod + little_child.data
+                    
+                    pass
+                elif little_child.nodeType == child.CDATA_SECTION_NODE:
+                    cod = cod + little_child.nodeValue
+                    pass
+            painter.bgcyan()
+            painter.bold()
+            highlighted(cod, keyword)
+            painter.undo()
+            painter.undo()
+    print('\n')
+
+def highlighted(name, keyword):
+    """
+    Highlight the string keyword contained in name
+    Arguments: name, keyword
+    Return: A new string that contains keyword highlighted
+    """
+    tmp_str = name
+    size=len(keyword)
+    while tmp_str!="":
+        ind = tmp_str.upper().find( keyword.upper())
+        if ind!=-1:
+            sys.stdout.write(tmp_str[0:ind])
+            painter.red()
+            painter.bold()
+            sys.stdout.write(tmp_str[ind:ind+size])
+            painter.undo()
+            painter.undo()
+        else:
+            sys.stdout.write(tmp_str)
+            break
+        tmp_str = tmp_str[ind+size:]
+
+
+
+def contains(string1, string2, whole_word, case_sensitive):
+    if not case_sensitive:
+        string1 = string1.upper()
+        string2 = string2.upper()
+        
+        
+    if whole_word:
+        pos = string1.find(string2)
+        fin_pos = pos + len(string2)-1
+        if pos==-1:
+            return False;
+        if pos!=0 and string.ascii_letters.find(string1[pos-1:pos])!=-1:
+            return False
+        if fin_pos!=len(string1)-1 and string.ascii_letters.find(string1[fin_pos+1:fin_pos+2])!=-1:
+            return False
+        return True
+    else:
+        return string1.find(string2)!=-1
+    pass
+
+def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_word, case_sensitive):
+    """
+    Search in all of dictionaries the keyword in the name and print in the standard output
+    Arguments: keyword 
+    Return: A data structure that is the answer of the query
+    """
+    ans = []
+    
+    for dict in doc.getElementsByTagName("dict"):
+        if in_dict_name:
+            dict_name = dict.getAttribute("name")
+        else:
+            dict_name = ""
+
+            
+        
+        if contains(dict_name, keyword, whole_word, case_sensitive): #Stampa tutto il dizionario
+            print()
+            painter.orange()
+            painter.bold()
+            highlighted(30*"-"+dict_name+30*"-", keyword)
+            painter.undo()
+            painter.undo()
+            print()
+            for item in dict.getElementsByTagName("item"):
+                print_item(item, keyword)
+                ans.append(item)
+        else:
+            trovato = False
+            for item in dict.getElementsByTagName("item"):
+                if in_item_name:
+                    item_name = item.getAttribute("name")
+                else:
+                    item_name = ""
+                    
+                item_description = ""
+                if in_item_description:
+                    for child in item.childNodes:
+                        if child.nodeType == child.TEXT_NODE:
+                            item_description = item_description + child.data
+                        elif child.nodeType == child.CDATA_SECTION_NODE:
+                            item_description = item_description + child.nodeValue
+                        elif child.tagName=="command":
+                            item_description = item_description + child.getAttribute("name")
+                        elif child.tagName=="code":
+                            item_description = item_description + child.firstChild.data
+                        
+                if contains(item_name, keyword, whole_word, case_sensitive) or contains(item_description, keyword, whole_word, case_sensitive):
+                    if not trovato:
+                        trovato = True
+                        dict_n = dict.getAttribute("name")
+                        print()
+                        painter.orange()
+                        painter.bold()
+                        highlighted(30*"-"+dict_n+30*"-", keyword)
+                        painter.undo()
+                        painter.undo()
+                        print()
+                    print_item(item, keyword)
+                    ans.append(item)
+    
+    return ans
+
+#def copy_command(l):
+    #if len(l)!=1:
+        #while 1:
+            #res = input("\033[1;33mID(Enter to exit): \033[1;m")
+            #if res.isdigit() and int(res)>=0 and int(res)<=len(l)-1:
+                #break
+            #elif res=="":
+                #return
+        #item = l.pop(int(res))
+    #else:
+        #item = l.pop(0)
+    
+    #cmd_list = []
+    #for child in item.childNodes:
+        #if child.nodeType == child.TEXT_NODE:
+            #pass
+        #elif child.nodeType == child.CDATA_SECTION_NODE:
+            #pass
+        #elif child.tagName=="command":
+            #cmd_list.append(child.getAttribute("name"))
+        #elif child.tagName=="code":
+            #pass
+    
+    #if len(cmd_list)==0:
+        #return
+    ## Get the command and copy it in the clipboard
+    #if len(cmd_list)!=1:
+        #while 1:
+            #res = input("\033[1;33mID command(Enter to exit): \033[1;m")
+            #if res.isdigit() and int(res)>=0 and int(res)<=len(cmd_list)-1:
+                #break
+            #elif res=="":
+                #return
+        #cmd = cmd_list.pop(int(res))
+    #else:
+        #cmd = cmd_list.pop(0)
+    
+    #print('\033[1;44m'+cmd+'\033[1;m')
+    #if gtk != None:
+        #clipboard = gtk.clipboard_get()
+        #clipboard.set_text(cmd)
+        #clipboard.store()
+    #pass
+
+def search_by_dict_name(keyword, whole_word, case_sensitive):
+    """
+    Search in dictionaries the dictionary with name contains the keyword
+    Arguments: keyword
+    """
+    doc = read_document()
+    l = search(doc, keyword, True, False, False, whole_word, case_sensitive)
+    if len(l)==0:
+        return
+    
+    #copy_command(l)
+    pass
+
+def search_by_item_name(keyword, whole_word, case_sensitive):
+    """
+    Search in all of dictionaries the keyword in the name and print in the standard output
+    Arguments: keyword 
+    """
+    doc = read_document()
+    l = search(doc, keyword, False, True, False, whole_word, case_sensitive)
+    if len(l)==0:
+        return
+    
+    #copy_command(l)
+    pass
+
+def search_all(keyword, whole_word, case_sensitive):
+    """
+    Search in all of dictionaries the keyword and print in the standard output
+    Arguments: keyword 
+    """
+    doc = read_document()
+    l = search(doc, keyword, True, True, True, whole_word, case_sensitive)
+    if len(l)==0:
+        return
+    
+    #copy_command(l)
+    pass
+
+                
+def help():
+    print("Usage: man2 [opt] [keyword]...")
+    print("Options:")
+    print("-h --help\t\t\tDisplay this")
+    print("-d --dictionary \t\tSearch the keyword on the dictionaries name")
+    print("-a --all\t\t\tSearch the keyword on the dictionaries name, items name and item description")
+    print("-s --show \t\t\tDisplay available dictionaries")
+    print("-c --case-sensitive\t\tSearch with case sensitive")
+    print("-w --whole-word\t\t\tSearch whole word")
+    print("Without options man2 search the keyword only on the items name")
+
+
+
+if __name__ == "__main__":
+    if len(sys.argv)==2 and (sys.argv[1]=="--show" or sys.argv[1]=="-s"):
+        view_dictionaries()
+        exit()
+    elif len(sys.argv)==1 or (len(sys.argv)==2 and (sys.argv=="-h" or sys.argv=="--help")):
+        help()
+        exit()
+    
+    # L'ultimo elemento ora non puo' mai essere un opzione
+    last=sys.argv[len(sys.argv)-1]
+    if last=="-d" or last=="--dictionary" or last=="-a" or last=="--all" or last=="-c" or last=="--case-sensitive" or \
+    last=="-w" or last=="--whole-word" or last=="-s" or last=="--show" or last=="-h" or last=="--help":
+        help()
+        exit()
+    
+    
+    
+    in_dict_name = False
+    case_sensitive = False
+    whole_word = False
+    in_all = False
+    for i in range(len(sys.argv)-1):
+        arg = sys.argv[i]
+        if arg=="-d" or arg=="--dictionary":
+            in_dict_name = True
+        elif arg=="-c" or arg=="--case-sensitive":
+            case_sensitive = True
+        elif arg=="-w" or arg=="--whole-word":
+            whole_word = True
+        elif arg=="-a" or arg=="--all":
+            in_all = True
+        
+    if (in_dict_name and in_all):
+        help()
+        exit()
+    
+    if in_dict_name:
+        search_by_dict_name(last, whole_word, case_sensitive)
+    elif in_all:
+        search_all(last, whole_word, case_sensitive)
+    elif not(in_dict_name) and not(in_all):
+        search_by_item_name(last, whole_word, case_sensitive)
+
