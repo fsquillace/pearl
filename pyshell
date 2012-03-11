@@ -26,7 +26,7 @@ fi
 #umask   file mode   directory mode
 #0022    -rw-r--r--  drwxr-xr-x
 #0077    -rw-------  drwx------
-umask 0077
+umask 0022
 
 
 
@@ -127,7 +127,7 @@ alias q="exit"
 alias ls="ls --color=auto"
 alias l="ls -h"
 alias a="ls -ha"
-
+alias c="clear"
 
 alias ll="l -l"
 alias la="a -l"
@@ -141,12 +141,17 @@ alias bin="cd ${PYSHELL_ROOT}/bin"
 alias sudo="sudo "
 #alias sudo="sudo -E"    # Useful to keep variables environment when you are root
 
+alias go="ping 8.8.8.8"
 alias goo="ping www.google.it"
 alias isconnect="python -c \"import util.net;print(util.net.is_connect())\""
 
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like

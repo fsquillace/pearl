@@ -77,6 +77,7 @@ Spazio 	        %20
         <command name="git config --global user.email johndoe@example.com"/>
         To set editor:<command name="git config --global core.editor emacs"/>
         To set diff editor:<command name="git config --global merge.tool vimdiff"/>
+        To set color:<command name="git config color.diff auto"/>
 
         To check config:<command name="git config --list"/>
     </item>
@@ -178,11 +179,19 @@ Spazio 	        %20
         To see the last commit on each branch:<command name="git branch -v"/>
         To see merged or no-merged branchs:<command name="git branch [--merged|--no-merged]"/>
 
+        WITH REMOTE:
         To get changes from a remote you can do two things (after doing "remote add" command):
         *    Fetch and then merge the current local branch:
-        *    Create a new branch from the remote one:<command name="git checkout -b serverfix origin/serverfix"/>
-        To delete a remote branch:<command name="git push origin :serverfix"/>
+        *    Create a new branch from the remote one:<command name="git checkout -b local_branch remote/remote_branch"/>
+        To delete a remote branch:<command name="git push origin :remote_branch"/>
+        To create/rename another branch from local to remote:
+        <command name="git push origin local_branch:remote_branch"/>
+
+        The local branch will automatically push to and pull from remote/remote_branch:
+        <command name="git checkout --track remote/remote_branch"/>
+        <command name="git checkout -b local_branch remote/remote_branch"/>
     </item>
+
     <item name="deploying using git on server">
         The best way is create a working directory on remote sever.
         SERVER SIDE
@@ -241,9 +250,58 @@ Spazio 	        %20
         *   FS -- The input field separator; defaults to whitespace and is reset by the -F command line parameter 
         Variables don't need dollar char!
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
-
+        
+        Print if $1 begin with J:<command name="awk '($1~/^J/) { print $1 }'"/>
+        Print if the lenght of $1 is greater than 6:<command name="awk '(length($2)>6) {print $2}'"/>
         Count number of lines where col3 &gt; col1:<command name="awk '$3 > $1 {print i + &quot;1&quot;; i++}'"/>
         Print the maximum value: <command name="awk 'BEGIN{} $1>x {x=$1} END{print x}'"/>
+
+Examples:
+        <code>
+#!/usr/bin/awk -f
+#calcolare la media dei voti con relativi giudizi.
+BEGIN {
+    print "     \fESITO DELLE PROVE\n"
+    print " \fNome\tMedia\tGiudizio\n";
+}
+{
+    totale=$2+$3+$4+$5+$6;
+    media=totale/5
+    if (media>18) {giudizio="promosso";}
+    else if (media&lt;18) {giudizio="respinto";}
+    print $1,media,"=>",giudizio;
+}
+END {
+    print "------------------------"
+    }</code>
+
+
+<code>#!/usr/bin/awk -f
+BEGIN {
+    count1=0
+    count2=0
+    print "\fRISULTATI STATISTICI"         
+}
+#conto i candidati promossi
+$4 ~ /promosso/ {count1++}
+#conto i candidati respinti
+$4 ~ /respinto/ {count2++}
+#calcolo la percentuale dei promossi
+{promossi=(count1/NR)*100}
+#calcolo la percentuale dei respinti
+{respinti=(count2/NR)*100}
+#calcolo il punteggio medio tra tutti i candidati
+{media+=$2/9}
+END {
+    print "\fnumero candidati:", NR
+    print "numero dei promossi:", count1
+    print "percentuale dei promossi", promossi "%"
+    print "numero dei respinti", count2
+    print "percentuale dei respinti:", respinti "%"
+    print "punteggio medio di tutti i candidati:", media
+    print ".........................."
+}</code>
+
     </item>
 
 </dict>
@@ -1134,7 +1192,293 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
 
 
 </dict>
+<!-- *********************************** RUBY ***************************************** -->
+<dict name="ruby">
+    <item name="Basics">
+        To import modules:<code>require 'mechanize'</code>
 
+        To install a new package:<code>gem install rails --version 3.0.1</code>
+        To update the gem package manager:<code>gem update --system</code>
+        Symbols are immutable strings:
+        <code>
+            symb = :rails
+            :rails.to_s
+        </code>
+
+        The value nil correspond to None in python.
+        
+        Array:
+        <code>
+            x = [1,'two',:three]
+            x[1] == 'two'
+            x.length == 3
+        </code>
+        
+        Hash:
+        <code>
+            w = {'a'=>1, :b=>[2,3]}
+            w.keys == ['a', :b]
+        </code>
+
+        Methods:
+        <code>
+            def foo(x,y=10)
+                return [x, y+1]  # last exp returned as result.
+            end
+        </code>
+
+        if and while:
+        <code>
+            if cond
+               stat
+            elsif
+               stat
+            else
+               stat
+            end
+
+            while cond
+               stat
+            end
+        </code>
+    </item>
+    <item name="string &amp; regular expression">
+        All this types are available:
+        <code>"string", %Q{string},'string',%q{string}</code>
+        The concatenation a=41; "The answer is #{a+1}"
+
+        Useful string methods:
+        <code>
+            s.chomp('s')   # wipe out the last char
+            s.gsub(//, '')  # substitute the occurrence with a new string
+        </code>
+
+        All this types are available for regex:
+        <code>/(.*)$/i, %r{(.*)$}i, Regexp.new('(.*)$', Regexp::IGNORECASE)</code>
+        Matching regexp: "fox@berkeley.EDU" ~= /(.*)@(.*)\.edu$/i
+        return false if no match, otherwise return true and $1..$n catch the groups.
+
+        Replacing a substring:
+            s.gsub(/s$/, '')
+    </item>
+    <item name="conversions &amp; more">
+        <code>
+            l.to_a # convert an Enumerable in Array
+            s.to_s # convert in string
+            s.to_sym # convert in symbol
+        </code>
+    </item>
+
+    <item name="method call and operators" >
+        To get all methods of an object:<code>57.methods</code>
+        Every operator is a method call:<code>1+2 correspond to 1.send(:+, 2)</code>
+
+        To append element into a list:<code>y &lt;&lt; [6,7] </code>
+    </item>
+    <item name="oop">
+        Creation of an object: <code>ClassName.new(...)</code>
+        Instance variable: <code>@variable</code>
+        Class (static) variable: <code>@@variable</code>
+        Class method:
+        <code>
+            def self.bank_name
+               @@bank_name
+            end
+        </code>
+
+    </item>
+
+    <item name="metaprogramming">
+        Generate accessor methods:<code>attr_accessor :balance</code>
+        Add methods REOPENING a class:
+        <code>
+            class Numeric
+            def euros
+                self * 1.3
+                end
+        </code>
+        If a method doesn't exist ruby call a special method:
+        <code>
+            class Numeric
+              def method_missing(method_id)
+                if method_id.to_s == 'euro'
+                  self.send('euros')
+                else
+                  super
+                end
+              end
+              end
+
+
+              # Or in this way useful for both module and class
+              Enumerable.class_eval do
+                def palindrome?
+                    return (self.is_a? Array) ? self.reverse == self : self.to_a.palindrome?
+                end
+              end
+        </code>
+    </item>
+    <item name="iterator">
+        Loops:
+        <code>
+            # Possible way to iterate across the elements
+            list.each do |string|
+               puts string
+            end
+
+            for i in (1..10) do
+              puts i
+            end
+
+            1.upto 10 do |num|
+              puts num
+            end
+
+            3.times{print "ciao"}
+
+            # Map is the same of map in python
+            x.map do |f|
+              fruit.reverse
+            end.sort
+
+            # Select correspond the same of filter in python
+            x.select do |el|
+              el =~ /^[aeuio]/i
+            end
+
+            x.collect {|f| f.include?('e')}
+            x.any?{|f| f.lenght>5}
+        </code>
+        Hash
+        <code>
+            hsh.each_key do |k| ... end
+            hsh.each_pair do |k,v| ... end
+        </code>
+    </item>
+    <item name="duck typing">
+        Similar to interface in Java:
+        <code>
+            class Account
+                include Comparable
+                def &lt;=>(other)
+                    self.balance &lt;=> other.balance
+                end
+            end
+        </code>
+        
+        Enumerable respond a lot of methods!!: each, all? any? 
+        collect, find, include?, inject, map, partition,...
+
+    </item>
+    <item name="yield">
+        It's the same concept as in python.
+        <code>
+            # yield function is:
+            def around_stuff
+              ..before..
+              yield
+              ..after..
+            end
+
+            # in user code
+            ...
+            around_stuff do 
+               my_stuff()
+            end
+            # so yield will be replaced with the function my_stuff()
+        </code>
+    </item>
+</dict>
+
+<!--- ********************************** RAILS ***************************************** -->
+<dict name="rails">
+    <item name="install rails and heroku">
+        Install rails:<command name="rails new first_app"/>
+        To install the gems in Gemfile:<command name="bundle install"/>
+
+        To execute the server:<command name="rails server"/>
+        
+        Deploying with heroku:
+        *  Install heroku:<command name="gem install heroku"/>
+        *  Create SSH Keys:<command name="ssh-keygen"/>
+        *  Load keys to heroku:<command name="heroku keys:add"/>
+        * Create the place to deploy:<command name="heroku  create"/>
+        * Deployment to heroku:<command name="git push heroku master"/>
+        * To open the browser with the right url:<command name="heroku open"/>
+
+        Other stuff with heroku:
+        *  Rename application:<command name="heroku rename other_app"/>
+    </item>
+    <item name="ActiveRecord">
+        Defining a model:
+        <code>
+            class Movie &lt; ActiveRecord::Base
+            end
+
+            # To create an ActiveRecord object
+            movie = Movie.new(:title => 'Help', :rating => '5')
+            # or
+            movie = Movie.new
+            movie.title = 'Help'; movie.rating = '5'
+        </code>
+
+        Create:
+        <code>
+            movie.save # or movie.save! but throw an exception
+            movie.create # combines .new and .save
+            # Ask if an object is not saved
+            movie.id == nil 
+            # or
+            movie.new_record?==true
+        </code>
+
+        Read:
+        <code>
+            Movie.where("rating = '5'")
+            Movie.where("release_date &lt; :cutoff and rating = :rating, 
+            :rating => '5', :cutoff => '1.year.ago')
+
+            Movie.find(3) # throw exception if not found
+            Movie.find_by_id(3) # nil if not found
+
+            # Auto generated methods
+            Movie.find_all_by_rating('5')
+            Movie.find_by_rating('5')
+        </code>
+
+        Update:
+        <code>
+            m = Movie.find_by_title('Help')
+            m.update_attributes(:release_date => '2011-Aug-10')
+        </code>
+
+        Delete:
+        <code>
+            movie.destroy
+        </code>
+    </item>
+
+    <item name="debugging">
+        Use the logger:<code>logger.debug(@movie.inspect)</code>
+
+        Debugger:
+        Put "debugger" in controller code and then:
+        <command name="rails server --debugger"/>
+        That will stop the execution and open the debugger.
+    </item>
+
+    <item name="flash and session">
+        flash[] persists up to the end of next request.
+        <code>
+            flash[:notice]     # for information
+            flash[:warning]    # for errors
+        </code>
+
+        session[] persists forever. to reset the session reset_session.
+        or<code>session.delete(:some_key)</code>
+    </item>
+
+</dict>
 
 
 <!--- ********************************** PYTHON ***************************************** -->

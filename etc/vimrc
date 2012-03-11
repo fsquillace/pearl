@@ -117,16 +117,37 @@ autocmd bufwritepost vimrc source ~/.vimrc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text, tab and indent related
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Formatting
+""""""""""""
+set ts=4  " Tabs are 4 spaces
+set bs=2  " Backspace over everything in insert mode
+set shiftwidth=4 " Tabs under smart indent
+set cinoptions=:0,p0,t0
+set cinwords=if,else,while,do,for,switch,case
+set formatoptions=tcqr
+set cindent
+set autoindent
+set smartindent
+set smarttab
 set expandtab
 set textwidth=500
 set tabstop=8
 set softtabstop=4
-set shiftwidth=4
 set smarttab
 set lbr
-set ai "Auto indent
-set si "Smart indet
 set wrap "Wrap lines
+
+
+" Visual
+""""""""
+set showmatch " Show matching brackets.
+set mat=5  " Bracket blinking.
+set list
+" Show $ at end of line and trailing space as ~
+set lcs=tab:\ \ ,eol:\ \,trail:~,extends:>,precedes:<
+set novisualbell  " No blinking .
+set noerrorbells  " No noise.
+set laststatus=2  " Always show status line.
 
 " Choose the fold method depending of the file type 
 " and unfold when opening it
@@ -232,8 +253,9 @@ let g:netrw_list_hide='^\.,.*\.pyc$'
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Ranger Chooser
 """""""""""""""""""""""""""""""""""""""""""""""""""
+
 fun! RangerChooser()
-    silent !ranger --choosefile=/tmp/chosenfile `[ -z '%' ] && echo -n . || dirname %`
+    exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
     if filereadable('/tmp/chosenfile')
         exec 'edit ' . system('cat /tmp/chosenfile')
         call system('rm /tmp/chosenfile')
@@ -397,7 +419,11 @@ au BufNewFile,BufRead *.cu set ft=cu
 au BufNewFile,BufRead *.cu.h set ft=cu
 
 
-
+""""""""""""""""""""""""""""""""""""""
+" Ruby on Rails
+""""""""""""""""""""""""""""""""""""""
+" Change which file opens after executing :Rails command
+let g:rails_default_file='config/database.yml'
 
 
 

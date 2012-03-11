@@ -403,9 +403,11 @@ MAIN ALIASES
     - *l*="ls -h --color"
     - *ll*="l -l"
     - *la*="l -a"
+    - *c*="clear"
+    - *go*=ping 8.8.8.8
     - *goo*=ping www.google.com
     - *isconnect* - check whether the computer is connected
-
+    - *alert* - send a notification alert
 
 TIPS & TRICKS
 -------------
@@ -422,8 +424,9 @@ following values make sense for a umask:
 |0022  |-rw-r--r-- |drwxr-xr-x
 |0077  |-rw------- |drwx------
 |=================================
-*pyshell* uses the '0077' for security reasons. If you do not want it, you can
-specify the other by in '$$~$$/.config/pyshellrc' typing: *umask* '0022'
+*pyshell* uses the '0022'. For security reasons you can use '0077'.
+If you do not want '0022', you can specify the other in 
+'$$~$$/.config/pyshellrc' by typing: *umask* '0077'
 
 
 REMOVING FILES WITH TRASH COMMAND
