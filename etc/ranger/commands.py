@@ -104,9 +104,13 @@ class sync(Command):
     :trash seriously? yeah!
     """
 
+
+
     allow_abbrev = False
    
     def execute(self):
+
+        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
         sync_dir = os.environ['SYNC_HOME']
 
         if self.arg(1) == '-s' or self.arg(1) == '--show':
@@ -114,16 +118,15 @@ class sync(Command):
         else:
             lastword = self.arg(-1)
             SYNC_WARNING = 'sync seriously? '
-            
+
             if lastword.startswith('y'):
                 # user confirmed sync!
                 cfs = self.fm.env.cwd.get_selection()
                 cwd = self.fm.env.cwd
 
+                subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
+                          ' '.join(['"'+f.path+'"' for f in cfs]))
                 for f in cfs:
-                    subprocess.getstatusoutput('rsync -R -C --exclude=.svn -uhzravE --delete '+\
-                            f.path+' '+sync_dir)
-                    
                     cwd.mark_item(f, val=False)
                 return
             
@@ -139,11 +142,10 @@ class sync(Command):
                 # better ask for a confirmation, when attempting to
                 # sync multiple files or a non-empty directory.
                 return self.fm.open_console(SYNC_WARNING)
-    
 
             # no need for a confirmation, just sync
-            subprocess.getstatusoutput('rsync -R -C --exclude=.svn -uhzravE --delete '+\
-                    cf.path+' '+sync_dir)
+            subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
+                      '"'+cf.path+'"')
 
 
 
@@ -170,6 +172,8 @@ class trash(Command):
     
     def execute(self):
         trash_dir = os.environ['PYSHELL_TEMPORARY']
+        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+
         os.system('mkdir -p '+ trash_dir)
         
         if self.arg(1) == '-s' or self.arg(1) == '--show':
@@ -183,9 +187,11 @@ class trash(Command):
             
             if lastword.startswith('y'):
                 # user confirmed deletion!
-                cfs = self.fm.env.cwd.get_selection()    
-                os.system('mv --backup=numbered -f -t "'+trash_dir+'" '+\
+                cfs = self.fm.env.cwd.get_selection()
+
+                os.system('source '+misc_lib+' ; trash '+\
                           ' '.join(['"'+f.path+'"' for f in cfs]))
+
                 return
             elif self.line.startswith(TRASH_WARNING):
                 # user did not confirm deletion
@@ -199,9 +205,8 @@ class trash(Command):
                 # better ask for a confirmation, when attempting to
                 # delete multiple files or a non-empty directory.
                 return self.fm.open_console(TRASH_WARNING)
-    
             # no need for a confirmation, just delete
-            os.system('mv --backup=numbered -f -t '+trash_dir+' '+\
+            os.system('source '+misc_lib+' ; trash '+\
                       '"'+cf.path+'"')
 
 
@@ -264,6 +269,10 @@ class compress(Command):
 
         obj.signal_bind('after', refresh)
         self.fm.loader.add(obj)
+
+        for f in marked_files:
+            cwd.mark_item(f, val=False)
+
 
     def tab(self):
         """ Complete with current folder name """

@@ -1,4 +1,6 @@
 pyshell 0.9.4
+- sync and trash functions of ranger depend now directly to misc.sh
+- Improved compress function of ranger
 - Added a go command to ping with Google DNS Server
 - Changed umask to 0022
 - Improved RangerChooser function in vimrc in order to instantiate always one instance of ranger

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apply(){
+function apply(){
     # If the file doesn't exist create it and append the line
     if [ ! -e "$2" ]
     then
@@ -23,7 +23,7 @@ apply(){
 
 
 
-pyshell-logo(){
+function pyshell_logo(){
 cat "$PYSHELL_ROOT/share/logo/logo-ascii.txt"
 }
 
@@ -87,5 +87,117 @@ if [ "$a" = "" ]; then
     fi
 
 fi
+}
+
+
+
+# Trash command
+function trash(){
+    mkdir -p $PYSHELL_TEMPORARY
+
+    if [ -z "$1" ] || [ "$1" = -s ] || [ "$1" = --show ]
+    then
+        ll -a $PYSHELL_TEMPORARY
+    elif [ "$1" = -e ] || [ "$1" = --empty ]
+    then
+        rm -rf $PYSHELL_TEMPORARY/*
+    elif [ "$1" = -h ] || [ "$1" = --help ]
+    then
+        echo "Usage:"
+        echo -e "trash FILE1 FILE2 ...\t\tMoves to trash the files"
+        echo -e "trash [-s || --show]\t\tShows the trash"
+        echo -e "trash [-e || --empty]\t\tEmpties the trash"
+        echo -e "trash [-h || --help]\t\tDisplays this"
+    else
+        mv --backup=numbered -f -t $PYSHELL_TEMPORARY $@
+    fi
 
 }
+
+# cd to last path after exit
+# This functionallows to change the directory 
+# to the last visited one after ranger quits.
+# You can always type "cd -" to go back
+# to the original one.
+function ranger(){
+    tempfile='/tmp/chosendir'
+    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    test -f "$tempfile" &&
+    if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+        echo $(cat "$tempfile")
+        builtin cd -- "$(cat "$tempfile")"
+    fi
+    rm -f -- "$tempfile"
+}
+
+
+# Create a sync with Dropbox/Ubuntu One folder using 
+# absolute path to maintain the same structure
+function sync() {
+    if [ "$1" = -h ] || [ "$1" = --help ]
+    then
+        echo "Usage:"
+        echo -e "sync [--exclude=PATTERN] FILE1 FILE2 ...\tSync files or directories"
+        echo -e "\t\texcluding what mathces with PATTERN"
+        echo -e "trash [-h || --help]\t\tDisplays this"
+        return 0
+    fi
+
+    # introduce --exclude option
+    exc_opt=""
+    for ((i=1; i<=$#;i++))
+    do
+        if [[ "${!i}" != *--exclude* ]]
+        then
+            break
+        else
+            exc_opt="${exc_opt} ${!i}"
+        fi
+    done
+
+    #for var in "$@" #Another solution
+    for ((j=$i;j<=$#;j++))
+    do
+        # Rsync Options:
+        # -c:     Enable checksum
+        # -a:     Preserve the attibutes of the files.
+        # -v:     Verbose.
+        # -z:     Enables the compression.
+        # -u:     Update files.
+        # -r:     Recursive.
+        # -E:     Preserve Executability.
+        # -h:     Human readable.
+        # -n:     Simulate.
+        # -R:     Relative (include implied directories).
+        # -C:     Exclude CVS.
+        # --exclude=.svn
+
+        rsync -R -C --exclude=.svn ${exc_opt} -uhzravE --delete $(readlink -f ${!j}) $SYNC_HOME 
+        
+        # The following solution doesn't manage deletion of files in the destination
+        #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
+    done
+
+}
+
+
+# This function integrate cd and cd2 in the same command
+function cd() {
+    if [ -z "$1" ] 
+    then
+	$PYSHELL_ROOT/bin/cd2
+    elif [ "$1" = -g ]
+    then
+        builtin cd `$PYSHELL_ROOT/bin/cd2 -p $2`
+    elif [ "$1" = -a ] || [ "$1" = --add ] || [ "$1" = -r ] || [ "$1" = --remove ] \
+	|| [ "$1" = -h ] || [ "$1" = --help ] || [ "$1" = -p ] || [ "$1" = --print ]
+    then
+        $PYSHELL_ROOT/bin/cd2 $1 $2
+    else
+	builtin cd $1
+    fi
+}
+
+
+
+
