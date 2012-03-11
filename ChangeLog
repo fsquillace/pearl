@@ -1,4 +1,5 @@
 pyshell 0.9.4
+- Enhanced the todo command output. Now, it's colored. deep_search use relative paths
 - sync and trash functions of ranger depend now directly to misc.sh
 - Improved compress function of ranger
 - Added a go command to ping with Google DNS Server

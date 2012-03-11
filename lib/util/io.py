@@ -145,47 +145,59 @@ def get_list(path):
 
     return l
 
-def get_files(path, recursive, pdf):
+def __get_files(root_path, rel_path, recursive, pdf):
+    """
+    Returns the list of the relative path of non-binary files
+    """
     file_list = []
-    
+    path = root_path + '/' + rel_path
     list = os.listdir(path)
     for entry in list:
         abs_path = os.path.normpath(path+"/"+entry)
         if os.path.isdir(abs_path) and recursive:
             debug('Sub-directory='+abs_path)
-            file_list.extend(get_files(abs_path, recursive, pdf))
+            file_list.extend(__get_files(root_path, rel_path+'/'+entry, recursive, pdf))
         elif os.path.isfile(abs_path):
             debug('Checking the file '+abs_path+'...')
             # Check it is pdf
             if abs_path.split('.')[-1]=='pdf' and pdf:
                 debug(abs_path+' is a pdf.')
-                file_list.append(abs_path)
+                file_list.append(rel_path+'/'+entry)
             else:
                 # Check it is binary
                 isBinary = os.system("file \"" + abs_path + "\" | grep text > /dev/null")
                 if not isBinary:
                     debug(abs_path+' is not binary')
-                    file_list.append(abs_path)
+                    file_list.append(rel_path+'/'+entry)
                 else:
-                    pass
                     debug(abs_path+' is not a file text')
                     
     return file_list
 
+
+
+def get_files(path, recursive, pdf):
+    """
+    Returns the list of the relative path of non-binary files
+    """
+    return __get_files(path, '', recursive, pdf)
+
+
 @future
-def analyze_files(file_list, keyword, recursive=True, case_sensitive=False,
+def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False,
         whole_words=False, pdf=False):
     dict_out = {}
     for entry in file_list:
         debug('Entry File: '+entry)
+        abs_path = path+'/'+entry
         try:
             if entry.split('.')[-1]=='pdf':
                 debug('Checking the pdf file '+entry+'...')
-                out = subprocess.check_output(['pdftotext', entry,'-'])
+                out = subprocess.check_output(['pdftotext', abs_path,'-'])
                 #(st, out) = commands.getstatusoutput('pdftotext "'+entry+'" -')
                 file = io.StringIO(out)
             else:
-                file = open(entry,'r')
+                file = open(abs_path,'r')
 
             list_lines = []
             for num, line in enumerate(file):
@@ -204,6 +216,7 @@ def deep_search(path, keyword, recursive=True, case_sensitive=False,
     
     dict_out = {}
     MAX_THREAD = 300
+    # returns the relative paths
     file_list = get_files(path, recursive, pdf)
     
     if len(file_list)>MAX_THREAD:
@@ -212,7 +225,7 @@ def deep_search(path, keyword, recursive=True, case_sensitive=False,
         size = 1   
     
     for ipos in range(0, len(file_list), size):
-        o = analyze_files(file_list[ipos:ipos+size], keyword, recursive, case_sensitive,
+        o = analyze_files(path, file_list[ipos:ipos+size], keyword, recursive, case_sensitive,
         whole_words, pdf)
         
     # Update the general dictionary

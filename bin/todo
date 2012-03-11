@@ -51,11 +51,15 @@ def __print_results(entry, list_lines):
     if len(list_lines)==0:
         return
 
-    print(20*"-"+entry+20*"-")
+    util.painter.red()
+    print("    "+entry)
+    util.painter.green()
     for (num, line) in list_lines:
-        print(str(num)+" "+line[:len(line)-1].strip())
+        print('        '+str(num)+' '+line[:len(line)-1].strip())
         pass
-    print((40+len(entry))*"-")
+    print()
+    util.painter.undo()
+
 
 if __name__ == "__main__":
 
@@ -160,6 +164,9 @@ if __name__ == "__main__":
             dict_out = util.io.deep_search(e, 'TODO', recursive=True,\
                     case_sensitive=True, whole_words=True, pdf=False)
 
+            util.painter.orange()
+            print(e)
+            util.painter.undo()
             for entry, list_lines in dict_out.items():
                 __print_results(entry, list_lines)
 
