@@ -293,7 +293,7 @@ Example of using:
 
 EYE
 ~~~
-EYE searches words, also recursively, into each text or pdf file.
+EYE searches (also recursively) if substrings match with the specified pattern, into each text or pdf file.
 
 Example of using:
 
@@ -303,6 +303,10 @@ Example of using:
 
     *$ eye -r -p* . "python"::
     Same as above but also search for pdf files.
+
+    *$ eye -r -c*  . "Line-[0-9]+"::
+    Same as above but matching using a regular expression and case sensitive.
+    For example, the string "Line-235" matchs with the regex above.
 
 SYNC
 ~~~~

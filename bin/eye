@@ -32,15 +32,25 @@ from util.logger import debug, warn
 
 from util.io import deep_search
 
+import re
 
-def __print_results(keyword, entry, list_lines):
+def __print_results(keyword, entry, list_lines, case_sensitive):
     """"""
+    flag = 0
+    if not case_sensitive:
+        flag = re.IGNORECASE
+
     if len(list_lines)==0:
         return
 
     print(20*"-"+entry+20*"-")
     for (num, line) in list_lines:
-        line = line.replace(keyword, '\033[1;31m'+keyword+'\033[1;m')
+        m = re.search(keyword, line)
+        it = re.finditer(keyword, line, flag)
+        for m in it:
+            if m:
+                line = line.replace(m.group(), '\033[1;31m'+m.group()+'\033[1;m')
+
         print(str(num)+" "+line[:len(line)-1].strip())
         pass
     print((40+len(entry))*"-")
@@ -88,5 +98,5 @@ if __name__=='__main__':
         print('Catched ^C command. Now exiting...')
 
     for entry, list_lines in dict_out.items():
-        __print_results(keyword, entry, list_lines)
+        __print_results(keyword, entry, list_lines, options.case_sensitive)
 

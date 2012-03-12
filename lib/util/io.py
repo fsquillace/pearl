@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # Author: Filippo Squillace <sqoox85@gmail.com>
 #
@@ -30,11 +30,12 @@ __version__ = "0.0.3"
 import os
 import pickle
 import subprocess
-import io
 import string
+import io
 from util.misc import debug
 from util.threads import future
 
+import re
 class DirectoryPathError(Exception):
     """
     The path specified is for a directory but not for a file.
@@ -201,7 +202,7 @@ def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False
 
             list_lines = []
             for num, line in enumerate(file):
-                if __contains(line, keyword, whole_words, case_sensitive):
+                if __contains(keyword, line, whole_words, case_sensitive):
                     list_lines.append((num+1, line))
 
             dict_out[entry] = list_lines
@@ -236,26 +237,18 @@ def deep_search(path, keyword, recursive=True, case_sensitive=False,
     return dict_out
 
 #----------------------------------------------------------------------
-def __contains(string1, string2, whole_word, case_sensitive):
+def __contains(pattern, string, whole_word, case_sensitive):
     """"""
-    if not case_sensitive:
-        string1 = string1.upper()
-        string2 = string2.upper()
 
+    flag = 0
+    if not case_sensitive:
+        flag = re.IGNORECASE
 
     if whole_word:
-        pos = string1.find(string2)
-        fin_pos = pos + len(string2)-1
-        if pos==-1:
-            return False;
-        if pos!=0 and string.ascii_letters.find(string1[pos-1:pos])!=-1:
-            return False
-        if fin_pos!=len(string1)-1 and string.ascii_letters.find(string1[fin_pos+1:fin_pos+2])!=-1:
-            return False
-        return True
-    else:
-        return string1.find(string2)!=-1
-    pass
+        pattern = '\s+'+pattern+'\s+'
+
+    return re.search(pattern, string, flag)
+
 
 
 

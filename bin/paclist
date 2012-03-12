@@ -32,9 +32,9 @@ from util.io import debug
 from optparse import OptionParser
 
 if __name__ == '__main__':
-    usage = "%prog [option] [\"todos\"]\n" + \
-          "Show the packages installed by pacman and sorted by size or install\
-          date."
+    usage = "%prog [option]\n" + \
+          "Show the packages installed by pacman and "+\
+          "sorted by size or install date."
 
     parser = OptionParser(usage=usage)
     parser.add_option("-e","--explicit", \
