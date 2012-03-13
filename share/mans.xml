@@ -69,6 +69,44 @@ Spazio 	        %20
     </item>
 </dict>
 
+<!--- ******************************* BITLBEE  ******************************** -->
+<dict name="bitlbee">
+    <item name="help">
+        General index:<command name="help index"/>
+    </item>
+
+    <item name="first step">
+        To register your own account:<command name="register &lt;password>"/>
+        Add a gmail account:<command name="account set jabber username@gmail.com password talk.google.com:5223:ssl"/>
+        Add a facebook account:<command name="account add jabber user@chat.facebook.com"/>
+        and enable it:<command name="account fb set oauth on"/>
+    </item>
+    <item name="manage accounts and user">
+        List the accounts:<command name="account list"/>
+        To set server property:<command name="account 0 set server talk.google.com"/>
+        To set username:<command name="account 0 set username foo@gmail.com"/>
+        To connect with an account:<command name="account 0 on"/>
+        To disconnect:<command name="account gtalk off"/>
+        To delete an account:<command name="account 0 del"/>
+        To see all the properties of an account:<command name="account 0 set"/>
+
+        To see all the properties of a user:<command name="set"/>
+    </item>
+
+    <item name="chatting">
+        To add some contacts:<command name="add 0 r2d2@example.com"/>
+        To remove:<command name="remove r2d2"/>
+        To rename:<command name="rename r2d3 r2d2"/>
+        To chat in separate window:<command name="/msg or /query"/>
+        
+        More features:
+        To join in a new separate channel:<command name="/join &amp;msn"/>
+    </item>
+</dict>
+
+
+
+
 <!--- ********************************** GIT ***************************************** -->
 <dict name="git">
     <item name="config">

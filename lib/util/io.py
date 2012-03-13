@@ -166,7 +166,7 @@ def __get_files(root_path, rel_path, recursive, pdf):
                 file_list.append(rel_path+'/'+entry)
             else:
                 # Check it is binary
-                isBinary = os.system("file \"" + abs_path + "\" | grep text > /dev/null")
+                isBinary = os.system("file -i \"" + abs_path + "\" | grep ascii > /dev/null")
                 if not isBinary:
                     debug(abs_path+' is not binary')
                     file_list.append(rel_path+'/'+entry)
