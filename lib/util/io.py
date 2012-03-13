@@ -25,7 +25,7 @@ __date__ = '21/05/2011'
 __license__   = 'GPL v3'
 __copyright__ = '2011'
 __docformat__ = 'restructuredtext en'
-__version__ = "0.0.3"
+__version__ = "0.0.9"
 
 import os
 import pickle
@@ -36,6 +36,15 @@ from util.misc import debug
 from util.threads import future
 
 import re
+
+import sys
+getstatusoutput = None
+if sys.version_info.major == 3:
+    from subprocess import getstatusoutput
+else:
+    from commands import getstatusoutput
+
+
 class DirectoryPathError(Exception):
     """
     The path specified is for a directory but not for a file.
@@ -146,7 +155,7 @@ def get_list(path):
 
     return l
 
-def __get_files(root_path, rel_path, recursive, pdf):
+def get_all_files(root_path, rel_path, recursive, pdf):
     """
     Returns the list of the relative path of non-binary files
     """
@@ -157,22 +166,9 @@ def __get_files(root_path, rel_path, recursive, pdf):
         abs_path = os.path.normpath(path+"/"+entry)
         if os.path.isdir(abs_path) and recursive:
             debug('Sub-directory='+abs_path)
-            file_list.extend(__get_files(root_path, rel_path+'/'+entry, recursive, pdf))
+            file_list.extend(get_all_files(root_path, rel_path+'/'+entry, recursive, pdf))
         elif os.path.isfile(abs_path):
-            debug('Checking the file '+abs_path+'...')
-            # Check it is pdf
-            if abs_path.split('.')[-1]=='pdf' and pdf:
-                debug(abs_path+' is a pdf.')
                 file_list.append(rel_path+'/'+entry)
-            else:
-                # Check it is binary
-                isBinary = os.system("file -i \"" + abs_path + "\" | grep ascii > /dev/null")
-                if not isBinary:
-                    debug(abs_path+' is not binary')
-                    file_list.append(rel_path+'/'+entry)
-                else:
-                    debug(abs_path+' is not a file text')
-                    
     return file_list
 
 
@@ -181,8 +177,21 @@ def get_files(path, recursive, pdf):
     """
     Returns the list of the relative path of non-binary files
     """
-    return __get_files(path, '', recursive, pdf)
 
+    all_files = get_all_files(path, '', recursive, pdf)
+    last_files = []
+
+    string_f = ' '.join(['"'+path+f+'"' for f in all_files])
+    st, out = getstatusoutput("file -i " + string_f)
+    for line in out.split('\n'):
+        m = re.match(path+'(.*):(.*);\s*charset=(.*)',line,flags=re.IGNORECASE)
+        if m:
+            f,t1,t2 = m.groups()
+            if t2.lower().find('ascii'):
+                last_files.append(f)
+            elif t1.lower().find('pdf')!=-1 and pdf:
+                last_files.append(f)
+    return last_files
 
 @future
 def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False,
@@ -214,12 +223,14 @@ def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False
 
 def deep_search(path, keyword, recursive=True, case_sensitive=False,
         whole_words=False, pdf=False):
+    """
+    Search efficiently a pattern into text and/or pdf files.
+    """
     
     dict_out = {}
     MAX_THREAD = 300
     # returns the relative paths
     file_list = get_files(path, recursive, pdf)
-    
     if len(file_list)>MAX_THREAD:
         size = (int)(len(file_list)/MAX_THREAD)+1
     else:
@@ -245,7 +256,7 @@ def __contains(pattern, string, whole_word, case_sensitive):
         flag = re.IGNORECASE
 
     if whole_word:
-        pattern = '\s+'+pattern+'\s+'
+        pattern = '[^0-9a-z]'+pattern+'[^0-9a-z]'
 
     return re.search(pattern, string, flag)
 
