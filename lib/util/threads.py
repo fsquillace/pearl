@@ -41,7 +41,7 @@ class future:
         try:
             self.__vals.append(self.__f(*args, **kw))
             self.__event.set()
-        except Exception(e):
+        except Exception as e:
             self.__exception = e
 
     def get(self):

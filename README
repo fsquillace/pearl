@@ -293,7 +293,8 @@ Example of using:
 
 EYE
 ~~~
-EYE searches (also recursively) if substrings match with the specified pattern, into each text or pdf file.
+EYE searches (also recursively) if substrings match with the specified pattern, 
+into each text or pdf file.
 
 Example of using:
 

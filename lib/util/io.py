@@ -205,9 +205,11 @@ def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False
                 debug('Checking the pdf file '+entry+'...')
                 out = subprocess.check_output(['pdftotext', abs_path,'-'])
                 #(st, out) = commands.getstatusoutput('pdftotext "'+entry+'" -')
-                file = io.StringIO(out)
-            else:
+                file = io.StringIO(out.decode())
+            elif os.access(abs_path, os.R_OK):
                 file = open(abs_path,'r')
+            else:
+                continue
 
             list_lines = []
             for num, line in enumerate(file):

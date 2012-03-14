@@ -31,6 +31,7 @@ import util.misc
 from util.logger import debug, warn
 
 from util.io import deep_search
+import util.painter
 
 import re
 
@@ -43,23 +44,23 @@ def __print_results(keyword, entry, list_lines, case_sensitive):
     if len(list_lines)==0:
         return
 
-    print(20*"-"+entry+20*"-")
+    util.painter.red()
+    print(entry)
+    util.painter.undo()
     for (num, line) in list_lines:
         m = re.search(keyword, line)
         it = re.finditer(keyword, line, flag)
         for m in it:
             if m:
                 line = line.replace(m.group(), '\033[1;31m'+m.group()+'\033[1;m')
-
-        print(str(num)+" "+line[:len(line)-1].strip())
-        pass
-    print((40+len(entry))*"-")
+        print('\033[1;32m'+str(num)+'\033[1;m: '+line[:len(line)-1].strip())
+    print()
 
 
 
 
 if __name__=='__main__':
-    usage = "%prog [options] [path] keyword"
+    usage = "%prog [options] [path] pattern"
     parser = OptionParser(usage=usage)
     parser.add_option("-c","--case-sensitive", dest="case_sensitive",\
             default=False, action="store_true", help="Case sensitive.")
