@@ -37,6 +37,8 @@ import os
 import sys
 import pickle
 
+import util.painter
+
 path_res = os.environ["PYSHELL_HOME"]
 
 def add_cmd(new_cmd, comment=''):
@@ -98,9 +100,16 @@ def print_list():
             # If the comment doesn't exist then don't show the # char
             if comm!='':
                 comm = '#'+comm
+                util.painter.orange()
                 print(comm)
-            print(str(i)+") "+cmd)
-            print("")
+                util.painter.undo()
+
+            util.painter.green()
+            sys.stdout.write(str(i)+') ')
+            util.painter.red()
+            sys.stdout.write(cmd+'\n')
+            util.painter.undo()
+            print('')
             i=i+1
     pass
 
