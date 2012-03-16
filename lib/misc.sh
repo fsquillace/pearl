@@ -172,7 +172,17 @@ function sync() {
         # -C:     Exclude CVS.
         # --exclude=.svn
 
-        rsync -R -C --exclude=.svn ${exc_opt} -uhzravE --delete $(readlink -f ${!j}) $SYNC_HOME 
+        abs_path=$(readlink -f "${!j}")
+
+        # If readlink didn't work well skip the following steps
+        # because without abs_path variable the next instructions 
+        # could be dangerous
+        if [ "$?" != "0" ]
+        then
+            continue
+        fi
+
+        rsync -R -C --exclude=.svn ${exc_opt} -uhzravE --delete "$abs_path" "$SYNC_HOME" 
         
         # The following solution doesn't manage deletion of files in the destination
         #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
@@ -198,7 +208,7 @@ function symc() {
     if [ "$1" == "-c" ] || [ "$1" == "--clean" ]
     then
         echo -e "Cleaning for broken symlinks in $SYNC_HOME. It could take time..."
-        find $SYNC_HOME -type l ! -execdir test -e '{}' \; -delete
+        find "$SYNC_HOME" -type l ! -execdir test -e '{}' \; -delete
         return 0
     fi
 
@@ -213,14 +223,22 @@ function symc() {
     #for var in "$@" #Another solution
     for ((j=$i;j<=$#;j++))
     do
-        abs_path=$(readlink -f ${!j})
+        abs_path=$(readlink -f "${!j}")
+
+        # If readlink didn't work well skip the following steps
+        # because without abs_path variable the next instructions 
+        # could be dangerous
+        if [ "$?" != "0" ]
+        then
+            continue
+        fi
 
         if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
         then
-            rm -v -fr $SYNC_HOME/$abs_path
+            rm -v -fr "$SYNC_HOME/$abs_path"
         else
             # The following solution doesn't manage deletion of files in the destination
-            cp -f -s -v -a --parents -u -r --target-directory $SYNC_HOME/ $abs_path
+            cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
 
             #Tag the file to be shown in ranger
             #if [ "$?" == 0 ]

@@ -78,9 +78,6 @@
 
 from ranger.api.commands import *
 from ranger.ext.get_executables import get_executables
-from ranger.core.runner import ALLOWED_FLAGS
-
-from tags import Tags
 
 import os
 from ranger.core.loader import CommandLoader
