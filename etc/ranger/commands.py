@@ -86,10 +86,6 @@ import os
 from ranger.core.loader import CommandLoader
 import subprocess
 
-tags = Tags(self.confpath('tagged'))
-#tags.add('/home/feel/configure_image.sh', tag='*')
-self.fm.tags = tags
-
 class sync(Command):
     """
     :sync                   Copy the selected files to the sync directory
@@ -150,37 +146,6 @@ class sync(Command):
             # no need for a confirmation, just sync
             subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
                       '"'+cf.path+'"')
-
-
-
-class tagg(Command):
-    """
-    :symc                   Create a sym link of the selected files into the sync directory
-    :symc [-s || --show ]   Show the sync directory
-   
-    Tries to create a sym link of the selection to sync directory.
-
-    "Selection" is defined as all the "marked files" (by default, you
-    can mark files with space or v). If there are no marked files,
-    use the "current file" (where the cursor is)
-
-    When attempting to synsync-empty directories or multiple
-    marked files, it will require a confirmation: The last word in
-    the line has to start with a 'y'.  This may look like:
-    :symc yes
-    :symc seriously? yeah!
-    """
-
-
-
-    allow_abbrev = False
-   
-    def execute(self):
-
-        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
-        sync_dir = os.environ['SYNC_HOME']
-
-
 
 
 
