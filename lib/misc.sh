@@ -237,8 +237,17 @@ function symc() {
         then
             rm -v -fr "$SYNC_HOME/$abs_path"
         else
-            # The following solution doesn't manage deletion of files in the destination
-            cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
+            # It needs to ensure that the file is readble
+            test -r "$abs_path"
+            if [ "$?" == "0" ]
+            then
+                # The following solution doesn't manage deletion of files in the destination
+                cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
+                # Wipe out all the files that don't have the read permission
+                find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
+            else
+                echo -e "The entry "${!j}" don't have read permission."
+            fi
 
             #Tag the file to be shown in ranger
             #if [ "$?" == 0 ]
