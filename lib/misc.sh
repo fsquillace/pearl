@@ -139,7 +139,7 @@ function sync() {
         echo "Usage:"
         echo -e "sync [--exclude=PATTERN] FILE1 FILE2 ...\tSync files or directories"
         echo -e "\t\texcluding what mathces with PATTERN"
-        echo -e "trash [-h || --help]\t\tDisplays this"
+        echo -e "sync [-h || --help]\t\tDisplays this"
         return 0
     fi
 
@@ -178,6 +178,59 @@ function sync() {
         #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
     done
 
+}
+
+
+# Create a link (that means link instead of copying like sync command)
+# with Dropbox/Ubuntu One folder using
+# absolute path to maintain the same structure
+function symc() {
+    if [ "$1" = -h ] || [ "$1" = --help ]
+    then
+        echo "Usage:"
+        echo -e "symc FILE1 FILE2 ...\tLink symbolic files or directories instead of copying"
+        echo -e "symc [-u || --unlink] FILE1 FILE2 ...\tRemove the sym link of files or directories"
+        echo -e "symc [-c || --clean]\tDelete broken sym links in SYNC directory"
+        echo -e "symc [-h || --help]\tDisplays this"
+        return 0
+    fi
+
+    if [ "$1" == "-c" ] || [ "$1" == "--clean" ]
+    then
+        echo -e "Cleaning for broken symlinks in $SYNC_HOME. It could take time..."
+        find $SYNC_HOME -type l ! -execdir test -e '{}' \; -delete
+        return 0
+    fi
+
+
+    if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
+    then
+        i=2
+    else
+        i=1
+    fi
+
+    #for var in "$@" #Another solution
+    for ((j=$i;j<=$#;j++))
+    do
+        abs_path=$(readlink -f ${!j})
+
+        if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
+        then
+            rm -v -fr $SYNC_HOME/$abs_path
+        else
+            # The following solution doesn't manage deletion of files in the destination
+            cp -f -s -v -a --parents -u -r --target-directory $SYNC_HOME/ $abs_path
+
+            #Tag the file to be shown in ranger
+            #if [ "$?" == 0 ]
+            #then
+                #mkdir -p ~/.config/ranger/
+                #echo "$abs_path" >> ~/.config/ranger/tagged
+            #fi
+            #ln -s $(readlink -f ${!j}) $SYNC_HOME
+        fi
+    done
 }
 
 

@@ -80,18 +80,22 @@ from ranger.api.commands import *
 from ranger.ext.get_executables import get_executables
 from ranger.core.runner import ALLOWED_FLAGS
 
+from tags import Tags
 
 import os
 from ranger.core.loader import CommandLoader
 import subprocess
 
+tags = Tags(self.confpath('tagged'))
+#tags.add('/home/feel/configure_image.sh', tag='*')
+self.fm.tags = tags
 
 class sync(Command):
     """
-    :sync                   Move to the sync directory the selected files
+    :sync                   Copy the selected files to the sync directory
     :sync [-s || --show ]   Show the sync directory
    
-    Tries to move to sync directory the selection.
+    Tries to copy to sync directory the selection.
 
     "Selection" is defined as all the "marked files" (by default, you
     can mark files with space or v). If there are no marked files,
@@ -100,8 +104,8 @@ class sync(Command):
     When attempting to synsync-empty directories or multiple
     marked files, it will require a confirmation: The last word in
     the line has to start with a 'y'.  This may look like:
-    :trash yes
-    :trash seriously? yeah!
+    :sync yes
+    :sync seriously? yeah!
     """
 
 
@@ -147,6 +151,162 @@ class sync(Command):
             subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
                       '"'+cf.path+'"')
 
+
+
+class tagg(Command):
+    """
+    :symc                   Create a sym link of the selected files into the sync directory
+    :symc [-s || --show ]   Show the sync directory
+   
+    Tries to create a sym link of the selection to sync directory.
+
+    "Selection" is defined as all the "marked files" (by default, you
+    can mark files with space or v). If there are no marked files,
+    use the "current file" (where the cursor is)
+
+    When attempting to synsync-empty directories or multiple
+    marked files, it will require a confirmation: The last word in
+    the line has to start with a 'y'.  This may look like:
+    :symc yes
+    :symc seriously? yeah!
+    """
+
+
+
+    allow_abbrev = False
+   
+    def execute(self):
+
+        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        sync_dir = os.environ['SYNC_HOME']
+
+
+
+
+
+class symc(Command):
+    """
+    :symc                   Create a sym link of the selected files into the sync directory
+    :symc [-s || --show ]   Show the sync directory
+   
+    Tries to create a sym link of the selection to sync directory.
+
+    "Selection" is defined as all the "marked files" (by default, you
+    can mark files with space or v). If there are no marked files,
+    use the "current file" (where the cursor is)
+
+    When attempting to synsync-empty directories or multiple
+    marked files, it will require a confirmation: The last word in
+    the line has to start with a 'y'.  This may look like:
+    :symc yes
+    :symc seriously? yeah!
+    """
+
+
+
+    allow_abbrev = False
+   
+    def execute(self):
+
+        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        sync_dir = os.environ['SYNC_HOME']
+
+        if self.arg(1) == '-s' or self.arg(1) == '--show':
+            self.fm.cd(sync_dir)
+        else:
+            lastword = self.arg(-1)
+            SYNC_WARNING = 'symc seriously? '
+
+            if lastword.startswith('y'):
+                # user confirmed sync!
+                cfs = self.fm.env.cwd.get_selection()
+                cwd = self.fm.env.cwd
+
+                s, o =subprocess.getstatusoutput('source '+misc_lib+' ; symc '+\
+                        ' '.join(['"'+f.path+'"' for f in cfs]))
+
+                for f in cfs:
+                    cwd.mark_item(f, val=False)
+                return
+            
+            elif self.line.startswith(SYNC_WARNING):
+                # user did not confirm sync
+                return
+    
+            cwd = self.fm.env.cwd
+            cf = self.fm.env.cf
+            
+            if cwd.marked_items or (cf.is_directory and not cf.is_link \
+                                    and len(os.listdir(cf.path)) > 0):
+                # better ask for a confirmation, when attempting to
+                # sync multiple files or a non-empty directory.
+                return self.fm.open_console(SYNC_WARNING)
+
+            # no need for a confirmation, just sync
+            subprocess.getstatusoutput('source '+misc_lib+' ; symc '+\
+                      '"'+cf.path+'"')
+
+class usymc(Command):
+    """
+    :usymc                   Remove the sym link of the selected files into the sync directory
+    :usymc [-s || --show ]   Show the sync directory
+   
+    Tries to remove a sym link of the selection to sync directory.
+
+    "Selection" is defined as all the "marked files" (by default, you
+    can mark files with space or v). If there are no marked files,
+    use the "current file" (where the cursor is)
+
+    When attempting to synsync-empty directories or multiple
+    marked files, it will require a confirmation: The last word in
+    the line has to start with a 'y'.  This may look like:
+    :usymc yes
+    :usymc seriously? yeah!
+    """
+
+
+
+    allow_abbrev = False
+   
+    def execute(self):
+
+        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        sync_dir = os.environ['SYNC_HOME']
+
+        if self.arg(1) == '-s' or self.arg(1) == '--show':
+            self.fm.cd(sync_dir)
+        else:
+            lastword = self.arg(-1)
+            SYNC_WARNING = 'usymc seriously? '
+
+            if lastword.startswith('y'):
+                # user confirmed sync!
+                cfs = self.fm.env.cwd.get_selection()
+                cwd = self.fm.env.cwd
+
+                s, o = subprocess.getstatusoutput('source '+misc_lib+' ; symc -u '+\
+                        ' '.join(['"'+f.path+'"' for f in cfs]))
+
+                for f in cfs:
+                    cwd.mark_item(f, val=False)
+                return
+            
+            elif self.line.startswith(SYNC_WARNING):
+                # user did not confirm sync
+                return
+    
+            cwd = self.fm.env.cwd
+            cf = self.fm.env.cf
+            
+            if cwd.marked_items or (cf.is_directory and not cf.is_link \
+                                    and len(os.listdir(cf.path)) > 0):
+                # better ask for a confirmation, when attempting to
+                # sync multiple files or a non-empty directory.
+                return self.fm.open_console(SYNC_WARNING)
+
+            # no need for a confirmation, just sync
+            subprocess.getstatusoutput('source '+misc_lib+' ; symc -u '+\
+                      '"'+cf.path+'"')
 
 
 class trash(Command):

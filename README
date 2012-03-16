@@ -179,9 +179,19 @@ There are several commands for ranger that *pyshell* introduces:
     Sync the selected files
 *:sync* [*-s* || *--show*]::
     Show the sync directory
-    Allows to sync the files selected moving them into the SYNC_HOME specified
-    in $$~$$/.config/pyshell/pyshellrc. For more details see the SYNC section
-    below.
+Allows to sync the files selected copying them into the SYNC_HOME specified
+in $$~$$/.config/pyshell/pyshellrc. For more details see the SYNC section
+below.
+
+*:symc*::
+    Create symlinks of the selected files into sync directory
+*:usymc*::
+    Remove the symlinks of the selected files
+*:symc* [*-s* || *--show*]::
+    Show the sync directory
+Allows to sync the files selected creating symlinks instead of copying them 
+into the SYNC_HOME specified in $$~$$/.config/pyshell/pyshellrc.
+For more details see the SYMC section below.
 
 *:extracthere*::
     Extract the files contained into the selected compress file.
@@ -343,6 +353,29 @@ Example of using:
     *$ sync* /home/david/ /etc/::
     Synchronizes all the files in the '/home/david' and '/etc/' respectively into
     '$SYNC_HOME/home/david' and '$SYNC_HOME/etc'.
+
+SYMC
+~~~~
+SYMC is still better than SYNC! It allows you to synchronize your data
+using a synchronization system such as Dropbox/Ubuntu One in a very fashion
+way but creating symlinks of the files instead of copying them.
+SYMC build the same filesystem structure starting from the sync directory
+specified by the environment variable '$SYNC_HOME'. For instance, if you want to
+sync the file '$$~$$/.bashrc' it will be copied in '$SYNC_HOME/$$~$$/.bashrc' by cp
+command. When updating/removing your files, they will be automatically synchronized 
+by your sync system so that you don't need to sync manually every time and you won't 
+lose your data anymore!
+
+In '$$~$$/.pyshell/pyshellrc' you can specify your sync directory in the environment
+variable '$SYNC_HOME' (to default is '$$~$$/Dropbox').
+See symc --help to know all the details of how using this command.
+
+Example of using:
+
+    *$ symc* /home/david/ /etc/::
+    Synchronizes all the files in the '/home/david' and '/etc/' respectively into
+    '$SYNC_HOME/home/david' and '$SYNC_HOME/etc' creating symlinks.
+
 
 BACKUP
 ~~~~~~
