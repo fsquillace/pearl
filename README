@@ -324,10 +324,15 @@ SYNC
 SYNC is an awesome command that allows you to synchronize your data
 using a synchronization system such as Dropbox/Ubuntu One in a very fashion
 way. You need to install rsync to use this command.
+SYNC allows you to define a base directory for source and destination in which you can
+create a mirror between them.
 SYNC build the same filesystem structure starting from the sync directory
-specified by the environment variable '$SYNC_HOME'. For instance, if you want to
-sync the file '$$~$$/.bashrc' it will be copied in '$SYNC_HOME/$$~$$/.bashrc' by rsync
-command. rsync allows to create a perfect mirror updating the sync directory
+specified by the environment variable '$SYNC_HOME'. For instance, if you have a rule that
+indicate the source as '/home/david' and the destination as '/home/phil'
+so, you can copy the directory '/home/david/mydir/mydir2' and it will be
+placed into the destination as '/home/phil/mydir/mydir2' accordingly to
+the rule. 
+SYNC uses rsync and it allows to create a perfect mirror updating the sync directory
 with only the modified files.
 
 Like to rsync you can exclude some files or directories that match with a
@@ -335,24 +340,26 @@ pattern. For example if you don't want sync makefiles:
 ------------------------------------------------
 sync --exclude=Makefile --exclude=makefile mydir
 ------------------------------------------------
+NOTE: The exclude feature is not currently available for this version of
+*pyshell*
 
-In '$$~$$/.pyshell/pyshellrc' you can specify your sync directory in the environment
-variable '$SYNC_HOME' (to default is '$$~$$/Dropbox').
-
-You could change the variable every time by setting '$SYNC_HOME'. For example,
+You could add new rules using as destination directory a remote machine. For example,
 you can synchronize files or directory directly on another remote machine:
 ----------------------------------
-$ export SYNC_HOME=user@domain.com:
-$ sync . '/home/user/myfile'
+$ sync -a $$~$$ user@domain.com:~
+$ cd $$~$$
+$ sync 1 'mydir/myfile'
 ----------------------------------
 NOTE: Don't forget to use *colon* if you specify a machine location.
 See sync --help to know all the details of how using this command.
 
 Example of using:
 
-    *$ sync* /home/david/ /etc/::
+    *$ sync -a* '/home/david/' '/home/david/Dropbox/'::
+    Add a new rule to mirror with Dropbox directory.
+    *$ sync* 1 'mydata' 'mydir/video/'::
     Synchronizes all the files in the '/home/david' and '/etc/' respectively into
-    '$SYNC_HOME/home/david' and '$SYNC_HOME/etc'.
+    '/home/david/Dropbox/mydata' and '/home/david/Dropbox/mydir/video/'.
 
 SYMC
 ~~~~

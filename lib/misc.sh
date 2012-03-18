@@ -134,59 +134,150 @@ function ranger(){
 # Create a sync with Dropbox/Ubuntu One folder using 
 # absolute path to maintain the same structure
 function sync() {
-    if [ "$1" = -h ] || [ "$1" = --help ]
+    if [ "$1" = -h ] || [ "$1" = --help ] && [ "$#" == 1 ]
     then
         echo "Usage:"
-        echo -e "sync [--exclude=PATTERN] FILE1 FILE2 ...\tSync files or directories"
-        echo -e "\t\texcluding what mathces with PATTERN"
+        echo -e "sync <num> FILE1 FILE2 ...\tSync files or directories"
+        echo -e "\t\tusing the <num> entry"
+        echo -e "sync [-l || --list]\t\tList all the sync entry"
+        echo -e "sync [-a || --add] <local src> <local/remote dest>\t\tAdd a sync entry"
+        echo -e "sync [-r || --remove] <num>\t\tREmove a sync entry"
         echo -e "sync [-h || --help]\t\tDisplays this"
         return 0
     fi
 
-    # introduce --exclude option
-    exc_opt=""
-    for ((i=1; i<=$#;i++))
-    do
-        if [[ "${!i}" != *--exclude* ]]
+    # If the file doesn't exist create it with a default entry
+    if [ ! -f $PYSHELL_HOME/syncs ]
+    then
+        echo "/,~/Dropbox" >> $PYSHELL_HOME/syncs
+    fi
+
+    if [ "$1" == "-l" ] || [ "$1" == "--list" ]
+    then
+        if [ "$#" == 1 ]
         then
-            break
+            cat -n $PYSHELL_HOME/syncs | sed -e 's/,/  ->  /g'
         else
-            exc_opt="${exc_opt} ${!i}"
+            echo "Error on arguments: type sync --help to know the usage."
+            return 127
         fi
-    done
 
-    #for var in "$@" #Another solution
-    for ((j=$i;j<=$#;j++))
-    do
-        # Rsync Options:
-        # -c:     Enable checksum
-        # -a:     Preserve the attibutes of the files.
-        # -v:     Verbose.
-        # -z:     Enables the compression.
-        # -u:     Update files.
-        # -r:     Recursive.
-        # -E:     Preserve Executability.
-        # -h:     Human readable.
-        # -n:     Simulate.
-        # -R:     Relative (include implied directories).
-        # -C:     Exclude CVS.
-        # --exclude=.svn
-
-        abs_path=$(readlink -f "${!j}")
-
-        # If readlink didn't work well skip the following steps
-        # because without abs_path variable the next instructions 
-        # could be dangerous
-        if [ "$?" != "0" ]
+    elif [ "$1" == "-r" ] || [ "$1" == "--remove" ]
+    then
+        if [ "$#" == 2 ]
         then
-            continue
+            # TODO Fix the remove option
+            sed -e "${2}d" $PYSHELL_HOME/syncs > $PYSHELL_HOME/syncs
+        else
+            echo "Error on arguments: type sync --help to know the usage."
+            return 127
         fi
 
-        rsync -R -C --exclude=.svn ${exc_opt} -uhzravE --delete "$abs_path" "$SYNC_HOME" 
-        
-        # The following solution doesn't manage deletion of files in the destination
-        #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
-    done
+    elif [ "$1" == "-a" ] || [ "$1" == "--add" ]
+    then
+        if [ "$#" == 3 ]
+        then
+            
+            echo "$(readlink -f $2),$3" >> $PYSHELL_HOME/syncs
+        else
+            echo "Error on arguments: type sync --help to know the usage."
+            return 127
+        fi
+    else
+        # Get the line of syncs
+        sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PYSHELL_HOME/syncs)
+        sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PYSHELL_HOME/syncs)
+
+
+        #introduce --exclude option
+        #exc_opt=""
+        #for ((i=1; i<=$;i++))
+        #do
+            #if [[ "${!i}" != *--exclude* ]]
+            #then
+                #break
+            #else
+                #exc_opt="${exc_opt} ${!i}"
+            #fi
+        #done
+
+
+
+        sync_src=$(readlink -f $sync_src)
+        # Change sync_src if it's different from /
+        if [ "$sync_src" != "/" ]
+        then
+            sync_src=$sync_src/
+        fi
+
+
+
+        #for var in "$@" #Another solution
+        for ((j=2;j<=$#;j++))
+        do
+            # Rsync Options:
+            # -c:     Enable checksum
+            # -a:     Preserve the attibutes of the files.
+            # -v:     Verbose.
+            # -z:     Enables the compression.
+            # -u:     Update files.
+            # -r:     Recursive.
+            # -E:     Preserve Executability.
+            # -h:     Human readable.
+            # -n:     Simulate.
+            # -R:     Relative (include implied directories).
+            # -C:     Exclude CVS.
+            # --exclude=.svn
+
+
+            abs_path=$(readlink -f "${!j}")
+            # If readlink didn't work well skip the following steps
+            # because without abs_path variable the next instructions 
+            # could be dangerous
+            if [ "$?" != "0" ]
+            then
+                continue
+            fi
+
+
+
+            # Manage the case of / for sync_src
+            if [ "$sync_src" == "/" ]
+            then
+                rel_path="$abs_path"
+
+            else
+                echo "$abs_path" | grep "^$sync_src" &> /dev/null
+                if [ "$?" != 0 ]
+                then
+                    echo "Error: $abs_path is not in the base src directory $sync_src"
+                    return 1
+                fi
+
+                # Get the relative path
+                rel_path=${abs_path/$sync_src/}
+
+            fi
+
+            # For debug:
+            #echo "Absolute path: $abs_path"
+            #echo "Base path: $sync_src"
+            #echo "Relative path: $rel_path"
+            # echo ""
+
+
+            # We must change directory to the base directory
+            # to the the right implied directories with --relative option
+            builtin cd $sync_src
+            rsync --relative -C --exclude=.svn -uhzravE --delete "$rel_path" "$sync_dest"
+            builtin cd - &> /dev/null
+
+            # The following solution doesn't manage deletion of files in the destination
+            #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
+        done
+
+
+    fi
 
 }
 
