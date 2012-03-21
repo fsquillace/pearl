@@ -83,85 +83,82 @@ import os
 from ranger.core.loader import CommandLoader
 import subprocess
 
+
 class sync(Command):
     """
-    :sync                   Copy the selected files to the sync directory
-    :sync [-s || --show ]   Show the sync directory
-   
+    :sync <num>             Copy the selected files to the sync directory
+                            specified by the entry <num>
+    :sync [-h || --help ]   Display the help
+
     Tries to copy to sync directory the selection.
+    Type sync -h for all the available option.
 
     "Selection" is defined as all the "marked files" (by default, you
     can mark files with space or v). If there are no marked files,
     use the "current file" (where the cursor is)
-
-    When attempting to synsync-empty directories or multiple
-    marked files, it will require a confirmation: The last word in
-    the line has to start with a 'y'.  This may look like:
-    :sync yes
-    :sync seriously? yeah!
     """
-
-
-
     allow_abbrev = False
    
     def execute(self):
-
         misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
-        sync_dir = os.environ['SYNC_HOME']
 
-        if self.arg(1) == '-s' or self.arg(1) == '--show':
-            self.fm.cd(sync_dir)
-        else:
-            lastword = self.arg(-1)
-            SYNC_WARNING = 'sync seriously? '
+        if (self.arg(1) == '-l' or self.arg(1) == '--list') and len(self.args)==2:
+            self.fm.execute_command('source '+misc_lib+'; sync -l; sleep 5')
+            #self.fm.cd(sync_dir)
+            return
+        elif (self.arg(1) == '-h' or self.arg(1) == '--help') and len(self.args)==2:
+            self.fm.execute_command('source '+misc_lib+'; sync -h; sleep 5')
+            return
+        elif (self.arg(1) == '-a' or self.arg(1) == '--add') and len(self.args)==4:
+            self.fm.execute_command('source '+misc_lib+'; '+self.line)
+            return
+        elif (self.arg(1) == '-r' or self.arg(1) == '--remove') and\
+                len(self.args)==3:
+            self.fm.execute_command('source '+misc_lib+'; '+self.line)
+            return
 
-            if lastword.startswith('y'):
+        elif self.arg(1).isdigit() and len(self.args)==2:
+            num_entry = self.arg(1)
+
+            if num_entry.isdigit():
                 # user confirmed sync!
                 cfs = self.fm.env.cwd.get_selection()
                 cwd = self.fm.env.cwd
+                cf = self.fm.env.cf
 
-                subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
+                if cwd.marked_items or (cf.is_directory and not \
+                        cf.is_link and len(os.listdir(cf.path)) > 0):
+                    # Sync the selections
+                    self.fm.execute_command('source '+misc_lib+' ; sync '+\
+                            num_entry+' '+\
                           ' '.join(['"'+f.path+'"' for f in cfs]))
-                for f in cfs:
-                    cwd.mark_item(f, val=False)
+                    for f in cfs:
+                        cwd.mark_item(f, val=False)
+                else:
+                    # Sync the file selected
+                    self.fm.execute_command('source '+misc_lib+' ; sync '+\
+                            num_entry+' '+\
+                            '"'+cf.path+'"')
                 return
-            
-            elif self.line.startswith(SYNC_WARNING):
-                # user did not confirm sync
-                return
-    
-            cwd = self.fm.env.cwd
-            cf = self.fm.env.cf
-            
-            if cwd.marked_items or (cf.is_directory and not cf.is_link \
-                                    and len(os.listdir(cf.path)) > 0):
-                # better ask for a confirmation, when attempting to
-                # sync multiple files or a non-empty directory.
-                return self.fm.open_console(SYNC_WARNING)
 
-            # no need for a confirmation, just sync
-            subprocess.getstatusoutput('source '+misc_lib+' ; sync '+\
-                      '"'+cf.path+'"')
+
+        return self.fm.notify("Error in arguments: %s" % \
+                (self.line), bad=True)
+
 
 
 
 class symc(Command):
     """
     :symc                   Create a sym link of the selected files into the sync directory
-    :symc [-s || --show ]   Show the sync directory
+    :symc [-h || --help ]   Show the help
    
     Tries to create a sym link of the selection to sync directory.
+    Type symc -h for all the available option.
 
     "Selection" is defined as all the "marked files" (by default, you
     can mark files with space or v). If there are no marked files,
     use the "current file" (where the cursor is)
-
-    When attempting to synsync-empty directories or multiple
-    marked files, it will require a confirmation: The last word in
-    the line has to start with a 'y'.  This may look like:
-    :symc yes
-    :symc seriously? yeah!
     """
 
 
@@ -171,104 +168,48 @@ class symc(Command):
     def execute(self):
 
         misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
-        sync_dir = os.environ['SYNC_HOME']
 
-        if self.arg(1) == '-s' or self.arg(1) == '--show':
-            self.fm.cd(sync_dir)
-        else:
-            lastword = self.arg(-1)
-            SYNC_WARNING = 'symc seriously? '
+        if (self.arg(1) == '-s' or self.arg(1) == '--show') and\
+                len(self.args)==2:
+            self.fm.execute_command('source '+misc_lib+'; '+self.line+'; sleep 5')
+            return
+        elif (self.arg(1) == '-h' or self.arg(1) == '--help') and len(self.args)==2:
+            self.fm.execute_command('source '+misc_lib+'; '+self.line+'; sleep 5')
+            return
+        elif (self.arg(1) == '-c' or self.arg(1) == '--clean') and\
+                len(self.args)==2:
+            self.fm.execute_command('source '+misc_lib+'; '+self.line)
+            return
 
-            if lastword.startswith('y'):
-                # user confirmed sync!
-                cfs = self.fm.env.cwd.get_selection()
-                cwd = self.fm.env.cwd
+        elif len(self.args)==1 or\
+                ((self.arg(1)=='-u' or self.arg(1)=='--unlink') and len(self.args)==2):
 
-                s, o =subprocess.getstatusoutput('source '+misc_lib+' ; symc '+\
-                        ' '.join(['"'+f.path+'"' for f in cfs]))
-
-                for f in cfs:
-                    cwd.mark_item(f, val=False)
-                return
-            
-            elif self.line.startswith(SYNC_WARNING):
-                # user did not confirm sync
-                return
-    
+            # user confirmed sync!
+            cfs = self.fm.env.cwd.get_selection()
             cwd = self.fm.env.cwd
             cf = self.fm.env.cf
-            
-            if cwd.marked_items or (cf.is_directory and not cf.is_link \
-                                    and len(os.listdir(cf.path)) > 0):
-                # better ask for a confirmation, when attempting to
-                # sync multiple files or a non-empty directory.
-                return self.fm.open_console(SYNC_WARNING)
 
-            # no need for a confirmation, just sync
-            subprocess.getstatusoutput('source '+misc_lib+' ; symc '+\
-                      '"'+cf.path+'"')
-
-class usymc(Command):
-    """
-    :usymc                   Remove the sym link of the selected files into the sync directory
-    :usymc [-s || --show ]   Show the sync directory
-   
-    Tries to remove a sym link of the selection to sync directory.
-
-    "Selection" is defined as all the "marked files" (by default, you
-    can mark files with space or v). If there are no marked files,
-    use the "current file" (where the cursor is)
-
-    When attempting to synsync-empty directories or multiple
-    marked files, it will require a confirmation: The last word in
-    the line has to start with a 'y'.  This may look like:
-    :usymc yes
-    :usymc seriously? yeah!
-    """
-
-
-
-    allow_abbrev = False
-   
-    def execute(self):
-
-        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
-        sync_dir = os.environ['SYNC_HOME']
-
-        if self.arg(1) == '-s' or self.arg(1) == '--show':
-            self.fm.cd(sync_dir)
-        else:
-            lastword = self.arg(-1)
-            SYNC_WARNING = 'usymc seriously? '
-
-            if lastword.startswith('y'):
-                # user confirmed sync!
-                cfs = self.fm.env.cwd.get_selection()
-                cwd = self.fm.env.cwd
-
-                s, o = subprocess.getstatusoutput('source '+misc_lib+' ; symc -u '+\
+            if cwd.marked_items or (cf.is_directory and not \
+                    cf.is_link and len(os.listdir(cf.path)) > 0):
+                # Sync the selections
+                self.fm.execute_command('source '+misc_lib+'; '+self.line+\
+                        ' '+\
                         ' '.join(['"'+f.path+'"' for f in cfs]))
-
                 for f in cfs:
                     cwd.mark_item(f, val=False)
-                return
-            
-            elif self.line.startswith(SYNC_WARNING):
-                # user did not confirm sync
-                return
-    
-            cwd = self.fm.env.cwd
-            cf = self.fm.env.cf
-            
-            if cwd.marked_items or (cf.is_directory and not cf.is_link \
-                                    and len(os.listdir(cf.path)) > 0):
-                # better ask for a confirmation, when attempting to
-                # sync multiple files or a non-empty directory.
-                return self.fm.open_console(SYNC_WARNING)
 
-            # no need for a confirmation, just sync
-            subprocess.getstatusoutput('source '+misc_lib+' ; symc -u '+\
-                      '"'+cf.path+'"')
+                return
+            else:
+                # Sync the file selected
+                self.fm.execute_command('source '+misc_lib+'; '+self.line+\
+                        ' '+\
+                        '"'+cf.path+'"')
+                return
+
+
+        return self.fm.notify("Error in arguments: %s" % \
+                (self.line), bad=True)
+
 
 
 class trash(Command):
@@ -311,7 +252,7 @@ class trash(Command):
                 # user confirmed deletion!
                 cfs = self.fm.env.cwd.get_selection()
 
-                os.system('source '+misc_lib+' ; trash '+\
+                self.fm.execute_command('source '+misc_lib+' ; trash '+\
                           ' '.join(['"'+f.path+'"' for f in cfs]))
 
                 return
@@ -328,7 +269,7 @@ class trash(Command):
                 # delete multiple files or a non-empty directory.
                 return self.fm.open_console(TRASH_WARNING)
             # no need for a confirmation, just delete
-            os.system('source '+misc_lib+' ; trash '+\
+            self.fm.execute_command('source '+misc_lib+' ; trash '+\
                       '"'+cf.path+'"')
 
 

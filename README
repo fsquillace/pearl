@@ -175,17 +175,18 @@ There are several commands for ranger that *pyshell* introduces:
 *:trash* [*-e* || *--empty*]::
     Empty the trash
 
-*:sync*::
-    Sync the selected files
-*:sync* [*-s* || *--show*]::
-    Show the sync directory
-Allows to sync the files selected copying them into the SYNC_HOME specified
-in $$~$$/.config/pyshell/pyshellrc. For more details see the SYNC section
-below.
+
+*:sync <num>*::
+    Sync the selected files on the entry <num>
+*:sync* [*-l* || *--list*]::
+    Show the list of the sync entries
+
+To know all the available option type: *sync -h*.
+For more details see the SYNC section below.
 
 *:symc*::
     Create symlinks of the selected files into sync directory
-*:usymc*::
+*:symc -u*::
     Remove the symlinks of the selected files
 *:symc* [*-s* || *--show*]::
     Show the sync directory
@@ -326,39 +327,40 @@ using a synchronization system such as Dropbox/Ubuntu One in a very fashion
 way. You need to install rsync to use this command.
 SYNC allows you to define a base directory for source and destination in which you can
 create a mirror between them.
-SYNC build the same filesystem structure starting from the sync directory
-specified by the environment variable '$SYNC_HOME'. For instance, if you have a rule that
+For instance, if you have a rule that
 indicate the source as '/home/david' and the destination as '/home/phil'
 so, you can copy the directory '/home/david/mydir/mydir2' and it will be
 placed into the destination as '/home/phil/mydir/mydir2' accordingly to
-the rule. 
+the rule.
 SYNC uses rsync and it allows to create a perfect mirror updating the sync directory
 with only the modified files.
 
-Like to rsync you can exclude some files or directories that match with a
-pattern. For example if you don't want sync makefiles:
-------------------------------------------------
-sync --exclude=Makefile --exclude=makefile mydir
-------------------------------------------------
-NOTE: The exclude feature is not currently available for this version of
-*pyshell*
+//Like to rsync you can exclude some files or directories that match with a
+//pattern. For example if you don't want sync makefiles:
+//------------------------------------------------
+//sync --exclude=Makefile --exclude=makefile mydir
+//------------------------------------------------
+//NOTE: The exclude feature is not currently available for this version of
+//*pyshell*
 
 You could add new rules using as destination directory a remote machine. For example,
 you can synchronize files or directory directly on another remote machine:
+
 ----------------------------------
 $ sync -a $$~$$ user@domain.com:~
 $ cd $$~$$
 $ sync 1 'mydir/myfile'
 ----------------------------------
 NOTE: Don't forget to use *colon* if you specify a machine location.
-See sync --help to know all the details of how using this command.
+See *sync --help* to know all the details of how using this command.
 
 Example of using:
 
     *$ sync -a* '/home/david/' '/home/david/Dropbox/'::
     Add a new rule to mirror with Dropbox directory.
     *$ sync* 1 'mydata' 'mydir/video/'::
-    Synchronizes all the files in the '/home/david' and '/etc/' respectively into
+    The files and directories 'mydata' and 'mydir/video' must be on '/home/david'. 
+    If so, SYNC synchronizes all the files specified respectively into
     '/home/david/Dropbox/mydata' and '/home/david/Dropbox/mydir/video/'.
 
 SYMC

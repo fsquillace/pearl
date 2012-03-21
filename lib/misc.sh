@@ -97,7 +97,7 @@ function trash(){
 
     if [ -z "$1" ] || [ "$1" = -s ] || [ "$1" = --show ]
     then
-        ll -a $PYSHELL_TEMPORARY
+        ls --color -lh -a $PYSHELL_TEMPORARY
     elif [ "$1" = -e ] || [ "$1" = --empty ]
     then
         rm -rf $PYSHELL_TEMPORARY/*
@@ -166,8 +166,7 @@ function sync() {
     then
         if [ "$#" == 2 ]
         then
-            # TODO Fix the remove option
-            sed -e "${2}d" $PYSHELL_HOME/syncs > $PYSHELL_HOME/syncs
+            sed -e "${2}d" $PYSHELL_HOME/syncs | tee $PYSHELL_HOME/syncs
         else
             echo "Error on arguments: type sync --help to know the usage."
             return 127
@@ -291,7 +290,8 @@ function symc() {
         echo "Usage:"
         echo -e "symc FILE1 FILE2 ...\tLink symbolic files or directories instead of copying"
         echo -e "symc [-u || --unlink] FILE1 FILE2 ...\tRemove the sym link of files or directories"
-        echo -e "symc [-c || --clean]\tDelete broken sym links in SYNC directory"
+        echo -e "symc [-c || --clean]\tDelete broken sym links in the sync directory"
+        echo -e "symc [-s || --show]\t\tShows the sync directory"
         echo -e "symc [-h || --help]\tDisplays this"
         return 0
     fi
@@ -300,6 +300,11 @@ function symc() {
     then
         echo -e "Cleaning for broken symlinks in $SYNC_HOME. It could take time..."
         find "$SYNC_HOME" -type l ! -execdir test -e '{}' \; -delete
+        return 0
+    fi
+    if [ "$1" == "-s" ] || [ "$1" == "--show" ]
+    then
+        ls --color -lh -a "$SYNC_HOME"
         return 0
     fi
 
@@ -334,6 +339,11 @@ function symc() {
             then
                 # The following solution doesn't manage deletion of files in the destination
                 cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
+                # Delete recursively all the version control directory
+                find "$SYNC_HOME/$abs_path" -type d -name .svn -exec rm -Rf '{}' \;
+                find "$SYNC_HOME/$abs_path" -type d -name .cvs -exec rm -Rf '{}' \;
+                find "$SYNC_HOME/$abs_path" -type d -name .git -exec rm -Rf '{}' \;
+
                 # Wipe out all the files that don't have the read permission
                 find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
             else
