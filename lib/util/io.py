@@ -30,9 +30,8 @@ __version__ = "0.0.9"
 import os
 import pickle
 import subprocess
-import string
 import io
-from util.misc import debug
+from util.misc import debug, error
 from util.threads import future
 
 import re
@@ -181,8 +180,16 @@ def get_files(path, recursive, pdf):
     all_files = get_all_files(path, '', recursive, pdf)
     last_files = []
 
-    string_f = ' '.join(['"'+path+f+'"' for f in all_files])
-    st, out = getstatusoutput("file -i " + string_f)
+    # This step could be improved.
+    # We need to make a partition of the files because the getstatusoutput
+    # doesn't accept argument list too long :(
+    out = ''
+    for i in range(0,len(all_files), 200):
+        string_f = ' '.join(['"'+path+f+'"' for f in all_files[i:i+200]])
+        s, o = getstatusoutput("file -i " + string_f)
+        out = out+o
+
+
     for line in out.split('\n'):
         m = re.match(path+'(.*):(.*);\s*charset=(.*)',line,flags=re.IGNORECASE)
         if m:
@@ -216,7 +223,8 @@ def analyze_files(path, file_list, keyword, recursive=True, case_sensitive=False
                 if __contains(keyword, line, whole_words, case_sensitive):
                     list_lines.append((num+1, line))
 
-            dict_out[entry] = list_lines
+            if len(list_lines)!=0:
+                dict_out[entry] = list_lines
         except UnicodeDecodeError:
             debug(entry+' doesn\'t have a UTF8 encoding.')
             continue
@@ -227,8 +235,13 @@ def deep_search(path, keyword, recursive=True, case_sensitive=False,
         whole_words=False, pdf=False):
     """
     Search efficiently a pattern into text and/or pdf files.
+    Returns None if the path doesn't exist
     """
     
+    if not os.path.exists(path):
+        error('The path: '+path+' doesn\'t exist.\n')
+        return None
+
     dict_out = {}
     MAX_THREAD = 300
     # returns the relative paths
@@ -238,14 +251,16 @@ def deep_search(path, keyword, recursive=True, case_sensitive=False,
     else:
         size = 1   
     
+    o = None
     for ipos in range(0, len(file_list), size):
         o = analyze_files(path, file_list[ipos:ipos+size], keyword, recursive, case_sensitive,
         whole_words, pdf)
         
     # Update the general dictionary
-    dict_all = o.get_all()
-    for d in dict_all:
-        dict_out.update(d)
+    if o is not None:
+        dict_all = o.get_all()
+        for d in dict_all:
+            dict_out.update(d)
         
     return dict_out
 

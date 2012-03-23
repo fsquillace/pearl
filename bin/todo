@@ -152,7 +152,7 @@ if __name__ == "__main__":
         f.close()
     elif len(sys.argv)==1:
                 
-        # Print TODO dirs
+        # Print todos dirs
         l_d = []
         for line in open(path_dirs):
             m = re.match('(\d):(.*)', line)
@@ -167,8 +167,13 @@ if __name__ == "__main__":
             util.painter.orange()
             print(e)
             util.painter.undo()
-            for entry, list_lines in dict_out.items():
-                __print_results(entry, list_lines)
+            if dict_out is not None:
+                if len(dict_out)==0:
+                    util.painter.cyan()
+                    print('    Nothing TODO!')
+                else:
+                    for entry, list_lines in dict_out.items():
+                        __print_results(entry, list_lines)
 
                 
         # Prints TODOs

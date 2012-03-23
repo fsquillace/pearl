@@ -1497,6 +1497,11 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
     </item>
 
     <item name="debugging">
+        In view:
+        <code>debug(@movie)
+            @movie.inspect</code>
+
+        In controller:
         Use the logger:<code>logger.debug(@movie.inspect)</code>
 
         Debugger:
