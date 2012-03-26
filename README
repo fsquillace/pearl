@@ -501,6 +501,12 @@ BIND FOR RANGER
 ~~~~~~~~~~~~~~~
 Cntrl-o starts ranger command
 
+ONE INSTANCE OF RANGER
+~~~~~~~~~~~~~~~~~~~~~
+When typing S key in ranger, it opens a new terminal but you can forget that you have
+already an instance of ranger in the same terminal. To avoid of opening nested 
+ranger instances, the built-in script ranger in *pyshell* allows you to always 
+open the last ranger available.
 
 CHANGING DIRECTORY EXITING FROM RANGER
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

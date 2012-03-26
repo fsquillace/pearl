@@ -1,4 +1,5 @@
 pyshell 0.9.4
+- There si only one instance of ranger for each terminal (without useless nested ranger)
 - Changed the behaviour of sync using a a table to sync between sources and destinations
 - Added symc script and symc ranger command to create symlinks into sync directory
 - deep_search command works with regular expressions

@@ -43,12 +43,13 @@ source $PYSHELL_ROOT/lib/misc.sh
 
 if [ -e $PYSHELL_HOME ]
 then
-    # Check updates
-    svn info $PYSHELL_ROOT &> /dev/null
-    if [ "$?" = "0"  ]
-    then
-        svn update $PYSHELL_ROOT &> /dev/null &
-    fi
+    # The following code is deprecated because we don't use svn anymore
+    ## Check updates
+    #svn info $PYSHELL_ROOT &> /dev/null
+    #if [ "$?" = "0"  ]
+    #then
+        #svn update $PYSHELL_ROOT &> /dev/null &
+    #fi
     
     source $PYSHELL_HOME/pyshellrc
 else
@@ -167,8 +168,6 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
         . /etc/bash_completion
 fi
-
-
 
 # This binds Ctrl-O to ranger:
 bind '"\C-o":"\C-u ranger\C-m"'

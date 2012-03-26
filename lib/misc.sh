@@ -120,6 +120,23 @@ function trash(){
 # You can always type "cd -" to go back
 # to the original one.
 function ranger(){
+
+    # Checks out into the jobs
+    id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
+    if [ "$id" != "" ]
+    then
+        fg $id
+        return
+    fi
+
+    # Checks out if the user pressed S key
+    ps -t `tty` -o comm= | grep ranger &> /dev/null
+    if [ "$?" == "0" ]
+    then
+        exit
+        return # Ensures that it returns anyway if there are jobs stopped
+    fi
+
     tempfile='/tmp/chosendir'
     /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&

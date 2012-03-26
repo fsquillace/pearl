@@ -290,6 +290,7 @@ Spazio 	        %20
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
         
         Print if $1 begin with J:<command name="awk '($1~/^J/) { print $1 }'"/>
+        To use several separator (it's also possible to change it at runtime using FS):<command name="awk -F &quot;[,;.]&quot; '{print $4}'"/>
         Print if the lenght of $1 is greater than 6:<command name="awk '(length($2)>6) {print $2}'"/>
         Count number of lines where col3 &gt; col1:<command name="awk '$3 > $1 {print i + &quot;1&quot;; i++}'"/>
         Print the maximum value: <command name="awk 'BEGIN{} $1>x {x=$1} END{print x}'"/>
