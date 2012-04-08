@@ -77,7 +77,9 @@ Spazio 	        %20
 
     <item name="first step">
         To register your own account:<command name="register &lt;password>"/>
-        Add a gmail account:<command name="account set jabber username@gmail.com password talk.google.com:5223:ssl"/>
+        Add a gmail account:<command name="account set jabber username@gmail.com password"/>
+        To see the setting related to this account:<command name="acc gtalk set"/>
+        Then set the "server","port" and "ssl" property accordingly.
         Add a facebook account:<command name="account add jabber user@chat.facebook.com"/>
         and enable it:<command name="account fb set oauth on"/>
     </item>
@@ -3170,9 +3172,8 @@ permette di replicare una directory presente su un sistema server
 
 </item>
 
-<item name="dd if=/dev/hda2 of=boot">
-Dovrebbe convertire e copiare un file. Crea un filesystem
-
+<item name="dd">
+    To copy an image to an pendrive:<command name="dd if=/home/nomeutente/nomefile.img of=/dev/sdb bs=10M"/>
 </item>
 
 <item name="cp">

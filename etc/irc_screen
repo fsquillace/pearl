@@ -1,0 +1,2 @@
+source ~/.screenrc
+screen -t IRC 0 irssi

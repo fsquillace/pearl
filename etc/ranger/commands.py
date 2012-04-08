@@ -273,40 +273,22 @@ class trash(Command):
                       '"'+cf.path+'"')
 
 
-class extracthere(Command):
+class extract(Command):
     def execute(self):
-        """ Extract copied files to current directory """
+        """ Extract from the selected compress files to current directory """
         cwd = self.fm.env.cwd
-        marked_files = tuple(cwd.get_selection())
-        #old version was wih copy instead of mark
-        #copied_files = tuple(self.fm.env.copy)
+        cf = self.fm.env.cf
 
-        if not marked_files:
-            return
-
-        def refresh(_):
-            cwd = self.fm.env.get_directory(original_path)
-            cwd.load_content()
-
-        one_file = marked_files[0]
-        cwd = self.fm.env.cwd
-        original_path = cwd.path
-        au_flags = ['-X', cwd.path]
-        au_flags += self.line.split()[1:]
-        au_flags += ['-e']
-
-        self.fm.env.copy.clear()
-        self.fm.env.cut = False
-        if len(marked_files) == 1:
-            descr = "extracting: " + os.path.basename(one_file.path)
+        if cwd.marked_items:
+            cfs = cwd.get_selection()
         else:
-            descr = "extracting files from: " + os.path.basename(one_file.dirname)
-        obj = CommandLoader(args=['aunpack'] + au_flags \
-                            + [f.path for f in marked_files], descr=descr)
+            cfs = [cf]
 
-        obj.signal_bind('after', refresh)
-        self.fm.loader.add(obj)
+        self.fm.execute_command('atool -x '+\
+                ' '.join(['"'+f.path+'"' for f in cfs]))
 
+        for f in cfs:
+            cwd.mark_item(f, val=False)
 
 
 class compress(Command):
