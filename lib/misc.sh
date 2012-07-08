@@ -229,6 +229,8 @@ function sync() {
 
 
         #for var in "$@" #Another solution
+        # Create all the relative paths
+        rel_paths=""
         for ((j=2;j<=$#;j++))
         do
             # Rsync Options:
@@ -274,7 +276,10 @@ function sync() {
                 rel_path=${abs_path/$sync_src/}
 
             fi
+            # TODO solve the problem of spaces for directory and files
+            rel_paths="${rel_path} ${rel_paths}"
 
+        done
             # For debug:
             #echo "Absolute path: $abs_path"
             #echo "Base path: $sync_src"
@@ -285,12 +290,11 @@ function sync() {
             # We must change directory to the base directory
             # to the the right implied directories with --relative option
             builtin cd $sync_src
-            rsync --relative -C --exclude=.svn -uhzravE --delete "$rel_path" "$sync_dest"
+            rsync --relative -C --exclude=.svn -uhzravE --delete ${rel_paths} "$sync_dest"
             builtin cd - &> /dev/null
 
             # The following solution doesn't manage deletion of files in the destination
             #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
-        done
 
 
     fi
@@ -301,6 +305,7 @@ function sync() {
 # Create a link (that means link instead of copying like sync command)
 # with Dropbox/Ubuntu One folder using
 # absolute path to maintain the same structure
+# TODO Solve the problem of the space for the filename when using symc inside ranger it doesn't work.
 function symc() {
     if [ "$1" = -h ] || [ "$1" = --help ]
     then
@@ -332,7 +337,7 @@ function symc() {
     else
         i=1
     fi
-
+"/"
     #for var in "$@" #Another solution
     for ((j=$i;j<=$#;j++))
     do

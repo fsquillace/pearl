@@ -68,6 +68,59 @@ Spazio 	        %20
         To select the region of the screen:<command name="scrot -c -s -d 5"/>
     </item>
 </dict>
+<!--- ******************************* IRC and IRSSI  ******************************** -->
+<dict name="irc irssi">
+    <item name="basic commands">
+        To connect to a server:<command name="/connect irc.freenode.net"/>
+        or:<command name="/server irc.freenode.net"/>
+        You can use Ctrl-X to switch between network connections.
+        To join a channel:<command name="/join #mychan"/>
+        To list all the channel:<command name="/list"/>
+        To close the session irc client:<command name="/quit"/>
+
+List of main commands:
+
+Command     Alias     Info
+/ban        /bans,/b  Sets or List bans for a channel
+/clear      /c, /cl   Clears a channel buffer
+/join       /j        Joins a channel
+/kick       /k        Kicks a user
+/kickban    /kb       Kickban a user
+/msg        /m        Send a private message to a user
+/unban *    /mub      Clears the unbanlist (unbans everyone) in a channel
+/names      /n        Lists the users in the current channel
+/query      /q        Open a query window with a user, or close current query window
+/topic      /t        Displays/edits current topic. Tip: use /t[space][tab] to automatically fill in existing topic.
+/window close   /wc     Force closure of a window.
+/whois  /wi     WHOIS a user. Displays user information 
+
+    </item>
+    <item name="miscellaneous">
+        To get the property:<command name="/set"/>
+        To set a property:<command name="/set timestamp_format %H:%M:%S"/>
+        To save the configuration:<command name="/save"/>
+        To get all the alias:<command name="/alias"/>
+        To set a theme:<command name="/set theme themename"/>
+        To highlight some nick:<command name="/hilight yournick"/>
+    </item>
+
+    <item name="perl script">
+        Put the script in ~/.irssi/scripts or in ~/.irssi/scripts/autorun to run the script at startup.
+        To execute a script:<command name="/run scriptname"/>
+    </item>
+
+    <item name="set a new account">
+        To set a nick:<command name="/nick feel"/>
+        To register the nick:<command name="/msg nickserv register password user@email"/>
+        To beingidentified with your own account:<command name="/msg nickserv register password"/>
+        To change the password:<command name="/ns set password newPassword"/>
+    </item>
+
+    <item name="chatting">
+        To a private chat:<command name="/query nick"/>
+    </item>
+
+</dict>
 
 <!--- ******************************* BITLBEE  ******************************** -->
 <dict name="bitlbee">
@@ -200,8 +253,8 @@ Spazio 	        %20
         To add tag to past commit:<command name="git tag -a v1.3 [checksum]"/>
         You can see the checksum typing log command.
 
-        To transfer to remote a tag:<command name="git remote push v1.2"/>
-        To transfer to remote all tags:<command name="git remote push --tags"/>
+        To transfer to remote a tag:<command name="git push v1.2"/>
+        To transfer to remote all tags:<command name="git push --tags"/>
     </item>
 
     <item name="branching and merge">
@@ -359,6 +412,16 @@ target: dependencies
 [tab]   compilation command
 ]]>
 </code>
+
+Special variables are:
+$^     -> Prerequisites of the rule
+$&lt;  -> First prerequisite
+$@     -> The target of the rule
+$?     -> All out-of-data prerequisites
+
+To include makefiles inside the same makefile we can use:
+include &lt;config.mk&gt;
+
 Ecco un esempio in cui si vede il contenuto di un Makefile
 <code>
 <![CDATA[
@@ -374,12 +437,6 @@ hello: main.o factorial.o hello.o
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
-
-factorial.o: factorial.cpp
-	$(CC) $(CFLAGS) factorial.cpp
-
-hello.o: hello.cpp
-	$(CC) $(CFLAGS) hello.cpp
 
 clean:
 	rm -rf *o hello
@@ -430,6 +487,7 @@ $(EXECUTABLE): $(OBJECTS)
         To remove package and its dipendencies and config files:<command name="pacman -Rns pack"/>
 
         To upgrade with the repository:<command name="pacman -Syu"/>
+        If you don't want to upgrade a particular package:<command name="pacman -Syu --ignore linux"/>
 
         To search in the database repository (both name and description):<command name="pacman -Ss string"/>
             to display extensive information:<command name="pacman -Si pack"/>
@@ -1090,9 +1148,11 @@ In grep si può mettere qualcosa che possa filtrare i dati in modo da ottenere p
 
 </item>
 
-<item name="limitazione connessioni TCP">
+<item name="kill and slow down connection with tcpkill and tcpnice">
 Se vogliamo chiudere le connessioni TCP su porta 22 (SSH):<command name="tcpkill -i eth0 tcp port 22"/>
+If you want to kill all the connections but not for a pecified host:<command name="sudo tcpkill -i wlan0 -9 not host 192.168.1.109"/>
 Se vogliamo rallentare una connessione TCP iniettando pacchetti che avvisano di una finestra di ricezione piccola o pacchetti ICMP:<command name="tcpnice -i eth0 tcp port 22"/>
+To slow down all the connection but not for a specified host:<command name="sudo tcpnice -i wlan0 not host 192.168.1.109"/>
 </item>
 
 </dict>
@@ -2775,6 +2835,10 @@ mostra gli utenti collegati al sistema e cosa stanno facendo.-f indica il termin
     </item>
      <item name="join pdf files">
         With ghostscript:<command name="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=finished.pdf file1.pdf file2.pdf"/>
+    </item>
+
+    <item name="compress pdf files">
+        With ghostscript:<command name="gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf"/>
     </item>
 
 
