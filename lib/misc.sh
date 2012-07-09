@@ -151,10 +151,35 @@ function ranger(){
 # Create a sync with Dropbox/Ubuntu One folder using 
 # absolute path to maintain the same structure
 function sync() {
-    if [ "$1" = -h ] || [ "$1" = --help ] && [ "$#" == 1 ]
+    TEMP=`getopt -o la::r:hR --long list,add::,remove:,help,reverse  -n 'sync' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try sync -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    OPT_ADD=false
+    OPT_REMOVE=false
+    OPT_LIST=false
+    OPT_REVERSE=false
+    OPT_HELP=false
+    while true ; do
+	case "$1" in
+	    -a|--add) OPT_ADD=true ; ARG1_ADD=$2; ARG2_ADD=$3; shift 3 ;;
+	    -r|--remove) OPT_REMOVE=true ; ARG_REMOVE=$2 ; shift 2 ;;
+	    -l|--list) OPT_LIST=true ; shift ;;
+            -R|--reverse) OPT_REVERSE=true ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return ;;
+	esac
+    done
+
+
+    if $OPT_HELP # [ "$1" = --help ] && [ "$#" == 1 ]
     then
         echo "Usage:"
-        echo -e "sync <num> FILE1 FILE2 ...\tSync files or directories"
+        echo -e "sync [-R || --reverse] <num> FILE1 FILE2 ...\tSync files or directories"
         echo -e "\t\tusing the <num> entry"
         echo -e "sync [-l || --list]\t\tList all the sync entry"
         echo -e "sync [-a || --add] <local src> <local/remote dest>\t\tAdd a sync entry"
@@ -169,41 +194,22 @@ function sync() {
         echo "/,~/Dropbox" >> $PYSHELL_HOME/syncs
     fi
 
-    if [ "$1" == "-l" ] || [ "$1" == "--list" ]
+    if $OPT_LIST #|| [ "$1" == "--list" ]
     then
-        if [ "$#" == 1 ]
-        then
-            cat -n $PYSHELL_HOME/syncs | sed -e 's/,/  ->  /g'
-        else
-            echo "Error on arguments: type sync --help to know the usage."
-            return 127
-        fi
+        cat -n $PYSHELL_HOME/syncs | sed -e 's/,/  ->  /g'
 
-    elif [ "$1" == "-r" ] || [ "$1" == "--remove" ]
+    elif $OPT_REMOVE #|| [ "$1" == "--remove" ]
     then
-        if [ "$#" == 2 ]
-        then
-            sed -e "${2}d" $PYSHELL_HOME/syncs | tee $PYSHELL_HOME/syncs
-        else
-            echo "Error on arguments: type sync --help to know the usage."
-            return 127
-        fi
+        sed -e "${2}d" $PYSHELL_HOME/syncs | tee $PYSHELL_HOME/syncs
 
-    elif [ "$1" == "-a" ] || [ "$1" == "--add" ]
+    elif $OPT_ADD #|| [ "$1" == "--add" ]
     then
-        if [ "$#" == 3 ]
-        then
-            
-            echo "$(readlink -f $2),$3" >> $PYSHELL_HOME/syncs
-        else
-            echo "Error on arguments: type sync --help to know the usage."
-            return 127
-        fi
+        echo "$(readlink -f $ARG1_ADD),$ARG2_ADD" >> $PYSHELL_HOME/syncs
     else
         # Get the line of syncs
         sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PYSHELL_HOME/syncs)
         sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PYSHELL_HOME/syncs)
-
+        shift;
 
         #introduce --exclude option
         #exc_opt=""
@@ -227,11 +233,10 @@ function sync() {
         fi
 
 
-
         #for var in "$@" #Another solution
         # Create all the relative paths
         rel_paths=""
-        for ((j=2;j<=$#;j++))
+        for arg in $@ # ((j=2;j<=$#;j++))
         do
             # Rsync Options:
             # -c:     Enable checksum
@@ -248,7 +253,7 @@ function sync() {
             # --exclude=.svn
 
 
-            abs_path=$(readlink -f "${!j}")
+            abs_path=$(readlink -f "$arg") #"${!j}")
             # If readlink didn't work well skip the following steps
             # because without abs_path variable the next instructions 
             # could be dangerous
@@ -280,6 +285,7 @@ function sync() {
             rel_paths="${rel_path} ${rel_paths}"
 
         done
+
             # For debug:
             #echo "Absolute path: $abs_path"
             #echo "Base path: $sync_src"
