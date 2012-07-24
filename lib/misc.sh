@@ -6,7 +6,7 @@ function apply(){
     then
         echo "Creating config file: $2"
         #dirp=$(readlink -f `dirname $2`)
-        dirp=$(dirname $2)
+        local dirp=$(dirname $2)
         mkdir -p $dirp
         touch "$2"
     fi
@@ -66,10 +66,10 @@ notifier(){
 
 
 
-bootapp(){    
+bootapp(){
 # Permette di decidere se voler mostrare stout o stderr
-show_stdout=$3
-show_stderr=$4
+local show_stdout=$3
+local show_stderr=$4
 a=`ps aux | grep  -v "grep" | grep "$1"`  #`pidof $1`
 if [ "$a" = "" ]; then
     #echo "L'applicazione " $1 "verrà eseguita tra" $2
@@ -89,6 +89,86 @@ if [ "$a" = "" ]; then
 fi
 }
 
+function eye(){
+    local TEMP=`getopt -o crwph --long case-sensitive,recursive,whole-words,pdf,help -n 'eye' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try eye -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    local OPT_CASE="-i"
+    local OPT_RECUR="-maxdepth 1"
+    local OPT_WHOLE_WORDS=false
+    local OPT_PDF=false
+    local OPT_HELP=false
+    while true ; do
+	case "$1" in
+	    -c|--case-sensitive) OPT_CASE="" ; shift ;;
+	    -r|--recursive) OPT_RECUR="" ; shift ;;
+	    -w|--whole-words) OPT_WHOLE_WORDS=true ; shift ;;
+            -p|--pdf) OPT_PDF=true ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return ;;
+	esac
+    done
+
+
+    if $OPT_HELP
+    then
+        echo "Usage: eye [options] [path] pattern"
+        echo "Options:"
+        echo "-h, --help            show this help message and exit"
+        echo "-c, --case-sensitive  Case sensitive."
+        echo "-r, --recursive       Recursive."
+        echo "-w, --whole-words     Whole words."
+        echo "-p, --pdf             Search in .pdf files too."
+        return 0
+    fi
+
+
+    local args=()
+    for arg do
+        args+=($arg)
+    done
+
+    if [ ${#args[@]} -gt 2 ]; then
+        echo "Too many arguments!" ; exit 127 ;
+    elif [ ${#args[@]} -eq 1 ]; then
+        local path=.
+        local keyword=${args[0]}
+    else
+        local path=${args[0]}
+        local keyword=${args[1]}
+    fi
+
+
+    if $OPT_WHOLE_WORDS
+    then
+        local keyword="[^0-9a-z]$keyword[^0-9a-z]"
+    fi
+
+    find $path $OPT_RECUR -type f -exec grep --binary-files=without-match --color=always $OPT_CASE -n "$keyword" {} \; -printf "\033[0;31m%p\033[0m\n" 
+
+
+    # | awk -F "[\n:]" '{ print $0 }' # if($1 ~ /^([0-9]*):(.*)$/) {print $0} else {print $0} }' # else {print "\033[0;31m" $0 "\033[0m"; next; print $0 } }'
+
+
+
+    if $OPT_PDF
+    then
+        local lis=$(find -type f -name "*.pdf" -printf "%p ")
+        for l in $lis
+        do
+            pdftotext $l - | grep --color=always -n $OPT_CASE $keyword
+            if [ "$?" -eq "0" ]; then
+                echo -e "\033[0;31m$l\033[0m"
+            fi
+        done
+    fi
+
+}
 
 
 # Trash command
@@ -122,7 +202,7 @@ function trash(){
 function ranger(){
 
     # Checks out into the jobs
-    id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
+    local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
     if [ "$id" != "" ]
     then
         fg $id
@@ -137,7 +217,7 @@ function ranger(){
         return # Ensures that it returns anyway if there are jobs stopped
     fi
 
-    tempfile='/tmp/chosendir'
+    local tempfile='/tmp/chosendir'
     /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
     if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
@@ -158,11 +238,11 @@ function sync() {
     # Note the quotes around `$TEMP': they are essential!
     eval set -- "$TEMP"
 
-    OPT_ADD=false
-    OPT_REMOVE=false
-    OPT_LIST=false
-    OPT_REVERSE=false
-    OPT_HELP=false
+    local OPT_ADD=false
+    local OPT_REMOVE=false
+    local OPT_LIST=false
+    local OPT_REVERSE=false
+    local OPT_HELP=false
     while true ; do
 	case "$1" in
 	    -a|--add) OPT_ADD=true ; ARG1_ADD=$2; ARG2_ADD=$3; shift 3 ;;
@@ -207,8 +287,8 @@ function sync() {
         echo "$(readlink -f $ARG1_ADD),$ARG2_ADD" >> $PYSHELL_HOME/syncs
     else
         # Get the line of syncs
-        sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PYSHELL_HOME/syncs)
-        sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PYSHELL_HOME/syncs)
+        local sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PYSHELL_HOME/syncs)
+        local sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PYSHELL_HOME/syncs)
         shift;
 
         #introduce --exclude option
@@ -229,13 +309,13 @@ function sync() {
         # Change sync_src if it's different from /
         if [ "$sync_src" != "/" ]
         then
-            sync_src=$sync_src/
+            local sync_src=$sync_src/
         fi
 
 
         #for var in "$@" #Another solution
         # Create all the relative paths
-        rel_paths=""
+        local rel_paths=""
         for arg in $@ # ((j=2;j<=$#;j++))
         do
             # Rsync Options:
@@ -253,7 +333,7 @@ function sync() {
             # --exclude=.svn
 
 
-            abs_path=$(readlink -f "$arg") #"${!j}")
+            local abs_path=$(readlink -f "$arg") #"${!j}")
             # If readlink didn't work well skip the following steps
             # because without abs_path variable the next instructions 
             # could be dangerous
@@ -267,7 +347,7 @@ function sync() {
             # Manage the case of / for sync_src
             if [ "$sync_src" == "/" ]
             then
-                rel_path="$abs_path"
+                local rel_path="$abs_path"
 
             else
                 echo "$abs_path" | grep "^$sync_src" &> /dev/null
@@ -278,11 +358,11 @@ function sync() {
                 fi
 
                 # Get the relative path
-                rel_path=${abs_path/$sync_src/}
+                local rel_path=${abs_path/$sync_src/}
 
             fi
             # TODO solve the problem of spaces for directory and files
-            rel_paths="${rel_path} ${rel_paths}"
+            local rel_paths="${rel_path} ${rel_paths}"
 
         done
 
@@ -312,6 +392,7 @@ function sync() {
 # with Dropbox/Ubuntu One folder using
 # absolute path to maintain the same structure
 # TODO Solve the problem of the space for the filename when using symc inside ranger it doesn't work.
+# TODO Manage the options using getopt
 function symc() {
     if [ "$1" = -h ] || [ "$1" = --help ]
     then
@@ -339,15 +420,15 @@ function symc() {
 
     if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
     then
-        i=2
+        local i=2
     else
-        i=1
+        local i=1
     fi
 "/"
     #for var in "$@" #Another solution
     for ((j=$i;j<=$#;j++))
     do
-        abs_path=$(readlink -f "${!j}")
+        local abs_path=$(readlink -f "${!j}")
 
         # If readlink didn't work well skip the following steps
         # because without abs_path variable the next instructions 
@@ -392,7 +473,7 @@ function symc() {
 
 # This function integrate cd and cd2 in the same command
 function cd() {
-    if [ -z "$1" ] 
+    if [ -z "$1" ]
     then
 	$PYSHELL_ROOT/bin/cd2
     elif [ "$1" = -g ]

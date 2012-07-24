@@ -1,3 +1,8 @@
+pyshell 0.10.1
+- Implemented the new version of eye in Bash
+- Improved the managment of options for sync
+- Fixed the problem of local variables in misc.sh
+
 pyshell 0.9.4
 - Added myirc alias to have irssi+screen
 - Improved the extract ranger command
