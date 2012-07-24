@@ -70,7 +70,7 @@ bootapp(){
 # Permette di decidere se voler mostrare stout o stderr
 local show_stdout=$3
 local show_stderr=$4
-a=`ps aux | grep  -v "grep" | grep "$1"`  #`pidof $1`
+local a=`ps aux | grep  -v "grep" | grep "$1"`  #`pidof $1`
 if [ "$a" = "" ]; then
     #echo "L'applicazione " $1 "verrà eseguita tra" $2
     # Opzione di default
@@ -87,6 +87,25 @@ if [ "$a" = "" ]; then
     fi
 
 fi
+}
+
+function pyshell_update(){
+    local srcdir=/tmp/pyshell
+    local pkgdir=$PYSHELL_ROOT
+
+
+    mkdir -p $srcdir
+    cd $srcdir
+    wget https://aur.archlinux.org/packages/py/pyshell/PKGBUILD
+    source PKGBUILD
+    wget -O pyshell.tar.gz $source
+    tar -xzvf pyshell.tar.gz
+
+    build
+
+    cd $pkgdir
+    rm -rf $srcdir
+
 }
 
 function eye(){
