@@ -1,3 +1,6 @@
+pyshell 0.12.0
+- Added a tag system in ranger to highlight the files and folder that are synchronized.
+
 pyshell 0.11.1
 - Implemented the new version of eye in Bash
 - Improved the managment of options for sync

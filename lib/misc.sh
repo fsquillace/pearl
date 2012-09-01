@@ -213,12 +213,20 @@ function trash(){
 
 }
 
+function check_sync(){
+    local sync_home_norm=$(realpath $SYNC_HOME)
+    find $sync_home_norm -print | awk -v q=$sync_home_norm '{sub(q,""); print "+:"$1}' > ~/.config/ranger/tagged
+}
+
+
 # cd to last path after exit
 # This functionallows to change the directory 
 # to the last visited one after ranger quits.
 # You can always type "cd -" to go back
 # to the original one.
 function ranger(){
+
+    check_sync
 
     # Checks out into the jobs
     local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
@@ -250,7 +258,7 @@ function ranger(){
 # Create a sync with Dropbox/Ubuntu One folder using 
 # absolute path to maintain the same structure
 function sync() {
-    TEMP=`getopt -o la::r:hR --long list,add::,remove:,help,reverse  -n 'sync' -- "$@"`
+    local TEMP=`getopt -o la::r:hR --long list,add::,remove:,help,reverse  -n 'sync' -- "$@"`
 
     if [ $? != 0 ] ; then echo "Error on parsing the command line. Try sync -h" >&2 ; return ; fi
 
@@ -427,7 +435,7 @@ function symc() {
     if [ "$1" == "-c" ] || [ "$1" == "--clean" ]
     then
         echo -e "Cleaning for broken symlinks in $SYNC_HOME. It could take time..."
-        find "$SYNC_HOME" -type l ! -execdir test -e '{}' \; -delete
+        find "$SYNC_HOME" -type l ! -execdir test -e '{}' \; -print -delete
         return 0
     fi
     if [ "$1" == "-s" ] || [ "$1" == "--show" ]
@@ -443,7 +451,7 @@ function symc() {
     else
         local i=1
     fi
-"/"
+
     #for var in "$@" #Another solution
     for ((j=$i;j<=$#;j++))
     do
