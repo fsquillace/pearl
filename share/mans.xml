@@ -373,6 +373,7 @@ Command     Alias     Info
         *   NR -- The current line's sequential number
         *   NF -- The number of fields in the current line
         *   FS -- The input field separator; defaults to whitespace and is reset by the -F command line parameter 
+        *   RS -- The record separator; by default is newline
         Variables don't need dollar char!
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
         
@@ -381,6 +382,9 @@ Command     Alias     Info
         Print if the lenght of $1 is greater than 6:<command name="awk '(length($2)>6) {print $2}'"/>
         Count number of lines where col3 &gt; col1:<command name="awk '$3 > $1 {print i + &quot;1&quot;; i++}'"/>
         Print the maximum value: <command name="awk 'BEGIN{} $1>x {x=$1} END{print x}'"/>
+        To delete all words ending with a letter g:<command name="awk '{gsub(&quot;[a-zA-Z0-9]*[g|G]&quot;, &quot;&quot;);print}' input"/>
+
+        To change the record separator: <command name="echo &quot;mela pera; cane gatto; Milano bari&quot; | awk 'BEGIN { RS=&quot;;&quot; } {print NR}'"/>
 
 Examples:
         <code>
@@ -428,6 +432,15 @@ END {
     print ".........................."
 }</code>
 
+<code>
+    #!/usr/bin/awk -f
+    # Count word,rows and chars in a file
+    {
+     nc += length($0); np += NF
+    }
+    END { print "Il file",FILENAME " contiene:", NR " righe,", np " parole,", nc " caratteri."
+    }
+</code>
     </item>
 
 </dict>
@@ -2616,6 +2629,9 @@ permette di attivare VNCServer è necessario specificare la password per l'acces
 <item name="ssh -l utente host">
 versione sicura di telnet
 Per comprimere i dati trasmessi e abilitare l'inoltro X11:<command name="ssh -X -C user@host"/>
+It's possible to use the option -Y the X11 forward <command name="ssh -Y -C user@host"/>
+The X11 forward automatically set the DISPLAY variable environment in order to have the right forward.
+So, it's not necessary to set the DISPLAY variable.
 Se si vuole avviare un'applicazione specificando un dato terminale:<command name="export DISPLAY=localhost:0.0"/>
 Per mostrare i DISPLAY degli altri terminali attivi basta usare il comando who.
 </item>
@@ -3673,6 +3689,10 @@ comando utilissimo per operazioni aritmetiche ( matematica ) tra stringhe
 
 <item name="date">
 visualizza la data
+It is possible to show previous dates. Examples:
+<command name="$ date --date='10 seconds ago'"/>
+<command name="$ date --date='1 days ago'"/>
+<command name="$ date --date='yesterday'"/>
 
 </item>
 

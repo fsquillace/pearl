@@ -29,6 +29,7 @@ inputrc extremely simplify the way of typing the commands.
 INSTALLATION
 ------------
 Once you extracted the .tar.gz file, type:
+
 -------------------------------
 $ cd pyshell
 $ source pyshell/pyshell
@@ -40,13 +41,12 @@ If so, *pyshell* create the configuration directory and apply some modification
 of your config file appending a 'source' in .vimrc, .bashrc and .inputrc (do not
 worry you have just to uncomment them if you do not want any of these features ;))
 
-NO ROOT PERMISSION (SVN REPOSITORY)
+NO ROOT PERMISSION (GIT REPOSITORY)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you do not have root permission, you can directly install *pyshell* by the
 svn repository. Type the following commands:
 .................................
-$ cd '$HOME'
-$ svn checkout 'http://pyshell.googlecode.com/svn/trunk/' '.'
+$ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/pyshell
 $ source pyshell/pyshell
 .................................
 
@@ -76,8 +76,8 @@ This is particular useful when you want to type file in remote server so as
 having all the feature you are used to. Here is a small list of the
 feature enabled in VIM:
 
-*Highlights and autocompletion::
-    For java, python, javascript, html, css, c/c++,xml and more..
+*Highlights and autocompletion*::
+    For java, python, javascript, html, css, c/c+$$+$$,xml and more;
 *Smart Home*::
     The key 'Home' has the special power of moving the cursor to the
     first character of the line;
@@ -180,9 +180,8 @@ There are several commands for ranger that *pyshell* introduces:
     Sync the selected files on the entry <num>
 *:sync* [*-l* || *--list*]::
     Show the list of the sync entries
-
-To know all the available option type: *sync -h*.
-For more details see the SYNC section below.
+    To know all the available option type: *sync -h*.
+    For more details see the SYNC section below.
 
 *:symc*::
     Create symlinks of the selected files into sync directory
@@ -190,9 +189,9 @@ For more details see the SYNC section below.
     Remove the symlinks of the selected files
 *:symc* [*-s* || *--show*]::
     Show the sync directory
-Allows to sync the files selected creating symlinks instead of copying them 
-into the SYNC_HOME specified in $$~$$/.config/pyshell/pyshellrc.
-For more details see the SYMC section below.
+    Allows to sync the files selected creating symlinks instead of copying them 
+    into the SYNC_HOME specified in $$~$$/.config/pyshell/pyshellrc.
+    For more details see the SYMC section below.
 
 *:extract*::
     Extract the files contained from to the selected compress files.
@@ -554,6 +553,7 @@ are stored into '$$~$$/.reminders'.
 
 COPYRIGHT
 ---------
+
        Copyright  (C) 2008, 2009, 2010, 2011 Free  Software 
        Foundation, Inc.
 
@@ -575,16 +575,16 @@ COPYRIGHT
 BUGS
 ----
 	Of course there is no bug in *pyshell*. But there may be unexpected behaviors.
-	Go to 'http://code.google.com/p/pyshell/issues/list' you can report directly
+	Go to 'https://github.com/fsquillace/pyshell/issues' you can report directly
 	this unexpected behaviors.
 
 AUTHORS
 -------
-Filippo Squillace <sqoox85@gmail.com>.
+Filippo Squillace <feel.squally@gmail.com>.
 
 WWW
 ---
-'http://pyshell.googlecode.com'
+'https://github.com/fsquillace/pyshell'
 
 Last words
 ----------
