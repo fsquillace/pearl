@@ -454,7 +454,7 @@ MAIN ALIASES
     - *goo*=ping www.google.com
     - *isconnect* - check whether the computer is connected
     - *alert* - send a notification alert
-    - *myirc* - Open irssi (a powerful irc client) within screen
+    - *scrssi* - Open irssi (a powerful irc client) within screen
 
 TIPS & TRICKS
 -------------

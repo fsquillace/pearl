@@ -154,6 +154,31 @@ Command     Alias     Info
 
 </dict>
 
+<!--- ******************************* AT  ******************************** -->
+<dict name="at">
+    <item name="general commands">
+        I comandi sono at, batch, atq, e atrm:
+          *  at esegue i comandi in un momento specificato.
+          *  atq elenca i lavori in attesa dell’utente, a meno che l’utente non sia il superutente;
+             in tal caso, tutti i lavori sono elencati.
+          *  atrm elimina uno dei lavori in attesa, identificati dal loro numero.
+          *  batch esegue comandi quando permesso dal livello di carico del sistema,
+             in altre parole, quando il carico medio scende sotto 1.5,
+             o il valore specificato nella chiamata di atd
+    </item>
+
+    <item name="at">
+        To execute at script.sh at 20.00 send an email of the output and insert the job into the queue a:<command name="at -m -q a -f script.sh 20.00"/>
+        Other possible values of time are &quot;midnight Friday&quot;
+    </item>
+    <item name="other command atrm, atq">
+        To see the list of jobs:<command name="atq"/>
+        To see the detail of the job number 3:<command name="at -c 3"/>
+        To remove the job number 3:<command name="atrm 3"/>
+    </item>
+
+</dict>
+
 <!--- ******************************* BITLBEE  ******************************** -->
 <dict name="bitlbee">
     <item name="help">
@@ -2703,7 +2728,9 @@ controlla la configurazione di TCP_WRAPPER segnalando config errate sui file /et
 
 <item name="tcpdump -i eth0 -F file">
 sniffa pacchetti sull'interfaccia di rete specificata, che verranno memorizzati su file. Esiste anche il comando ethereal
-
+Display traffic about DNS:<command name="tcpdump -i eth1 'udp port 53'"/>
+Display all FTP session to 202.54.1.5:<comand name="tcpdump -i eth1 'dst 202.54.1.5 and (port 21 or 20'"/>
+Use wireshark to view detailed information about files:<command name="tcpdump -n -i eth1 -s 0 -w output.txt src or dst port 80"/>
 </item>
 
 <item name="ifconfig eth0 192.168.0.1/24">

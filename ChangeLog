@@ -1,3 +1,8 @@
+pyshell 0.13.2
+- Renamed the command myirc to scrssi.
+- Add at command manual.
+- Added the colorize hostname of the prompt function
+
 pyshell 0.12.2
 - Added a tag system in ranger to highlight the files and folder that are synchronized.
 
