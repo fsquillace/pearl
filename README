@@ -523,8 +523,9 @@ for Vim in the Vim configuration section.
 
 BOOT GRAPHICAL APPLICATION AT STARTUP OF X SEVER
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-You can specify in your ~/.xinitrc your applications you want to startup
+You can specify in your $$~$$/.xinitrc your applications you want to startup
 with some delay with the following bash function:
+
 -----------------------------------
 source /path/to/pyshell/lib/misc.sh
 bootapp pidgin 23
@@ -532,6 +533,12 @@ bootapp pidgin 23
 It will boot pidgin after 23 seconds. This function allow to reduce the
 overhead of booting the X Server with a lot of application at startup.
 
+COLORIZE THE HOSTNAME IN PROMPT
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In order to recognize easily which machine you are currently using,
+the hostname information present in the prompt is colorized in function of its value.
+In other words, there is a hash function that give a int value that correspond
+to a color for a given hostname string.
 
 CONFIG FILES
 ------------

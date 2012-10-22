@@ -1,3 +1,7 @@
+pyshell 0.14.1
+- Added the --max-size option for symc
+- Fixed trash command for filenames with spaces
+
 pyshell 0.13.2
 - Renamed the command myirc to scrssi.
 - Add at command manual.

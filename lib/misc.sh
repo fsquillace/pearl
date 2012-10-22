@@ -153,7 +153,7 @@ function eye(){
     done
 
     if [ ${#args[@]} -gt 2 ]; then
-        echo "Too many arguments!" ; exit 127 ;
+        echo "Too many arguments!" ; return 127 ;
     elif [ ${#args[@]} -eq 1 ]; then
         local path=.
         local keyword=${args[0]}
@@ -208,7 +208,7 @@ function trash(){
         echo -e "trash [-e || --empty]\t\tEmpties the trash"
         echo -e "trash [-h || --help]\t\tDisplays this"
     else
-        mv --backup=numbered -f -t $PYSHELL_TEMPORARY $@
+        mv --backup=numbered -f -t $PYSHELL_TEMPORARY "$@"
     fi
 
 }
@@ -418,81 +418,133 @@ function sync() {
 # Create a link (that means link instead of copying like sync command)
 # with Dropbox/Ubuntu One folder using
 # absolute path to maintain the same structure
-# TODO Solve the problem of the space for the filename when using symc inside ranger it doesn't work.
-# TODO Manage the options using getopt
+# TODO Make exclude option. Try to use --exclude of du command
 function symc() {
-    if [ "$1" = -h ] || [ "$1" = --help ]
+    #################### BEGIN OPTION PARSING ############################
+    local TEMP=`getopt -o ucm:sh --long unlink,clean,max-size:,show,help -n 'symc' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try symc -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    local OPT_UNLINK=false
+    local OPT_CLEAN=false
+    local OPT_MAX_SIZE=""
+    local OPT_SHOW=false
+    local OPT_HELP=false
+    while true ; do
+	case "$1" in
+            -u|--unlink) OPT_UNLINK=true ; shift ;;
+            -c|--clean) OPT_CLEAN=true ; shift ;;
+	    -m|--max-size) shift; OPT_MAX_SIZE="$1" ; shift ;;
+            -s|--show) OPT_SHOW=true ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return ;;
+	esac
+    done
+
+    if $OPT_HELP
     then
         echo "Usage:"
         echo -e "symc FILE1 FILE2 ...\tLink symbolic files or directories instead of copying"
+        echo -e "symc [[-m || --max-size] BYTES] FILE1 ...\tMax size in BYTES for each file to be symced."
         echo -e "symc [-u || --unlink] FILE1 FILE2 ...\tRemove the sym link of files or directories"
         echo -e "symc [-c || --clean]\tDelete broken sym links in the sync directory"
-        echo -e "symc [-s || --show]\t\tShows the sync directory"
+        echo -e "symc [-s || --show]\tShows the sync directory"
         echo -e "symc [-h || --help]\tDisplays this"
         return 0
     fi
 
-    if [ "$1" == "-c" ] || [ "$1" == "--clean" ]
+    local args=()
+    for arg do
+        args+=("$arg")
+    done
+
+
+    if $OPT_SHOW && [ ${#args[@]} -gt 0 ]; then
+        echo "Error: No arguments with --show option!" ; return 127 ;
+    elif $OPT_CLEAN && [ ${#args[@]} -gt 0 ]; then
+        echo "Error: No arguments with --clean option!" ; return 127 ;
+    fi
+
+    #################### END OPTION PARSING ############################
+
+    if $OPT_CLEAN
     then
         echo -e "Cleaning for broken symlinks in $SYNC_HOME. It could take time..."
+        local res="none"
+        while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+        do
+            read -p "Do you want to proceed? (Y/n)> " res
+        done
+
+        if [ "$res" == "n" ] || [ "$res" == "N" ]; then
+            return 0
+        fi
+
         find "$SYNC_HOME" -type l ! -execdir test -e '{}' \; -print -delete
         return 0
     fi
-    if [ "$1" == "-s" ] || [ "$1" == "--show" ]
+
+    if $OPT_SHOW
     then
         ls --color -lh -a "$SYNC_HOME"
         return 0
     fi
 
 
-    if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
-    then
-        local i=2
-    else
-        local i=1
-    fi
+
+
+
 
     #for var in "$@" #Another solution
-    for ((j=$i;j<=$#;j++))
+    #for var in $args
+    for var in "${args[@]}";
     do
-        local abs_path=$(readlink -f "${!j}")
+        local abs_path=$(readlink -f "$var")
 
         # If readlink didn't work well skip the following steps
         # because without abs_path variable the next instructions 
         # could be dangerous
         if [ "$?" != "0" ]
         then
+            echo "Error on getting the absolute path of $var"
             continue
         fi
 
-        if [ "$1" == "-u" ] || [ "$1" == "--unlink" ]
+
+        if $OPT_UNLINK
         then
             rm -v -fr "$SYNC_HOME/$abs_path"
         else
             # It needs to ensure that the file is readble
             test -r "$abs_path"
-            if [ "$?" == "0" ]
+            if [ "$?" != "0" ]
             then
-                # The following solution doesn't manage deletion of files in the destination
-                cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
-                # Delete recursively all the version control directory
-                find "$SYNC_HOME/$abs_path" -type d -name .svn -exec rm -Rf '{}' \;
-                find "$SYNC_HOME/$abs_path" -type d -name .cvs -exec rm -Rf '{}' \;
-                find "$SYNC_HOME/$abs_path" -type d -name .git -exec rm -Rf '{}' \;
-
-                # Wipe out all the files that don't have the read permission
-                find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
-            else
-                echo -e "The entry "${!j}" don't have read permission."
+                echo -e "You don't have read permission for $var."
             fi
 
-            #Tag the file to be shown in ranger
-            #if [ "$?" == 0 ]
-            #then
-                #mkdir -p ~/.config/ranger/
-                #echo "$abs_path" >> ~/.config/ranger/tagged
-            #fi
-            #ln -s $(readlink -f ${!j}) $SYNC_HOME
+
+            if [ "$OPT_MAX_SIZE" != "" ]
+            then
+                local DU=`du -ab $abs_path`
+                # Separate each filename with a null character \x00
+                echo "$DU" | awk -v ms=$OPT_MAX_SIZE '{if($1<ms)  {out=$2; for(i=3;i<=NF;i++){out=out" "$i}; printf "%s\x00", out; }  }' | xargs -0 -I {} cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" {}
+
+            else
+                cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
+            fi
+
+            ## Delete recursively all the version control directory
+            #find "$SYNC_HOME/$abs_path" -type d -name .svn -exec rm -Rf '{}' \;
+            #find "$SYNC_HOME/$abs_path" -type d -name .cvs -exec rm -Rf '{}' \;
+            #find "$SYNC_HOME/$abs_path" -type d -name .git -exec rm -Rf '{}' \;
+
+            # Wipe out all the files that don't have the read permission
+            find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
+
         fi
     done
 }
