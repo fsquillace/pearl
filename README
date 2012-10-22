@@ -366,7 +366,7 @@ SYMC
 ~~~~
 SYMC is still better than SYNC! It allows you to synchronize your data
 using a synchronization system such as Dropbox/Ubuntu One in a very fashion
-way but creating symlinks of the files instead of copying them.
+way by creating symlinks of the files instead of copying them.
 SYMC build the same filesystem structure starting from the sync directory
 specified by the environment variable '$SYNC_HOME'. For instance, if you want to
 sync the file '$$~$$/.bashrc' it will be copied in '$SYNC_HOME/$$~$$/.bashrc' by cp
@@ -383,6 +383,13 @@ Example of using:
     *$ symc* /home/david/ /etc/::
     Synchronizes all the files in the '/home/david' and '/etc/' respectively into
     '$SYNC_HOME/home/david' and '$SYNC_HOME/etc' creating symlinks.
+
+    *$ symc* -m 3145728 --exclude Dropbox --exclude .git -e .svn -e .cvs .::
+    Synchronizes all the files in the current directory with size lesser
+    than 3MB (3145728=3MB)  excluding all the .git, .svn, .cvs folders.
+    This is awesome and you can use it if you want to save most of your data
+    periodically using cron.
+
 
 
 BACKUP

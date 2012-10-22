@@ -215,6 +215,7 @@ function trash(){
 
 function check_sync(){
     local sync_home_norm=$(realpath $SYNC_HOME)
+    #find $sync_home_norm -print0 | xargs -0 -I {} echo "+:{}" > ~/.config/ranger/tagged
     find $sync_home_norm -print | awk -v q=$sync_home_norm '{sub(q,""); print "+:"$1}' > ~/.config/ranger/tagged
 }
 
@@ -418,16 +419,16 @@ function sync() {
 # Create a link (that means link instead of copying like sync command)
 # with Dropbox/Ubuntu One folder using
 # absolute path to maintain the same structure
-# TODO Make exclude option. Try to use --exclude of du command
 function symc() {
     #################### BEGIN OPTION PARSING ############################
-    local TEMP=`getopt -o ucm:sh --long unlink,clean,max-size:,show,help -n 'symc' -- "$@"`
+    local TEMP=`getopt -o e:ucm:sh --long exclude:,unlink,clean,max-size:,show,help -n 'symc' -- "$@"`
 
     if [ $? != 0 ] ; then echo "Error on parsing the command line. Try symc -h" >&2 ; return ; fi
 
     # Note the quotes around `$TEMP': they are essential!
     eval set -- "$TEMP"
 
+    local OPT_EXCLUDE=()
     local OPT_UNLINK=false
     local OPT_CLEAN=false
     local OPT_MAX_SIZE=""
@@ -435,6 +436,7 @@ function symc() {
     local OPT_HELP=false
     while true ; do
 	case "$1" in
+            -e|--exclude) shift; OPT_EXCLUDE+=($1) ; shift ;;
             -u|--unlink) OPT_UNLINK=true ; shift ;;
             -c|--clean) OPT_CLEAN=true ; shift ;;
 	    -m|--max-size) shift; OPT_MAX_SIZE="$1" ; shift ;;
@@ -445,12 +447,14 @@ function symc() {
 	esac
     done
 
+
     if $OPT_HELP
     then
         echo "Usage:"
-        echo -e "symc FILE1 FILE2 ...\tLink symbolic files or directories instead of copying"
-        echo -e "symc [[-m || --max-size] BYTES] FILE1 ...\tMax size in BYTES for each file to be symced."
-        echo -e "symc [-u || --unlink] FILE1 FILE2 ...\tRemove the sym link of files or directories"
+        echo -e "symc [FILE1 FILE2] ...\tLink symbolic files or directories instead of copying (by default takes the current directory)"
+        echo -e "symc [[-m || --max-size] BYTES] [FILE1] ...\tMax size in BYTES for each file to be symced."
+        echo -e "symc [[-e || --exclude] PATTERN] [FILE1] ...\tExclude some file or directory that match to the PATTERN."
+        echo -e "symc [-u || --unlink] [FILE1 FILE2] ...\tRemove the sym link of files or directories"
         echo -e "symc [-c || --clean]\tDelete broken sym links in the sync directory"
         echo -e "symc [-s || --show]\tShows the sync directory"
         echo -e "symc [-h || --help]\tDisplays this"
@@ -461,6 +465,12 @@ function symc() {
     for arg do
         args+=("$arg")
     done
+
+    # If no file is spcified take the current directory
+    if [ ${#args[@]} -eq 0 ]; then
+        local args=(".")
+    fi
+
 
 
     if $OPT_SHOW && [ ${#args[@]} -gt 0 ]; then
@@ -524,26 +534,34 @@ function symc() {
             if [ "$?" != "0" ]
             then
                 echo -e "You don't have read permission for $var."
+                continue
             fi
 
+            exc_opt=""
+            for el in ${OPT_EXCLUDE[@]}; do exc_opt="$exc_opt --exclude $el"; done
+
+            # Calculate the directories
+            du $exc_opt -b "$abs_path" | awk -F '[\t]' '{print $2;}' > /tmp/tmp_symc
+
+            local DU=`du $exc_opt -ab "$abs_path"`
 
             if [ "$OPT_MAX_SIZE" != "" ]
             then
-                local DU=`du -ab $abs_path`
-                # Separate each filename with a null character \x00
-                echo "$DU" | awk -v ms=$OPT_MAX_SIZE '{if($1<ms)  {out=$2; for(i=3;i<=NF;i++){out=out" "$i}; printf "%s\x00", out; }  }' | xargs -0 -I {} cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" {}
-
+                local FILES=$(echo "$DU" | awk -F '[\t]' -v ms=$OPT_MAX_SIZE '{if($1<ms){print $2;}  }')
             else
-                cp -f -s -v -a --parents -u -r --target-directory "$SYNC_HOME" "$abs_path"
+                local FILES=$(echo "$DU" | awk -F '[\t]' '{print $2;}')
+
             fi
 
-            ## Delete recursively all the version control directory
-            #find "$SYNC_HOME/$abs_path" -type d -name .svn -exec rm -Rf '{}' \;
-            #find "$SYNC_HOME/$abs_path" -type d -name .cvs -exec rm -Rf '{}' \;
-            #find "$SYNC_HOME/$abs_path" -type d -name .git -exec rm -Rf '{}' \;
+
+            echo "$FILES" | grep -x -v -F -f /tmp/tmp_symc | tr -s '\n' '\000' | xargs -0 -I {} cp -f -s -v -a --parents -u --target-directory "$SYNC_HOME" {}
+
+            unset DU
+            unset FILES
+            rm -f /tmp/tmp_symc
 
             # Wipe out all the files that don't have the read permission
-            find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
+            #find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
 
         fi
     done

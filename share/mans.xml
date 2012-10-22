@@ -399,6 +399,7 @@ Command     Alias     Info
         *   NF -- The number of fields in the current line
         *   FS -- The input field separator; defaults to whitespace and is reset by the -F command line parameter 
         *   RS -- The record separator; by default is newline
+        *   OFS -- The output field separator; default is space. See example below
         Variables don't need dollar char!
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
         
@@ -410,6 +411,9 @@ Command     Alias     Info
         To delete all words ending with a letter g:<command name="awk '{gsub(&quot;[a-zA-Z0-9]*[g|G]&quot;, &quot;&quot;);print}' input"/>
 
         To change the record separator: <command name="echo &quot;mela pera; cane gatto; Milano bari&quot; | awk 'BEGIN { RS=&quot;;&quot; } {print NR}'"/>
+        Use another output field separator:<command name="echo &quot;banane;pere;ciliegie;fragole&quot; | awk -F&quot;;&quot; 'BEGIN { OFS=&quot;_&quot; } {print $1,$2,$3}'"/>
+        Null char output separator. USEFUL in order to use pipe with xargs -0:<command name="echo &quot;berry,banana,pineapple,apple&quot; | awk 'BEGIN{RS=&quot;,&quot;} {printf &quot;%s\000&quot;,$1}'"/>
+        Null char input separator:<command name="du -0 -b | awk 'BEGIN{RS=&quot;\x00&quot;}{print $0}'"/>
 
 Examples:
         <code>
