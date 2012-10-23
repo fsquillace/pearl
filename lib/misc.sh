@@ -227,7 +227,8 @@ function check_sync(){
 # to the original one.
 function ranger(){
 
-    check_sync
+    # The following command add tags for the files synced. The problem is that is takes time
+    #check_sync
 
     # Checks out into the jobs
     local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
@@ -586,5 +587,99 @@ function cd() {
 }
 
 
+# Manage the favourite commands
+# List, add, remove commands in a list and execute them using Cntrl-h combination.
+function cmd() {
+    local TEMP=`getopt -o raph --long remove,add,print,help  -n 'cmd' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try cmd -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    local OPT_ADD=false
+    local OPT_REMOVE=false
+    local OPT_PRINT=false
+    local OPT_HELP=false
+    while true ; do
+	case "$1" in
+	    -a|--add) OPT_ADD=true ; shift ;;
+	    -r|--remove) OPT_REMOVE=true ; shift ;;
+	    -p|--print) OPT_PRINT=true ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return 127 ;;
+	esac
+    done
+
+    local args=()
+    for arg do
+        args+=("$arg")
+    done
 
 
+    if $OPT_HELP
+    then
+        echo "Usage:"
+        echo -e "cmd <num>\t\tTake the command from the list and store to the history. Type Ctrl+h to paste into the command line."
+        echo -e "cmd [-p || --print] <num>\t\tPrint the entry selected"
+        echo -e "cmd [-a || --add] <cmd> [<comments>]\t\tAdd a command with comments"
+        echo -e "cmd [-r || --remove] <num>\t\tRemove a command entry"
+        echo -e "cmd [-h || --help]\t\tDisplays this"
+        return 0
+    fi
+
+    # If the file doesn't exist create it with a default entry
+    if [ ! -f $PYSHELL_HOME/commands ]
+    then
+        touch $PYSHELL_HOME/commands
+    fi
+
+
+    if $OPT_REMOVE
+    then
+        if [ ${#args[@]} -eq 1 ]; then
+            local cmds=$(sed -e "${args[0]}d" $PYSHELL_HOME/commands)
+            echo "$cmds" > $PYSHELL_HOME/commands
+        else
+            echo "Error the --remove option needs only one argument."
+            return 127
+        fi
+
+    elif $OPT_ADD
+    then
+        if [ ${#args[@]} -eq 1 ]; then
+            local comments=""
+        else
+            local comments=${args[1]}
+        fi
+        if [ ${#args[@]} -le 2 ]; then
+            echo "${args[0]}%;%$comments" >> $PYSHELL_HOME/commands
+        else
+            echo "Error the --add option needs maximum two arguments"
+        fi
+
+    elif $OPT_PRINT
+    then
+        if [ ${#args[@]} -eq 1 ]; then
+            awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands
+        else
+            echo "Error the --print option needs only one argument."
+            return 127
+        fi
+    else
+        # If no file is spcified list all commands
+        if [ ${#args[@]} -eq 0 ]; then
+            cat $PYSHELL_HOME/commands | awk -F '%;%' '{print "\033[01;32m"NR": \033[01;33m"$2"\n\033[01;00m   "$1"\n"}'
+        elif [ ${#args[@]} -eq 1 ]; then
+            local entry=$(awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands)
+            echo "bind '\"\C-h\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
+            source $PYSHELL_TEMPORARY/new_cmd
+        else
+            echo "Error too many arguments!"
+            return 127
+        fi
+    fi
+
+    return 0
+}
