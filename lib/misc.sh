@@ -630,9 +630,11 @@ function cd() {
         echo "$bookmrks" > $HOME/.config/ranger/bookmarks
     elif [ "$OPT_PRINT" != "" ]
     then
+        touch $HOME/.config/ranger/bookmarks
         awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $HOME/.config/ranger/bookmarks
     elif [ "$OPT_GO" != "" ]
     then
+        touch $HOME/.config/ranger/bookmarks
         local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $HOME/.config/ranger/bookmarks)
         builtin cd "$path"
     else
@@ -640,6 +642,7 @@ function cd() {
         then
             builtin cd $args
         else
+            touch $HOME/.config/ranger/bookmarks
             awk -F ":" '{print $1") "$2}' $HOME/.config/ranger/bookmarks
         fi
     fi
