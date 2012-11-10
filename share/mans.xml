@@ -1379,6 +1379,12 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
             symb = :rails
             :rails.to_s
         </code>
+        Print
+        <code>
+            puts "name"  # print with \n
+            print "name" # print without \n
+            p :name  # equal to puts :name.inspect
+        </code>
 
         The value nil correspond to None in python.
         
@@ -1386,13 +1392,25 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
         <code>
             x = [1,'two',:three]
             x[1] == 'two'
+            x[0..2] == [1, 'two']
             x.length == 3
+            a &lt;&lt; 7 # append 7 to a
+            %w[0 3 4 5fsad] # create a array of string
         </code>
         
+        Ranges:
+        <code>
+            0..9
+            (0..9).to_a
+            ('a'..'e').to_a
+            => ["a", "b", "c", "e"]
+        </code>
         Hash:
         <code>
             w = {'a'=>1, :b=>[2,3]}
             w.keys == ['a', :b]
+            w = Hash.new(0) # default value for nonexistring key
+            w[:foo] # it returns 0
         </code>
 
         Methods:
@@ -1568,7 +1586,8 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
 <!--- ********************************** RAILS ***************************************** -->
 <dict name="rails">
     <item name="install rails and heroku">
-        Install rails:<command name="rails new first_app"/>
+        Install rails app:<command name="rails new first_app"/>
+        Best way to install an app (choose the dbms and delete the test folder):<command name="rails new first_app --database postgresql -T"/>
         To install the gems in Gemfile:<command name="bundle install"/>
 
         To execute the server:<command name="rails server"/>
@@ -1583,6 +1602,25 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
 
         Other stuff with heroku:
         *  Rename application:<command name="heroku rename other_app"/>
+
+        Open the console without making any changing:<command name="rails console --sandbox"/>
+    </item>
+    <item name="generate code for model and controller">
+        <command name="rails generate model User name:string email:string"/>
+        Generate the Users controller with new action:<command name="rails generate controller Users new"/>
+        <command name="rails integration_test layout_links"/>
+        To create the files for rspec:<command name="rails generate rspec:install"/>
+
+        Create a new empty migration:<command name="rails generate migration add_email_uniqueness_index"/>
+
+        Generate the controller, route, model and view:<command name="rails generate scaffold User name:string email:string"/>
+    </item>
+    <item name="rake actions">
+        <command name="rake db:migrate"/>
+        <command name="rake db:create"/>
+        Create a db test:<command name="rake db:test:prepare"/>
+        Add a column to a model:<command name="rails generate migration add_password_to_users encrypt_password:string"/>
+        Delete all the record from the dev db:<command name="rake db:reset"/>
     </item>
     <item name="ActiveRecord">
         Defining a model:
@@ -1619,17 +1657,42 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
             # Auto generated methods
             Movie.find_all_by_rating('5')
             Movie.find_by_rating('5')
+
+            # Get first, last and all
+            Movie.first
+            Movie.last
+            Movie.all
         </code>
 
         Update:
         <code>
             m = Movie.find_by_title('Help')
             m.update_attributes(:release_date => '2011-Aug-10')
+            # or
+            m.relase_date = '2011-Aug-10'
+            m.save
+
+            # To get the original saved information use reload
+            m.release_date = '23423'
+            m.reload.relase_date  # it gives '2011-Aug-10'
+
         </code>
 
         Delete:
         <code>
             movie.destroy
+        </code>
+
+        Validation:
+        <code>
+            # in the model:
+            vlaidates :name, :presence => true
+
+            # Checks whether is valid according to the constraints
+            m.valid?
+            # and the errors
+            m.errors.full_messages
+
         </code>
     </item>
 
@@ -1637,7 +1700,10 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
         In view:
         <code>debug(@movie)
             @movie.inspect</code>
-
+        or with ERB:
+        <code>
+            &lt;%= debug(params) if Rails.env.development? %&gt;
+        </code>
         In controller:
         Use the logger:<code>logger.debug(@movie.inspect)</code>
 
@@ -1645,6 +1711,7 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
         Put "debugger" in controller code and then:
         <command name="rails server --debugger"/>
         That will stop the execution and open the debugger.
+        To decide what environment use:<command name="rails server --environment production"/>
     </item>
 
     <item name="flash and session">

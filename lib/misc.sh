@@ -89,6 +89,7 @@ if [ "$a" = "" ]; then
 fi
 }
 
+# TODO the variable pkgdir is not well set.
 function pyshell_update(){
     local srcdir=/tmp/pyshell
     local pkgdir=$PYSHELL_ROOT
@@ -571,19 +572,79 @@ function symc() {
 
 # This function integrate cd and cd2 in the same command
 function cd() {
-    if [ -z "$1" ]
+    #################### BEGIN OPTION PARSING ############################
+    local TEMP=`getopt -o g:a:r:p:h --long go:,add:,remove:,print:,help -n 'cd' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try cd -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    local OPT_ADD=""
+    local OPT_REMOVE=""
+    local OPT_GO=""
+    local OPT_PRINT=""
+    local OPT_HELP=false
+    while true ; do
+	case "$1" in
+            -g|--go) shift; OPT_GO="$1" ; shift ;;
+            -a|--add) shift; OPT_ADD="$1" ; shift ;;
+            -r|--remove) shift; OPT_REMOVE="$1" ; shift ;;
+	    -p|--print) shift; OPT_PRINT="$1" ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return ;;
+	esac
+    done
+
+
+    if $OPT_HELP
     then
-	$PYSHELL_ROOT/bin/cd2
-    elif [ "$1" = -g ]
-    then
-        builtin cd `$PYSHELL_ROOT/bin/cd2 -p $2`
-    elif [ "$1" = -a ] || [ "$1" = --add ] || [ "$1" = -r ] || [ "$1" = --remove ] \
-	|| [ "$1" = -h ] || [ "$1" = --help ] || [ "$1" = -p ] || [ "$1" = --print ]
-    then
-        $PYSHELL_ROOT/bin/cd2 $1 $2
-    else
-	builtin cd $1
+        echo "Usage: cd [OPT] [KEY]"
+        echo -e "cd\tList all the entries"
+        echo -e "cd -g [KEY]\tGo to the directory specified by the key"
+        echo -e "cd [-a || --add] PATH\tAdd the specified PATH"
+        echo -e "cd [[-r || --remove] KEY\tRemove an entry"
+        echo -e "cd [-p || --print] KEY\tPrint the PATH entry (useful for pipe command)"
+        echo -e "symc [-h || --help]\tDisplays this"
+        return 0
     fi
+
+    local args=()
+    for arg do
+        args+=("$arg")
+    done
+
+    #################### END OPTION PARSING ############################
+
+    if [ "$OPT_ADD" != ""  ]
+    then
+        local abs_path=$(readlink -f "$OPT_ADD")
+        local alphnum="abcdefghilmnopqrstuvwykzxABCDEFGHILMNOPQRSTUVZWYKX0123456789"
+        local pos=$(expr $RANDOM % ${#alphnum})
+        local key=${alphnum:$pos:1}
+        echo "$key:$abs_path" >> $HOME/.config/ranger/bookmarks
+    elif [ "$OPT_REMOVE" != "" ]
+    then
+        local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" $HOME/.config/ranger/bookmarks)
+        echo "$bookmrks" > $HOME/.config/ranger/bookmarks
+    elif [ "$OPT_PRINT" != "" ]
+    then
+        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $HOME/.config/ranger/bookmarks
+    elif [ "$OPT_GO" != "" ]
+    then
+        local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $HOME/.config/ranger/bookmarks)
+        builtin cd "$path"
+    else
+        if [ "$args" != "" ]
+        then
+            builtin cd $args
+        else
+            awk -F ":" '{print $1") "$2}' $HOME/.config/ranger/bookmarks
+        fi
+    fi
+
+    return 0;
 }
 
 
