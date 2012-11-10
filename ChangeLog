@@ -1,3 +1,6 @@
+pyshell 0.15.1
+- Fix cd
+
 pyshell 0.15.0
 - Changed cd command to bash instead python
 
