@@ -468,17 +468,16 @@ function symc() {
         args+=("$arg")
     done
 
-    # If no file is spcified take the current directory
-    if [ ${#args[@]} -eq 0 ]; then
-        local args=(".")
-    fi
-
-
 
     if $OPT_SHOW && [ ${#args[@]} -gt 0 ]; then
         echo "Error: No arguments with --show option!" ; return 127 ;
     elif $OPT_CLEAN && [ ${#args[@]} -gt 0 ]; then
         echo "Error: No arguments with --clean option!" ; return 127 ;
+    fi
+
+    # If no file is spcified take the current directory
+    if ! $OPT_HELP && ! $OPT_CLEAN && ! $OPT_SHOW && [ ${#args[@]} -eq 0 ]; then
+        local args=(".")
     fi
 
     #################### END OPTION PARSING ############################
@@ -746,4 +745,22 @@ function cmd() {
     fi
 
     return 0
+}
+
+
+function screen(){
+  if [ "$1" == "-g" ]
+  then
+      dir=$(cd -p $2)
+      # Create an hash of the dir to get an id of the directory
+      hashdir=$(echo $dir  | sum - | awk '{print $1}')
+      folder=$(basename $dir)
+
+      builtin cd $dir
+      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd
+      clear
+      builtin cd -
+  else
+      /usr/bin/screen $@
+  fi
 }

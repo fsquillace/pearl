@@ -1,3 +1,7 @@
+pyshell 0.16.2
+- Fixed symc
+- Created a wrapper to use screen as an IDE
+
 pyshell 0.15.1
 - Fix cd
 

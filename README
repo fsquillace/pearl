@@ -213,8 +213,8 @@ also other useful commands for Archlinux such as:
 Please, check out in the 'bin' directory of *pyshell* root directory to see
 all the available commands.
 
-CD/CD2
-~~~~~~
+CD
+~~~
 Allows to list all your favorite bookmark paths. It is aliased in the classical
 cd built-in command. Type *cd --help* to see all the available options.
 
@@ -236,6 +236,26 @@ Integration with Ranger application
 CD stores the entries in '$$~$$/.config/ranger/bookmark' to be integrated with
 Ranger. So, if you add an entry directly with ranger you will see it in cd
 command too.
+
+SCREEN
+~~~~~~
+The classic *screen* command is wrapped using a bash function that adds a new option '-g'.
+It creates a new screen in the directory specified according the bookmark files.
+Moreover, if a screen already exists for such directory, it recalls the same screen.
+It is extremely useful when you want to use screen as an *IDE* and to recall your project
+whenever you want. Cool!
+If you are using multiple terminals and you call an already attached screen in another terminal,
+it automatically detaches and reattaches into the new terminal. The session name of each screen,
+listed using '-list' option, is called according to the related directory.
+
+Example of using:
+
+    *$ screen -g* 0*::
+    Creates a new screen to the directory specified in the bookmark with entry 0.
+    If the screen already exists it recall the old screen.
+
+    *$ screen -list*::
+    Lists the already created lists.
 
 TODO
 ~~~~

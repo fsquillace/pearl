@@ -369,12 +369,14 @@ Command     Alias     Info
 
 
 
-<!--- ********************************** GREP SED & AWK ***************************************** -->
-<dict name="Grep Sed &amp; Awk">
+<!--- ********************************** GREP SED PASTE & AWK ***************************************** -->
+<dict name="Grep Sed Paste &amp; Awk">
     <item name="grep '\&lt; [a-z0-9-]\+\&gt;' doc.txt">
         ricerca su un file dati. -i ignora il case, -m &quot;num&quot; num massimo di abbinamenti, -n stampa il numero della linea, -f=&quot;FILE&quot; per specificare che il Pattern si trova in File, --colour per il colore. per comandi avanzati sed oppure awk(molto difficile)
     </item>
-
+    <item name="paste">
+        Merge lines of files delimited by a space char:<command name="paste -s -d ' ' file.txt"/>
+    </item>
     <item name="sed">
         The delimiters can be: @:,;% instead of / if we want.
         *  Substitution
@@ -414,6 +416,7 @@ Command     Alias     Info
         Use another output field separator:<command name="echo &quot;banane;pere;ciliegie;fragole&quot; | awk -F&quot;;&quot; 'BEGIN { OFS=&quot;_&quot; } {print $1,$2,$3}'"/>
         Null char output separator. USEFUL in order to use pipe with xargs -0:<command name="echo &quot;berry,banana,pineapple,apple&quot; | awk 'BEGIN{RS=&quot;,&quot;} {printf &quot;%s\000&quot;,$1}'"/>
         Null char input separator:<command name="du -0 -b | awk 'BEGIN{RS=&quot;\x00&quot;}{print $0}'"/>
+        Traspose a column into row:<command name="echo -e &quot;a\nb\nc\n&quot; | awk 'BEGIN {RS=&quot;\n&quot;; ORS=&quot; &quot;;print &quot;\n&quot;}  {print $0} END{print &quot;\n\n&quot;}'"/>
 
 Examples:
         <code>
@@ -470,6 +473,23 @@ END {
     END { print "Il file",FILENAME " contiene:", NR " righe,", np " parole,", nc " caratteri."
     }
 </code>
+
+
+<code>
+#!/usr/bin/awk -f
+BEGIN {
+  print " \f##########RETRIBUZIONE TOTALE###########\n"
+}
+{
+  i=2; totale=0
+  while (i&lt;=NF) {
+    totale=totale+$i;
+    i++
+  }
+  print "\nil Signor",$1, "in sette mesi ha guadagnato", totale, "euro"
+}
+</code>
+
     </item>
 
 </dict>
