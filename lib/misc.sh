@@ -760,6 +760,15 @@ function screen(){
       /usr/bin/screen -S "$folder-$2-$hashdir" -aARd
       clear
       builtin cd -
+  elif [ "$1" == "-k" ]
+  then
+      dir=$(cd -p $2)
+      # Create an hash of the dir to get an id of the directory
+      hashdir=$(echo $dir  | sum - | awk '{print $1}')
+      folder=$(basename $dir)
+
+      /usr/bin/screen -S "$folder-$2-$hashdir" -X quit
+
   else
       /usr/bin/screen $@
   fi

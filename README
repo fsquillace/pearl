@@ -247,6 +247,8 @@ whenever you want. Cool!
 If you are using multiple terminals and you call an already attached screen in another terminal,
 it automatically detaches and reattaches into the new terminal. The session name of each screen,
 listed using '-list' option, is called according to the related directory.
+In order to close all windows of a screen session the option '-k' can be used. It basically executes
+the command 'quit' of screen for the specified session.
 
 Example of using:
 
@@ -256,6 +258,9 @@ Example of using:
 
     *$ screen -list*::
     Lists the already created lists.
+
+    *$ screen -k 0*::
+    Close the session for the bookmark with entry 0.
 
 TODO
 ~~~~
@@ -537,9 +542,9 @@ open the last ranger available.
 
 CHANGING DIRECTORY EXITING FROM RANGER
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-There is a function that allows to change automatically the directory as soon
-as the user quit from ranger programm. Note that you can return to the original
-directory by typing "cd -".
+There is a function that allows to change automatically the current directory you are
+in ranger as soon as the user quit from ranger programm.
+Note that you can return to the original directory by typing "cd -".
 
 RANGER FILE CHOOSER IN VIM
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -564,7 +569,7 @@ COLORIZE THE HOSTNAME IN PROMPT
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In order to recognize easily which machine you are currently using,
 the hostname information present in the prompt is colorized in function of its value.
-In other words, there is a hash function that give a int value that correspond
+In other words, there is a hash function that gives a int value that correspond
 to a color for a given hostname string.
 
 CONFIG FILES
