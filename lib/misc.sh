@@ -773,3 +773,94 @@ function screen(){
       /usr/bin/screen $@
   fi
 }
+
+
+
+function todo(){
+    local TEMP=`getopt -o g:r:lh --long go:,remove:,list,help  -n 'todo' -- "$@"`
+
+    if [ $? != 0 ] ; then echo "Error on parsing the command line. Try todo -h" >&2 ; return ; fi
+
+    # Note the quotes around `$TEMP': they are essential!
+    eval set -- "$TEMP"
+
+    local OPT_REMOVE=""
+    local OPT_GO=""
+    local OPT_LIST=false
+    local OPT_HELP=false
+    while true ; do
+	case "$1" in
+            -g|--go) shift; OPT_GO="$1" ; shift ;;
+            -r|--remove) shift; OPT_REMOVE="$1" ; shift ;;
+            -l|--list) OPT_LIST=true ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) echo "Internal error!" ; return 127 ;;
+	esac
+    done
+
+    local args=()
+    for arg do
+        args+=("$arg")
+    done
+
+
+    if $OPT_HELP
+    then
+        echo "Usage:"
+        echo -e "todo [TODO]\t\tScan the files starting in the directories of the bookmarks having an integer entry key and prints the lines having TODO words. You can also add a TODO in the general list."
+        echo -e "todo [-r || --remove <num>]\t\tRemove a todo in the list"
+        echo -e "todo [-g || --go <num>]\t\tScan for TODOs only for the entry specified"
+        echo -e "todo [-l || --list]\t\tList only the general TODO list without scan any folder"
+        echo -e "todo [-h || --help]\t\tDisplays this"
+        return 0
+    fi
+
+    if [ "$OPT_REMOVE" != "" ]
+    then
+        local out=$(grep "REM MSG" $HOME/.reminders | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
+        echo "$out" > $HOME/.reminders
+    elif [ "$OPT_GO" != "" ]
+    then
+        local path=$(cd -p $OPT_GO)
+        echo -e "\033[0;33m$path\033[0m"
+        local res=$(eye -c -r -w "$path" TODO | awk '{print "\t"$0}')
+        if [ "$res" != "" ]
+        then
+            echo "$res"
+        else
+            echo -e "\t\033[0;36mNothing TODO!\033[0m"
+        fi
+        echo ""
+
+        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+    elif $OPT_LIST
+    then
+        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+    else
+        if [ ${#args[@]} -eq 1 ]; then
+            # Append the todo in the reminders file
+            echo "REM MSG ${args[0]}" >> $HOME/.reminders
+        elif [ ${#args[@]} -eq 0 ]; then
+            # List all todos
+            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $HOME/.config/ranger/bookmarks)
+            for path in $list
+            do
+                echo -e "\033[0;33m$path\033[0m"
+                local res=$(eye -c -r -w "$path" TODO | awk '{print "\t"$0}')
+                if [ "$res" != "" ]
+                then
+                    echo "$res"
+                else
+                    echo -e "\t\033[0;36mNothing TODO!\033[0m"
+                fi
+                echo ""
+            done
+            grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        else
+            echo "Error too many arguments"
+        fi
+
+    fi
+
+}

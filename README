@@ -44,7 +44,7 @@ worry you have just to uncomment them if you do not want any of these features ;
 NO ROOT PERMISSION (GIT REPOSITORY)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you do not have root permission, you can directly install *pyshell* by the
-svn repository. Type the following commands:
+git repository. Type the following commands:
 .................................
 $ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/pyshell
 $ source pyshell/pyshell

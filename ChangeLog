@@ -1,5 +1,6 @@
-pyshell ?.?.?
+pyshell 0.17.1
 - Added the function of screen to quit a session
+- Changed todo in bash script
 
 pyshell 0.16.2
 - Fixed symc
