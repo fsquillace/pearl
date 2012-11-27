@@ -762,7 +762,7 @@ function screen(){
       folder=$(basename $dir)
 
       builtin cd $dir
-      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd
+      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd -c ${PYSHELL_ROOT}/etc/screenrc
       clear
       builtin cd -
   elif [ "$1" == "-k" ]

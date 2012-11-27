@@ -249,6 +249,7 @@ it automatically detaches and reattaches into the new terminal. The session name
 listed using '-list' option, is called according to the related directory.
 In order to close all windows of a screen session the option '-k' can be used. It basically executes
 the command 'quit' of screen for the specified session.
+Furthermore, when using screen with '-g' option a nice statusbar will appear in the bottom of the terminal.
 
 Example of using:
 
