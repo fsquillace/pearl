@@ -24,5 +24,5 @@ termcapinfo xterm* ti@:te@
 # Default screens
 #screen -t ranger 1  ranger
 #screen -t mutt	 2  mutt
-screen -t irssi	 1  irssi
+#screen -t irssi	 1  irssi
 #screen -t server	2	ssh me@myserver
