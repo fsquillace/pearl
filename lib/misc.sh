@@ -614,6 +614,13 @@ function cd() {
         args+=("$arg")
     done
 
+
+    # Checks if directory and files exists
+    if [ ! -d "$HOME/.config/ranger" ]; then
+        mkdir -p "$HOME/.config/ranger"
+        touch $HOME/.config/ranger/bookmarks
+    fi
+
     #################### END OPTION PARSING ############################
 
     if [ "$OPT_ADD" != ""  ]
@@ -633,7 +640,6 @@ function cd() {
         awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $HOME/.config/ranger/bookmarks
     elif [ "$OPT_GO" != "" ]
     then
-        touch $HOME/.config/ranger/bookmarks
         local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $HOME/.config/ranger/bookmarks)
         builtin cd "$path"
     else
@@ -641,7 +647,6 @@ function cd() {
         then
             builtin cd $args
         else
-            touch $HOME/.config/ranger/bookmarks
             awk -F ":" '{print $1") "$2}' $HOME/.config/ranger/bookmarks
         fi
     fi
@@ -815,6 +820,14 @@ function todo(){
         echo -e "todo [-h || --help]\t\tDisplays this"
         return 0
     fi
+
+    # Checks if directory and files exists
+    if [ ! -d "$HOME/.config/ranger" ]; then
+        mkdir -p "$HOME/.config/ranger"
+        touch "$HOME/.config/ranger/bookmarks"
+        touch "$HOME/.reminders"
+    fi
+
 
     if [ "$OPT_REMOVE" != "" ]
     then

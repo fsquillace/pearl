@@ -31,9 +31,7 @@ umask 0022
 
 
 ######################### INSTALLATION STEP ###########################
-
-THIS_FILE=`basename ${BASH_ARGV[0]}`
-export PYSHELL_ROOT=$(readlink -f "${BASH_ARGV[0]%/*}/")
+export PYSHELL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
 export PYSHELL_HOME=~/.config/pyshell
 export PYSHELL_TEMPORARY=$PYSHELL_HOME/tmp/`tty`
 

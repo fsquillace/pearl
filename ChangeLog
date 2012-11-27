@@ -1,3 +1,6 @@
+pyshell 0.17.4
+- Fixed some bug in pyshell script
+
 pyshell 0.17.1
 - Added the function of screen to quit a session
 - Changed todo in bash script
