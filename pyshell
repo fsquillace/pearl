@@ -41,25 +41,31 @@ source $PYSHELL_ROOT/lib/misc.sh
 
 if [ -e $PYSHELL_HOME ]
 then
-    # The following code is deprecated because we don't use svn anymore
-    ## Check updates
-    #svn info $PYSHELL_ROOT &> /dev/null
-    #if [ "$?" = "0"  ]
+
+    # Checks for updates if pyshell was installed from Git
+    #if [ -d $PYSHELL_ROOT/.git ]
     #then
-        #svn update $PYSHELL_ROOT &> /dev/null &
+        #builtin cd $PYSHELL_ROOT
+        #git pull origin master
+        #builtin cd -
     #fi
-    
+
     source $PYSHELL_HOME/pyshellrc
 else
 
-    # Sourcing bash config.
-    apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
+    # If pyshell come from the git repo, make a changing to the home config file of the user
+    if [ -d $PYSHELL_ROOT/.git ]
+    then
+        # Sourcing bash config.
+        apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
 
-    # Sourcing vim config.
-    apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
+        # Sourcing vim config.
+        apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
 
-    # Sourcing input config
-    apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
+        # Sourcing input config
+        apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
+
+    fi
 
     # Sourcing commands.py ranger config
     apply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
@@ -68,15 +74,14 @@ else
     echo "Creating ~/.config/pyshell directory ..."
     mkdir -p $PYSHELL_HOME/bkp
     mkdir -p $PYSHELL_HOME/etc
-    
-    echo "You can put now your own script code in $PYSHELL_HOME/pyshellrc... ;)"
+
     echo "#!/bin/bash" > $PYSHELL_HOME/pyshellrc
     echo "#This script is used to execute anything you want. " >> $PYSHELL_HOME/pyshellrc
     echo "# Uncomment and type your Dropbox/Ubuntu One home if it's different from ~/Dropbox/:" >> $PYSHELL_HOME/pyshellrc
     echo "#export SYNC_HOME=~/Dropbox/" >> $PYSHELL_HOME/pyshellrc
     chmod +x $PYSHELL_HOME/pyshellrc
-    
-    
+
+
 fi
 
 mkdir -p $PYSHELL_TEMPORARY

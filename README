@@ -28,20 +28,25 @@ inputrc extremely simplify the way of typing the commands.
 
 INSTALLATION
 ------------
-Once you extracted the .tar.gz file, type:
+There are two ways for installing pyshell depending if the user
+has the root permission or not. This is due to the fact that *pyshell*
+appears extremely useful also in case the user has a non-root
+access to a remote server but, the user wants all the advantages of using
+*pyshell*.
 
--------------------------------
-$ cd pyshell
-$ source pyshell/pyshell
--------------------------------
+ROOT PERMISSION
+~~~~~~~~~~~~~~~
+If you use Archlinux you can install it from the AUR typing:
 
-If you are using *pyshell* for the first time you probably do not have the
-configuration directory in '$$~$$/.config/.pyshell'.
-If so, *pyshell* create the configuration directory and apply some modification
-of your config file appending a 'source' in .vimrc, .bashrc and .inputrc (do not
-worry you have just to uncomment them if you do not want any of these features ;))
+---------------------
+$ yaourt -S pyshell
+---------------------
+Open a new terminal and a *pyshell* will be directly activated.
 
-NO ROOT PERMISSION (GIT REPOSITORY)
+In the future there will be a Launchpad repository for distributions
+Debian-based.
+
+NON ROOT PERMISSION (GIT REPOSITORY)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you do not have root permission, you can directly install *pyshell* by the
 git repository. Type the following commands:
@@ -50,16 +55,24 @@ $ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/pyshell
 $ source pyshell/pyshell
 .................................
 
+If you are using *pyshell* for the first time you probably do not have the
+configuration directory in '$$~$$/.config/.pyshell'.
+If so, *pyshell* create the configuration directory and apply some modification
+of your config files appending a 'source' in .vimrc, .bashrc and .inputrc.
+These modification will be applied to the user config files ONLY in case of a NON ROOT
+PERMISSION.
+
 You can install *pyshell* in other place different from your home.
 
-When opening a new terminal the sequence of script that are sourced is the following:
+In case of a NON ROOT PERMISSION, when opening a new terminal the sequence of script
+that are sourced is the following:
 	. '.bashrc'::
 	*pyshell* append a new line in '.bashrc' in order to startup *pyshell* once a terminal is opened.
 	. 'pyshell'
 	*pyshell* introduce every alias, variable and script that the commands need for the correct execution.
 	. 'pyshellrc'::
 	Contains all the configuration that you need to set after the execution of *pyshell*.
-	This can be useful when you want directly edit some alias, variable or script of *pyshell*.  
+	This can be useful when you want directly edit some alias, variable or script of *pyshell*.
 
 CONFIGURATIONS
 --------------

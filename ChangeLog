@@ -1,3 +1,7 @@
+pyshell 0.18.1
+- Two modes of installing the pyshell system
+- Fixed some bugs for symc
+
 pyshell 0.17.5
 - Added the screen config file
 
