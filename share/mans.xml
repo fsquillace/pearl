@@ -61,6 +61,35 @@ Spazio 	        %20
 </item>
 </dict>
 
+<!--- ********************************** SYSTEMD ***************************************** -->
+<dict name="systemd">
+    <item name="system">
+        To boot the system:<command name="systemctl reboot"/>
+        To poweroff the system:<command name="sudo systemctl poweroff"/>
+        Analyze the boot time in msec:<command name="systemd-analyze"/>
+        Ordered list of units sortex by init time:<command name="systemd-analyze blame"/>
+        Plot a graph of init time:<command name="systemd-analyze plot"/>
+    </item>
+    <item name="system-log">
+        System log:<command name="journalctl"/>
+        Create a text file for the log:<command name="journalctl -a > read_log.txt"/>
+        Get log a specific unit:<command name="journalctl _SYSTEMD_UNIT=systemd-logind.service"/>
+    </item>
+    <item name="services">
+        List of services:<command name="systemctl"/>
+        List of active and non active services:<command name="systemctl list-unit-files"/>
+        Start a service:<command name="systemctl start service"/>
+        Stop a service:<command name="systemctl stop service"/>
+        Restart a service:<command name="systemctl restart service"/>
+        Reload a service:<command name="sudo systemctl reload service"/>
+        Show the status of a service:<command name="systemctl status service"/>
+        Enable a service at boot:<command name="systemctl enable service"/>
+        Disable a service at boot:<command name="systemctl disable service"/>
+        Check whether a service is disabled:<command name="systemctl is-enabled service; echo $?"/>
+    </item>
+</dict>
+
+
 <!--- ********************************** BASH SHORTCUTS ***************************************** -->
 <dict name="bash shortcuts">
     <item name="bash shortcuts">
@@ -234,6 +263,9 @@ Command     Alias     Info
     <item name="init a project">
         Existing project:<command name="git init"/>
         Cloning project:<command name="git clone git://github.com/schacon/grit.git"/>
+        To create a repository without a working directory: <command name="git init --bare --shared myproject.git"/>
+        To clone a repository without a working directory: <command name="git init --bare --shared remoterepo myproject.git"/>
+        The last two commands above are useful for a shared repository.
     </item>
     <item name="fundamental commands">
         <command name="git add file"/>
@@ -280,6 +312,7 @@ Command     Alias     Info
         To create an alias:<command name="git config --global alias.co checkout"/>
         So, you can type:<command name="git co"/>
         To run an external command with alias:<command name="git config --global alias.visual &quot;!gitk&quot;"/>
+        There are two important gui tools (do not forget to install tk package first):<command name="gtk gui; gitk"/>
     </item>
     <item name="working with remote">
         To know the remotes:<command name="git remote -v"/>
@@ -402,6 +435,8 @@ Command     Alias     Info
         *   FS -- The input field separator; defaults to whitespace and is reset by the -F command line parameter 
         *   RS -- The record separator; by default is newline
         *   OFS -- The output field separator; default is space. See example below
+        *   FILENAME -- name of the file (see below for an example to use it for joining two files!)
+
         Variables don't need dollar char!
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
         
@@ -417,7 +452,7 @@ Command     Alias     Info
         Null char output separator. USEFUL in order to use pipe with xargs -0:<command name="echo &quot;berry,banana,pineapple,apple&quot; | awk 'BEGIN{RS=&quot;,&quot;} {printf &quot;%s\000&quot;,$1}'"/>
         Null char input separator:<command name="du -0 -b | awk 'BEGIN{RS=&quot;\x00&quot;}{print $0}'"/>
         Traspose a column into row:<command name="echo -e &quot;a\nb\nc\n&quot; | awk 'BEGIN {RS=&quot;\n&quot;; ORS=&quot; &quot;;print &quot;\n&quot;}  {print $0} END{print &quot;\n\n&quot;}'"/>
-
+        Use of arrays:<command name="$ awk 'BEGIN{ortolano[&quot;banana&quot;]=20; print ortolano[&quot;banana&quot;]}'"/>
 Examples:
         <code>
 #!/usr/bin/awk -f
@@ -487,6 +522,55 @@ BEGIN {
     i++
   }
   print "\nil Signor",$1, "in sette mesi ha guadagnato", totale, "euro"
+}
+</code>
+
+<code>
+#!/usr/bin/awk -f
+
+# Example of arrays
+
+BEGIN {
+  print "\n\n"
+  #L'array geo ha come chiavi tre Stati e, come valori, le rispettive capitali.
+  geo["Francia"] = "Parigi"
+  geo["Angola"] = "Luanda"
+  geo["Bhutan"] = "Thimphu"
+  for (i in geo) {
+    printf "%8s %06s\n", i, geo[i] #su printf ci ritorneremo
+  }
+  # Eliminiamo la chiave "Francia" con il comando delete.
+  print "\n\n"
+  delete geo["Francia"]
+  for (i in geo) {
+    print i, geo[i] #Controlliamo se ha eliminato la chiave Francia col suo relativo valore.
+  }
+  # cerca se la chiave Francia esiste
+  print "\n\n"
+  print "Francia " ( "Francia" in geo )   #Dà 0, la chiave Francia non esiste
+  print "Bhutan " ( "Bhutan" in geo )"\n"  #Dà 1, la chiave Bhutan esiste
+}
+</code>
+
+<code>
+# Example of using two files doing a joing in one table!
+#!/usr/bin/awk -f
+
+BEGIN { 
+         print "\n\t.............START....................\n"
+         FORMAT="\t%-12s%-12s%-8s%s\n"
+         printf FORMAT,"ALUNNI","MATRICOLE","VOTI","MATERIE"
+  }
+   {  
+          if (FILENAME == "tabella1.txt") {
+               matricole[$1] = $2
+          }
+          if (FILENAME == "tabella2.txt") {
+              printf FORMAT, $1,matricole[$1],$2,$3 
+          }
+   }
+END {
+print "\n\t.................END..................\n"
 }
 </code>
 
@@ -2469,10 +2553,11 @@ rimuove un modulo in memoria. -a rimuove tutti i moduli
 </item>
 
 <item name="ps">
-Mostra tutti i processi attivi:<command name="ps aux"/>
-Mostra tutti i processi con il nome getty e l'output e' formattato secondo l'ordine di -o: <command name="ps -C getty -o user,pid,tty,time,comm"/>
-Mostra i primi 10 processi che usano più CPU:<command name="ps aux | sort -n -k 3 | tail -10"/>
-Mostra i primi 10 processi che usano più Memoria:<command name="ps aux | sort -n -k 4 | tail -10"/>
+    Lists of the process in execution:<command name="ps -e"/>
+    Shows with more details:<command name="ps aux"/>
+    Shows all processes for the getty command with customied fields:<command name="ps -C getty -o user,pid,tty,time,comm"/>
+    Shows the first 10 processes sorted by CPU usage:<command name="ps aux | sort -n -k 3 | tail -10"/>
+    Shows the first 10 processes sorted by Memory usage:<command name="ps aux | sort -n -k 4 | tail -10"/>
 visualizza ulteriori info sui processi attivi. si utilizzano le opzioni -afx, -a mostra i processi utilizzati da altri utenti, -f definisce una struttura ad albero, -x mostra  processi senza terminali di controllo, u rende l'output human-readble
 
 </item>
@@ -2635,8 +2720,30 @@ restituisce il percorso di &quot;comando&quot; utile per capire se il comando e'
 
 </dict>
 
-<!--- ********************************** RETE ***************************************** -->
-<dict name="rete">
+<!--- ********************************** NETWORK ***************************************** -->
+<dict name="network">
+    <item name="hping">
+        Modes are:
+        *  --udp
+        *  --tcp (default)
+        *  --icmp
+        *  --scan
+        *  --listen
+        *  --rawip
+
+        Makes a traceroute:<command name="sudo hping3 --traceroute -V --udp www.google.com"/>
+
+        Sends only one packet from port 6000 (-S syn/-A ack/-F fin) on 80 port:<command name="sudo hping3 -c 1 -V -S -p 80 -s 6000 192.168.1.1"/>
+        Choose an arbitrary source IP and send packets to port 80 with interval 1500msec:<command name="sudo hping3 --spoof 1.2.3.4 -S 10.20.30.40 -p 80 -i u1500"/>
+        Also with random source IP:<command name="sudo hping3 192.168.1.1 --udp --rand-source"/>
+
+        Scan the port (using -S syn/-A ack/-F fin): <command name="sudo hping3 192.168.1.1 -S --scan 1-1024"/>
+    </item>
+
+    <item name="netcat">
+        Listen to a port # 3005 and execute /usr/bin/w command when client connects:<command name="$ nc -l -p 3005 -e /usr/bin/w"/>
+        Later just do:<command name="telnet localhost 3005"/>
+    </item>
 
 <item name="curl">
 In generale, consente di trasferire documenti HTML request di tipo GET o POST e ricevere dal server response.
@@ -2783,16 +2890,15 @@ chat. /join #canale permette di entrare in un canale, /leave #canale permette di
 </item>
 
 <item name="netstat ">
-Mostra tutte le connessioni presenti sul sistema.
-Lista di tutte le porte UDP e TCP attive:<command name="netstat -a"/>
-Solo connessioni TCP:<command name="netstat -at"/>
-Solo connessioni UDP:<command name="netstat -au"/>
-Non risolve gli indirizzi IP(più efficiente):<command name="netstat -an"/>
-Lista delle porte in ascolto:<command name="netstat -l"/>
-Monitoraggio continuo di netstat:<command name="netstat -c"/>
-Mostra il nome del processo e il suo PID:<command name="netstat -pa"/>
-Lista interfacca di rete:<command name="netstat -i"/>
-Tabella di routing del kernel:<command name="nestat -r"/>
+    Shows all the connections active on the system.
+    Shows all connection UDP, TCP and Unix:<command name="netstat -a"/>
+    Only TCP/UDP connections:<command name="netstat -aut"/>
+    Doesn't make a DNS resolution (more efficient):<command name="netstat -an"/>
+    Shows the list Lista delle porte in ascolto:<command name="netstat -l"/>
+    Continue monitoring of connection:<command name="netstat -c"/>
+    Shows the processes with PID (use also lsof -i):<command name="netstat -pa"/>
+    List of network interfaces:<command name="netstat -i"/>
+    Kernel routing table:<command name="nestat -r"/>
 
 Esiste un ulteriore comando denominato ss che consente di controllare i socket attivi sulla propria macchina
 
@@ -3085,9 +3191,12 @@ consente di ottenere informazioni su eventi dei dispositivi di input quali tasti
 
 </item>
 
-<item name="halt/ shutdown -r now">
-ferma il sistema. -r indica reboot, -h indica halt. Si può utilizzare per esempio shutdown -r +1 &quot;Riavvio della macchina&quot; in cui si attende un minuto e si da un avviso prima di riavviare
-
+<item name="halt/ shutdown">
+    To reboot:<command name="shutdown -r"/>
+    To halt:<command name="shutdown -h"/>
+    To reboot the system right now:<command name="shutdown -r now"/>
+    To reboot the next minute with a message:<command name="shutdown -r +1 &quot;Restarting...&quot;"/>
+    To cancel the shutdown:<command name="shutdown -c"/>
 </item>
 
 <item name="uname -a">
@@ -3289,6 +3398,7 @@ operazione inversa del mount
 <dict name="gestione file">
 
 <item name="lsof">
+    Shows open port with related process:<command name="lsof -i"/>
 Visualizza i file aperti del sistema. Per ciascun file mostra il processo che lo ha aperto.
 Se si vuole indicare una specifica cartella:<command name="lsof +D /media/usb"/>
 Se si vuole indicare un intera partizione:<command name="lsof /dev/sdb1"/>

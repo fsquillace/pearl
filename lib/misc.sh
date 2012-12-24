@@ -562,7 +562,7 @@ function symc() {
             rm -f /tmp/tmp_symc
 
             # Wipe out all the files that don't have the read permission
-            #find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
+            find "$SYNC_HOME/$abs_path" -type l ! -execdir test -r '{}' \; -delete
 
         fi
     done
@@ -605,7 +605,7 @@ function cd() {
         echo -e "cd [-a || --add] PATH\tAdd the specified PATH"
         echo -e "cd [[-r || --remove] KEY\tRemove an entry"
         echo -e "cd [-p || --print] KEY\tPrint the PATH entry (useful for pipe command)"
-        echo -e "symc [-h || --help]\tDisplays this"
+        echo -e "cd [-h || --help]\tDisplays this"
         return 0
     fi
 
@@ -618,8 +618,8 @@ function cd() {
     # Checks if directory and files exists
     if [ ! -d "$HOME/.config/ranger" ]; then
         mkdir -p "$HOME/.config/ranger"
-        touch $HOME/.config/ranger/bookmarks
     fi
+    touch $HOME/.config/ranger/bookmarks
 
     #################### END OPTION PARSING ############################
 
@@ -697,11 +697,7 @@ function cmd() {
         return 0
     fi
 
-    # If the file doesn't exist create it with a default entry
-    if [ ! -f $PYSHELL_HOME/commands ]
-    then
-        touch $PYSHELL_HOME/commands
-    fi
+    touch $PYSHELL_HOME/commands
 
 
     if $OPT_REMOVE
@@ -821,12 +817,13 @@ function todo(){
         return 0
     fi
 
-    # Checks if directory and files exists
+    # Checks if directory exists
     if [ ! -d "$HOME/.config/ranger" ]; then
         mkdir -p "$HOME/.config/ranger"
-        touch "$HOME/.config/ranger/bookmarks"
-        touch "$HOME/.reminders"
     fi
+
+    touch "$HOME/.config/ranger/bookmarks"
+    touch "$HOME/.reminders"
 
 
     if [ "$OPT_REMOVE" != "" ]
