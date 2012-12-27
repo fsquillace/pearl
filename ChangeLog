@@ -1,6 +1,8 @@
 pyshell ?.?.?
 - Completion with - and _ treated equally
 - Windows started from 1 in screen command
+- Enhanced grep manual
+- New pyshell installation system
 
 pyshell 0.18.1
 - Two modes of installing the pyshell system

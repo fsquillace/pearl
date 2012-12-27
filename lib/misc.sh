@@ -1,10 +1,115 @@
 #!/bin/sh
 
+function pyshell_install(){
+
+# Config bashrc
+grep "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to START pyshell when open a new terminal? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
+    fi
+else
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to DELETE pyshell when open a new terminal? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
+    fi
+fi
+
+# Config vimrc
+grep "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to START the pyshell config vim? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
+    fi
+else
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to DELETE the pyshell config vim? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
+    fi
+fi
+
+# Config inputrc
+grep "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to START the pyshell completion history? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
+    fi
+else
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to DELETE the pyshell completion history? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
+    fi
+fi
+
+# Config ranger
+grep "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to START the pyshell Ranger file manager config? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        apply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
+    fi
+else
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to DELETE the pyshell Ranger file manager config? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
+    fi
+fi
+
+}
+
+
+
 function apply(){
     # If the file doesn't exist create it and append the line
     if [ ! -e "$2" ]
     then
-        echo "Creating config file: $2"
         #dirp=$(readlink -f `dirname $2`)
         local dirp=$(dirname $2)
         mkdir -p $dirp
@@ -15,12 +120,16 @@ function apply(){
     grep "$1" "$2" &> /dev/null
     if [ "$?" = "1" ]
     then
-        echo "Sourcing $2 config. Uncomment in $2 if you don't want it."
         echo "" >> $2
         echo "$1" >> $2
     fi
 }
 
+function unapply(){
+    grep -v -x "$1" "$2" &> /tmp/tmp_file
+    cat /tmp/tmp_file > "$2"
+    rm -r /tmp/tmp_file
+}
 
 
 function pyshell_logo(){

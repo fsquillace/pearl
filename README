@@ -38,9 +38,10 @@ ROOT PERMISSION
 ~~~~~~~~~~~~~~~
 If you use Archlinux you can install it from the AUR typing:
 
----------------------
+-----------------------------
 $ yaourt -S pyshell
----------------------
+$ source /opt/pyshell/pyshell
+-----------------------------
 Open a new terminal and a *pyshell* will be directly activated.
 
 In the future there will be a Launchpad repository for distributions
@@ -50,26 +51,27 @@ NON ROOT PERMISSION (GIT REPOSITORY)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 If you do not have root permission, you can directly install *pyshell* by the
 git repository. Type the following commands:
-.................................
+...................................................................
 $ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/pyshell
 $ source pyshell/pyshell
-.................................
+...................................................................
 
 If you are using *pyshell* for the first time you probably do not have the
-configuration directory in '$$~$$/.config/.pyshell'.
-If so, *pyshell* create the configuration directory and apply some modification
-of your config files appending a 'source' in .vimrc, .bashrc and .inputrc.
-These modification will be applied to the user config files ONLY in case of a NON ROOT
-PERMISSION.
+configuration directory in '$$~$$/.config/.pyshell'. In this case, the command
+'pyshell_install' will be executed. 'pyshell_install' will ask you if you want to
+apply new config for the files '.bashrc', '.vimrc', '.inputrc'.
+The new configuration are not mandatory but they are strongly recommended (see below to have
+information about the vim, bash and readline configurations made by *pyshell*)
 
-You can install *pyshell* in other place different from your home.
+You can easily change or reset the settings of pyshell whenever you want executing 'pyshell_install' again.
 
-In case of a NON ROOT PERMISSION, when opening a new terminal the sequence of script
-that are sourced is the following:
+You can also install *pyshell* in other place different from your home.
+
+If you choose to install the *pyshell* configurations and you open a new terminal the following scripts will be executed:
 	. '.bashrc'::
 	*pyshell* append a new line in '.bashrc' in order to startup *pyshell* once a terminal is opened.
 	. 'pyshell'
-	*pyshell* introduce every alias, variable and script that the commands need for the correct execution.
+	*pyshell* introduce every alias, variable and script that the *pyshell* commands need for the correct execution.
 	. 'pyshellrc'::
 	Contains all the configuration that you need to set after the execution of *pyshell*.
 	This can be useful when you want directly edit some alias, variable or script of *pyshell*.

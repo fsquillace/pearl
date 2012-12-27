@@ -38,7 +38,6 @@ export PYSHELL_TEMPORARY=$PYSHELL_HOME/tmp/`tty`
 # Get functions from misc.sh
 source $PYSHELL_ROOT/lib/misc.sh
 
-
 if [ -e $PYSHELL_HOME ]
 then
 
@@ -53,23 +52,16 @@ then
     source $PYSHELL_HOME/pyshellrc
 else
 
-    # If pyshell come from the git repo, make a changing to the home config file of the user
-    if [ -d $PYSHELL_ROOT/.git ]
-    then
-        # Sourcing bash config.
-        apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
+    pyshell_logo
 
-        # Sourcing vim config.
-        apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
+    echo ""
+    echo "The pyshell configurations are not mandatory but they are strongly recommended."
+    echo "They consist of vim, bash, readline and ranger file manager configurations made by *pyshell*."
+    echo "You can easily change or reset the settings of pyshell whenever you want executing:"
+    echo ">> pyshell_install"
+    echo ""
 
-        # Sourcing input config
-        apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
-
-    fi
-
-    # Sourcing commands.py ranger config
-    apply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
-
+    pyshell_install
 
     echo "Creating ~/.config/pyshell directory ..."
     mkdir -p $PYSHELL_HOME/bkp
