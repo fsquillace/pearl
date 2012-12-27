@@ -1,4 +1,4 @@
-pyshell ?.?.?
+pyshell 0.19.4
 - Completion with - and _ treated equally
 - Windows started from 1 in screen command
 - Enhanced grep manual
