@@ -3,6 +3,7 @@ pyshell ?.?.?
 - Windows started from 1 in screen command
 - Enhanced grep manual
 - New pyshell installation system
+- Added new items in git dictionary
 
 pyshell 0.18.1
 - Two modes of installing the pyshell system

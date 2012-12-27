@@ -268,7 +268,10 @@ Command     Alias     Info
         The last two commands above are useful for a shared repository.
     </item>
     <item name="fundamental commands">
-        <command name="git add file"/>
+        To track a file in git or to stage a file to be candidate for a commit:<command name="git add file"/>
+        Note: Every time you change a file it will not be in a stage area and to get the last changes in stage you have to retype
+        git add on that file.
+        The interctive tool for manage untracked or unstaged files:<command name="git add -i"/>
         <command name="git mv fileold filenew"/>
         <command name="git status"/>
         To commit and skip the staged phase:<command name="git commit -am 'message'"/>
@@ -278,12 +281,15 @@ Command     Alias     Info
 
         To see what you’ve changed but not yet staged:<command name="git diff"/>
         To compares your staged changes to your last commit:<command name="git diff --staged"/>
+        To show the diff and log message of a commit/branch or whatever object:<command name="git show name_object"/>
 
 
         To take track of your past commit:<command name="git log"/>
         And using diff too of the last one:<command name="git log -p -1"/>
+        To use the graph:<command name="git log --graph"/>
         To get statistics:<command name="git log --stat"/>
         For a concise list of commits:<command name="git log --pretty=oneline"/>
+        To log only a branch but not the commit of master:<command name="git log name_branch --not master"/>
         For a detailed use of log see:http://progit.org/book/ch2-3.html
     </item>
 
@@ -330,7 +336,7 @@ Command     Alias     Info
         To remove a remote:<command name="git remote rm dav"/>
         To rename a remote:<command name="git remote rename joe feel"/>
     </item>
-    <item name="tagging">
+    <item name="tagging and archive">
         List available tags:<command name="git tag"/>
         To look for some tags:<command name="git tag -l 'v1.4.2.*'"/>
         
@@ -345,6 +351,13 @@ Command     Alias     Info
 
         To transfer to remote a tag:<command name="git push v1.2"/>
         To transfer to remote all tags:<command name="git push --tags"/>
+
+        To give a unique and human readable release number to the current commit:<command name="git describe master"/>
+        To create an archive:<command name="git archive master | gzip > `git describe master`.tar.gz"/>
+
+        Example of Changelog:
+        <command name="git shortlog 0.18.1...0.17.5 --no-merges"/>
+        <command name="git log 0.18.1...0.17.5 --no-merges --pretty=format:&quot;%ci %an &lt;%ae&gt;%n    * %s&quot; | awk 'BEGIN{ldate=0}{msg=$0; if((NR-1)%2==0){msg=$1; for(i=4;i&lt;=NF;i++)msg=msg&quot; &quot;$i;} if($1!=ldate){print msg}; if((NR-1)%2==0){ldate=$1}}'"/>
     </item>
 
     <item name="branching and merge">
@@ -361,6 +374,7 @@ Command     Alias     Info
         To delete a branch:<command name="git branch -d hotfix"/>
         To see the last commit on each branch:<command name="git branch -v"/>
         To see merged or no-merged branchs:<command name="git branch [--merged|--no-merged]"/>
+        To move/rename a branch:<command name="git branch -m oldbranch newbranch"/>
 
         WITH REMOTE:
         To get changes from a remote you can do two things (after doing "remote add" command):
@@ -397,6 +411,76 @@ Command     Alias     Info
         CLIENT SIDE:
         Add the remote:
         <command name="git remote add production user@ssh.domain.com:~/my_project/.git"/>
+    </item>
+
+    <item name="Contributing to a project">
+        To check whitespaces before commiting:<command name="git diff --check"/>
+        Before pushing to the remote is important to remember the following steps:
+        1) fetch the changes in order to get the remote (usually origin/master) up to date
+        locally:<command name="git fetch orign"/>
+        2) merge the two versions(master and origin/master).
+        You need to be in the master branch:<command name="git merge origin/master"/>
+        3) Push the new snapshot in remote:<command name="git push orign master"/>
+
+        To check what commits are needed to merge use:<command name="git log --no-merges"/>
+
+        To request pull from a remote public repo:<command name="git request-pull origin/master myfork"/>
+        
+        MANAGE PATCHES:
+        Create a Patch:
+        From your commits it is possible to create a patch:<command name="git format-patch -M origin/master"/>
+        Send email with patches (first use git config to set the email account):<command name="git send-email *.patch"/>
+
+        Apply a patch:
+        For applying a new patch is a good practice to create a temporary branch first.
+        To apply a patch that come from git diff or diff commands:<command name="git apply name_patch.patch"/>
+        Before apply it is good idea to check first:<command name="git apply --check name_patch.patch"/>
+
+        To apply a patch from format-patch(it is the best way):<command name="git am name_patch.patch"/>
+        In case of error you can edit the conflict file and type:<command name="git am --resolved"/>
+        Or in case of abort of skip:<command name="git am --skip"/><command name="git am --abort"/>
+
+        If the patch doesn't work, it is possible to apply using a three-way merge:<command name="git am -3 name_patch.patch"/>
+        The interactive mode is:<command name="git am -i name_patch.patch"/>
+
+        DETERMINE THE DIFFERENCES:
+        It is important to know that using the classic:<command name="git diff master"/> is not always a good idea,
+        in particular when the branches diverges a lot.
+        To see truly the difference we need to find the common ancestor:<command name="git merge-base name_branch master"/>
+        and later use that ancestor to diff:<command name="git diff 367cd"/>
+        Git provides an awesome command to do that directly!<command name="git diff name_branch...master"/>
+    </item>
+
+    <item name="miscelaneous to be a git master!">
+        To get the commit from the branch name:<command name="git rev-parse branch_name"/>
+        REFLOG:
+        Git records all the operations done in a history:<command name="git reflog"/>
+        To show what is going on yesterday on master:<command name="git show master@{yesterday}"/>
+        And two months ago on HEAD:<command name="git show HEAD@{2.months.ago}"/>
+
+        ANCESTRY REFS:
+        There are two specification ^ or ~. ^ is used to traverse ancestors with more than one parent
+        and ~ is used to traverse depth in the history.
+        To get the second parent:<command name="git show HEAD^2"/> or <command name="git show HEAD^^"/>
+        To get the grandparent:<command name="git shoe HEAD~2"/>
+
+        COMMIT RANGES:
+        What is in experiment branch that hasn’t yet been merged into master branch?<command name="git show master..experiment"/>
+        Or to get a log for the commits that has to be merged in a remote:<command name="git log origin/master..HEAD"/>
+        To get the commits that are reachable by either of two references but not by both of them showing the sides too:
+        <command name="git log --left-right master...experiment"/>
+    </item>
+
+    <item name="stashing">
+        Stashing is useful when you have started a work that you still don't want to commit but you have also to switch branch.
+        To store the changes:<command name="git stash"/>
+        To list the stashs:<command name="git stash list"/>
+        To apply a stash:<command name="git stash apply stash@{1}"/>
+        Even better apply and delete a stash:<command name="git stash pop stash@{1}"/>
+        To drop a stash:<command name="git drop stash@{1}"/>
+        To show the diff:<command name="git stash show -p stash@{1}"/>
+        After changes it is possible to unapply the work from a stash:<command name="git stash show -p stash@{0} | git apply -R"/>
+        To create a branch from a stash:<command name="git stash branch branch_name"/>
     </item>
 </dict>
 
