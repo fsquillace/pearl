@@ -1,5 +1,6 @@
 pyshell ?.?.?
 - Completion with - and _ treated equally
+- Windows started from 1 in screen command
 
 pyshell 0.18.1
 - Two modes of installing the pyshell system

@@ -13,6 +13,14 @@ term screen-256color
 #Use X scrolling mechanism
 termcapinfo xterm* ti@:te@
 
+# To start with window number to 1
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10
+screen 1
+
+
+
 #backtick 1 5 5 true
 #termcapinfo rxvt* 'hs:ts=\E]2;:fs=\007:ds=\E]2;\007'
 #hardstatus string "screen (%n: %t)"
