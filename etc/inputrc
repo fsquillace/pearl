@@ -23,6 +23,8 @@ set output-meta on
 
 # Very useful for the tab completion
 set completion-ignore-case On
+# It treats hyphens and underscores equally during the completion
+set completion-map-case on
 
 # some defaults / modifications for the emacs mode
 $if mode=emacs

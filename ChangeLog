@@ -1,3 +1,6 @@
+pyshell ?.?.?
+- Completion with - and _ treated equally
+
 pyshell 0.18.1
 - Two modes of installing the pyshell system
 - Fixed some bugs for symc
