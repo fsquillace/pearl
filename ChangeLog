@@ -1,3 +1,6 @@
+pyshell ?.?.?
+- Enhanced grep manual
+
 pyshell 0.18.1
 - Two modes of installing the pyshell system
 - Fixed some bugs for symc

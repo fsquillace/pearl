@@ -406,6 +406,9 @@ Command     Alias     Info
 <dict name="Grep Sed Paste &amp; Awk">
     <item name="grep '\&lt; [a-z0-9-]\+\&gt;' doc.txt">
         ricerca su un file dati. -i ignora il case, -m &quot;num&quot; num massimo di abbinamenti, -n stampa il numero della linea, -f=&quot;FILE&quot; per specificare che il Pattern si trova in File, --colour per il colore. per comandi avanzati sed oppure awk(molto difficile)
+
+        To invert match:<command name="grep -v python f.txt"/>
+        To check an exact match:<command name="grep -x python.* f.txt"/>
     </item>
     <item name="paste">
         Merge lines of files delimited by a space char:<command name="paste -s -d ' ' file.txt"/>
