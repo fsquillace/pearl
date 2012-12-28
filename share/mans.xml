@@ -469,6 +469,32 @@ Command     Alias     Info
         Or to get a log for the commits that has to be merged in a remote:<command name="git log origin/master..HEAD"/>
         To get the commits that are reachable by either of two references but not by both of them showing the sides too:
         <command name="git log --left-right master...experiment"/>
+
+        DETECT BUGGY COMMITS:
+        In case of having hundreds of commits in order to detect a buggy commit:
+        1) Start the binary search algorithm:<command name="git bisect start"/>
+        2) Specify that the current commit is buggy:<command name="git bisect bad"/>
+        3) Specify the last known good commit:<command name="git bisect good v1.0"/>
+        bisect start to evaluate the middle commits and after you test the commit,
+        you can judge the commit as bad o good:<command name="git bisect good/bad"/>
+        Until you get the first bad commit.
+        To reset the HEAD to the original commit:<command name="git bisect reset"/>
+
+        If you have a script that return zero in case the commit is good and non-zero otherwise,
+        you can easily automate as follows:
+        1) Indicate the good and bad commit:<command name="git bisect start HEAD v1.0"/>
+        2) Run the process:<command name="git bisect run test-error.sh"/>
+        bisect continue until finds the first broken commit.
+
+        BUG ANNOTATION:
+        If you detect a bug and want to know when it was introduced and why:
+        <command name="git blame -L 12,22 name_file"/>
+        To check also if the file was renamed and so on:<command name="git blame -C -L 143,160 file_name"/>
+
+        REWRITNG THE HISTORY:
+        In order to split, merge, change multiple messages in previous commit see
+        http://git-scm.com/book/en/Git-Tools-Rewriting-History
+
     </item>
 
     <item name="stashing">
@@ -523,6 +549,7 @@ Command     Alias     Info
         *   RS -- The record separator; by default is newline
         *   OFS -- The output field separator; default is space. See example below
         *   FILENAME -- name of the file (see below for an example to use it for joining two files!)
+        *   FNR -- same as NR but with multiple files it restart counting from 1 for each file while NR continue incrementing
 
         Variables don't need dollar char!
         Example:<command name="awk '{print $1,NF,NR,FS }'"/>
@@ -3394,6 +3421,13 @@ permette di aprire molti formati audio tra cui gli mp3. -v è l'opzione per il v
 
 <!--- ********************************** FILESYSTEM E DISCHI ***************************************** -->
 <dict name="filesystem dischi">
+
+    <item name="create a RAM disk">
+        In order to create a disk into the ram:
+        <command name="mkdir -p /media/ramdisk"/>
+        <command name="mount -t tmpfs -o size=2048M tmpfs /media/ramdisk"/>
+        To unmount:<command name="umount /media/ramdisk"/>
+    </item>
 
 <item name="Ricavare l'UUID a partire dal file dev">
 Restituisce l'uuid e il tipo di filesystem:<command name="sudo blkid /dev/xxx"/>

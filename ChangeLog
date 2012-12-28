@@ -1,3 +1,8 @@
+pyshell ?.?.?
+- Changed pyshell_install and pyshell_update
+- Introduced screenrc for pyshell config
+- Added new stuffs in mans
+
 pyshell 0.19.4
 - Completion with - and _ treated equally
 - Windows started from 1 in screen command
