@@ -1,6 +1,12 @@
 #!/bin/sh
 
-function pyshell_install(){
+function pyshell_settings(){
+
+if [ ${#@} -ne 0 ]; then
+    echo "pyshell_settings: unrecognized options '$@'"
+    echo "Usage: pyshell_settings"
+    return 128
+fi
 
 # Config bashrc
 grep "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc &> /dev/null
@@ -102,6 +108,33 @@ else
     fi
 fi
 
+# Config screenrc
+grep "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to START the pyshell config for the screen command? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        apply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
+    fi
+else
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to DELETE the pyshell config for the screen command? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
+    fi
+fi
+
+
+
 }
 
 
@@ -198,24 +231,24 @@ if [ "$a" = "" ]; then
 fi
 }
 
-# TODO the variable pkgdir is not well set.
 function pyshell_update(){
-    local srcdir=/tmp/pyshell
-    local pkgdir=$PYSHELL_ROOT
+    if [ ${#@} -ne 0 ]; then
+        echo "pyshell_update: unrecognized options '$@'"
+        echo "Usage: pyshell_update"
+        return 128
+    fi
 
-
-    mkdir -p $srcdir
-    cd $srcdir
-    wget https://aur.archlinux.org/packages/py/pyshell/PKGBUILD
-    source PKGBUILD
-    wget -O pyshell.tar.gz $source
-    tar -xzvf pyshell.tar.gz
-
-    build
-
-    cd $pkgdir
-    rm -rf $srcdir
-
+    if [ -d $PYSHELL_ROOT/.git ]
+    then
+        builtin cd $PYSHELL_ROOT
+        git pull
+        builtin cd -
+    else
+        echo "PyShell wasn't installed using Git."
+        echo "May be it was installed by the package manager of the system."
+        echo "Use it if you want to update Pyshell."
+        return 1
+    fi
 }
 
 function eye(){

@@ -56,12 +56,12 @@ else
 
     echo ""
     echo "The pyshell configurations are not mandatory but they are strongly recommended."
-    echo "They consist of vim, bash, readline and ranger file manager configurations made by *pyshell*."
+    echo "They consist of vim, bash, readline and ranger file manager configurations made by pyshell."
     echo "You can easily change or reset the settings of pyshell whenever you want executing:"
-    echo ">> pyshell_install"
+    echo ">> pyshell_settings"
     echo ""
 
-    pyshell_install
+    pyshell_settings
 
     echo "Creating ~/.config/pyshell directory ..."
     mkdir -p $PYSHELL_HOME/bkp

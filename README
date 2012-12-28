@@ -58,16 +58,17 @@ $ source pyshell/pyshell
 
 If you are using *pyshell* for the first time you probably do not have the
 configuration directory in '$$~$$/.config/.pyshell'. In this case, the command
-'pyshell_install' will be executed. 'pyshell_install' will ask you if you want to
-apply new config for the files '.bashrc', '.vimrc', '.inputrc'.
-The new configuration are not mandatory but they are strongly recommended (see below to have
-information about the vim, bash and readline configurations made by *pyshell*)
+'pyshell_settings' will be executed. 'pyshell_settings' will ask you if you want to
+apply new config for the files '.bashrc', '.vimrc', '.inputrc', '.screenrc'. It consists
+just on appending a line for each of those files. This new configuration are not mandatory
+but they are strongly recommended (see below to have information about the vim, bash and
+readline configurations made by *pyshell*)
 
-You can easily change or reset the settings of pyshell whenever you want executing 'pyshell_install' again.
-
+You can easily change or reset the settings of pyshell whenever you want executing 'pyshell_settings' again.
 You can also install *pyshell* in other place different from your home.
 
 If you choose to install the *pyshell* configurations and you open a new terminal the following scripts will be executed:
+
 	. '.bashrc'::
 	*pyshell* append a new line in '.bashrc' in order to startup *pyshell* once a terminal is opened.
 	. 'pyshell'
@@ -75,6 +76,12 @@ If you choose to install the *pyshell* configurations and you open a new termina
 	. 'pyshellrc'::
 	Contains all the configuration that you need to set after the execution of *pyshell*.
 	This can be useful when you want directly edit some alias, variable or script of *pyshell*.
+
+UPDATE PYSHELL
+--------------
+In case *pyshell* was installed with root permission, *pyshell* can be updated using the
+same package manager of the system. If *pyshell* was installed using Git repository,
+*pyshell* provides a handy command to help you update it 'pyshell_update'.
 
 CONFIGURATIONS
 --------------
