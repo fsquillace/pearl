@@ -1,5 +1,17 @@
 #!/bin/sh
 
+function confirm_question(){
+    # $1: prompt;
+
+    local res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "$1" res
+    done
+
+    echo "$res"
+}
+
 function pyshell_settings(){
 
 if [ ${#@} -ne 0 ]; then
@@ -12,21 +24,13 @@ fi
 grep "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc &> /dev/null
 if [ "$?" != "0" ]
 then
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to START pyshell when open a new terminal? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to START pyshell when open a new terminal? (Y/n)> ")
 
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
         apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
     fi
 else
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to DELETE pyshell when open a new terminal? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to DELETE pyshell when open a new terminal? (y/N)> ")
 
     if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
         unapply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
@@ -37,21 +41,13 @@ fi
 grep "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc &> /dev/null
 if [ "$?" != "0" ]
 then
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to START the pyshell config vim? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to START the pyshell config vim? (Y/n)> ")
 
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
         apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
     fi
 else
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to DELETE the pyshell config vim? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to DELETE the pyshell config vim? (y/N)> ")
 
     if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
         unapply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
@@ -62,21 +58,13 @@ fi
 grep "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc &> /dev/null
 if [ "$?" != "0" ]
 then
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to START the pyshell completion history? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to START the pyshell completion history? (Y/n)> ")
 
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
         apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
     fi
 else
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to DELETE the pyshell completion history? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to DELETE the pyshell completion history? (y/N)> ")
 
     if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
         unapply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
@@ -87,21 +75,13 @@ fi
 grep "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py &> /dev/null
 if [ "$?" != "0" ]
 then
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to START the pyshell Ranger file manager config? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to START the pyshell Ranger file manager config? (Y/n)> ")
 
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
         apply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
     fi
 else
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to DELETE the pyshell Ranger file manager config? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to DELETE the pyshell Ranger file manager config? (y/N)> ")
 
     if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
         unapply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
@@ -112,27 +92,18 @@ fi
 grep "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc &> /dev/null
 if [ "$?" != "0" ]
 then
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to START the pyshell config for the screen command? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to START the pyshell config for the screen command? (Y/n)> ")
 
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
         apply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
     fi
 else
-    local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to DELETE the pyshell config for the screen command? (Y/n)> " res
-    done
+    local res=$(confirm_question "Do you want to DELETE the pyshell config for the screen command? (y/N)> ")
 
     if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
         unapply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
     fi
 fi
-
 
 
 }
