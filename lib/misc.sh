@@ -344,7 +344,7 @@ function ranger(){
     # The following command add tags for the files synced. The problem is that is takes time
     #check_sync
 
-    # Checks out into the jobs
+    # Checks out into the jobs if the user pressed the C-z key
     local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
     if [ "$id" != "" ]
     then
@@ -353,8 +353,7 @@ function ranger(){
     fi
 
     # Checks out if the user pressed S key
-    ps -t `tty` -o comm= | grep ranger &> /dev/null
-    if [ "$?" == "0" ]
+    if [ "$RANGER_LEVEL" != "" ]
     then
         exit
         return # Ensures that it returns anyway if there are jobs stopped
