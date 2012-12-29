@@ -495,6 +495,16 @@ Command     Alias     Info
         In order to split, merge, change multiple messages in previous commit see
         http://git-scm.com/book/en/Git-Tools-Rewriting-History
 
+        SUBMODULES:
+        Allows to keep a Git repo as a subdirectory of another Git repo.
+        To add a git project into the 'rack' directory:<command name="git submodule add git://github.com/chneukirchen/rack.git rack"/>
+        To clone a project with submodules:
+        1) git clone:<command name="git clone ...."/>
+        2) init the submodules:<command name="git submodule init"/>
+        3) fetch the modules:<command name="git submodule update"/>
+        The info of the submodules will be stored in .gitmodules
+        Submodules is sometimes odd to use. Check out the doc for any problem: http://git-scm.com/book/en/Git-Tools-Submodules
+
     </item>
 
     <item name="stashing">
