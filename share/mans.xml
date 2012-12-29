@@ -505,6 +505,17 @@ Command     Alias     Info
         The info of the submodules will be stored in .gitmodules
         Submodules is sometimes odd to use. Check out the doc for any problem: http://git-scm.com/book/en/Git-Tools-Submodules
 
+        SUBTREE MERGING:
+        Is a substitution of the submodules method.
+        Instead of creating a submodule the method creates a branch:
+        1) Create a remote:<command name="git remote add rack_remote git@github.com:schacon/rack.git"/>
+        2) Fetch:<command name="git fetch rack_remote"/>
+        3) Read the root tree of the branch and put the content into 'rack' dir:<command name="git read-tree --prefix=rack/ -u rack_branch"/>
+        4) After any changes from the rack_branch, merge it using:<command name="git merge --squash -s subtree --no-commit rack_branch"/>
+
+        To see the diff between the 'rack' directory and rack_branch:<command name="git diff-tree -p rack_branch"/>
+
+
     </item>
 
     <item name="stashing">
