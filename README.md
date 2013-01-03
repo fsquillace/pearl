@@ -642,7 +642,7 @@ Simply type *pearl\_update\_modules* and it will place the program in '$PEARL\_H
 You can specify in your ~/.xinitrc your applications you want to startup
 with some delay with the following bash function:
 
-    source /path/to/pearl/lib/misc.sh
+    source /path/to/pearl/lib/util.sh
     bootapp pidgin 23
 
 It will boot pidgin after 23 seconds. This function allow to reduce the

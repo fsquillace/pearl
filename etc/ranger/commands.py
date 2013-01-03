@@ -98,9 +98,9 @@ class sync(Command):
     use the "current file" (where the cursor is)
     """
     allow_abbrev = False
-   
+
     def execute(self):
-        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/util.sh'
 
         if (self.arg(1) == '-l' or self.arg(1) == '--list') and len(self.args)==2:
             self.fm.execute_command('source '+misc_lib+'; sync -l; sleep 5')
@@ -152,7 +152,7 @@ class symc(Command):
     """
     :symc                   Create a sym link of the selected files into the sync directory
     :symc [-h || --help ]   Show the help
-   
+
     Tries to create a sym link of the selection to sync directory.
     Type symc -h for all the available option.
 
@@ -164,10 +164,10 @@ class symc(Command):
 
 
     allow_abbrev = False
-   
+
     def execute(self):
 
-        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/util.sh'
 
         if (self.arg(1) == '-s' or self.arg(1) == '--show') and\
                 len(self.args)==2:
@@ -217,7 +217,7 @@ class trash(Command):
     :trash                   Move to trash the selected files
     :trash [-s || --show ]   Show the trash
     :trash [-e || --empty]   Empty the trash
-    
+
     Tries to move to trash the selection.
 
     "Selection" is defined as all the "marked files" (by default, you
@@ -232,13 +232,13 @@ class trash(Command):
     """
 
     allow_abbrev = False
-    
+
     def execute(self):
         trash_dir = os.environ['PEARL_TEMPORARY']
-        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/util.sh'
 
         os.system('mkdir -p '+ trash_dir)
-        
+
         if self.arg(1) == '-s' or self.arg(1) == '--show':
             self.fm.cd(trash_dir)
         elif self.arg(1) == '-e' or self.arg(1) == '--empty':
@@ -247,7 +247,7 @@ class trash(Command):
         else:
             lastword = self.arg(-1)
             TRASH_WARNING = 'trash seriously? '
-            
+
             if lastword.startswith('y'):
                 # user confirmed deletion!
                 cfs = self.fm.env.cwd.get_selection()
@@ -259,10 +259,10 @@ class trash(Command):
             elif self.line.startswith(TRASH_WARNING):
                 # user did not confirm deletion
                 return
-    
+
             cwd = self.fm.env.cwd
             cf = self.fm.env.cf
-            
+
             if cwd.marked_items or (cf.is_directory and not cf.is_link \
                                     and len(os.listdir(cf.path)) > 0):
                 # better ask for a confirmation, when attempting to

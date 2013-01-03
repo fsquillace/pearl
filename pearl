@@ -6,6 +6,7 @@
 # (update 29-01-2012 continue ending thesis in Valencia)
 # (update 27-01-2013 working in Dublin)
 # (update 06-02-2013 still in Dublin and big day changing the name in pearl!)
+# (update 31-12-2013 modularized the pearl script in Milan!)
 # Usage: source pearl OR bash --rcfile pearl
 
 # If not running interactively, don't do anything
@@ -22,7 +23,6 @@ fi
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-
 # Possible choices:
 #umask   file mode   directory mode
 #0022    -rw-r--r--  drwxr-xr-x
@@ -30,7 +30,7 @@ fi
 umask 0022
 
 
-# Define the main pearl variables
+# Define the MAIN PEARL variables first of all!
 export PEARL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
 if [ ! -d $PEARL_ROOT ]; then
     echo "Error: Could not set PEARL_ROOT env because $PEARL_ROOT does not exist."
@@ -42,101 +42,25 @@ mkdir -p $PEARL_TEMPORARY
 # Variable for logging system
 export PEARL_DEBUG=0
 
-# Import the functions from misc.sh and install.sh
-source $PEARL_ROOT/lib/misc.sh
+
+# Import the functions from the modules in lib/
+source $PEARL_ROOT/lib/util.sh
 source $PEARL_ROOT/lib/install.sh
 source $PEARL_ROOT/lib/apps.sh
-source $PEARL_ROOT/lib/aliases.sh
-source $PEARL_ROOT/lib/history.sh
 
 # Install pearl if it is not installed yet
-pearl_install
+pearl_create_home
 
-#####################
-# Variables
-#####################
+source $PEARL_ROOT/lib/variables.sh
+source $PEARL_ROOT/lib/aliases.sh
+source $PEARL_ROOT/lib/history.sh
+source $PEARL_ROOT/lib/ssh.sh
+source $PEARL_ROOT/lib/options.sh
+source $PEARL_ROOT/lib/prompt.sh
+source $PEARL_ROOT/lib/bindings.sh
+source $PEARL_ROOT/lib/traps.sh
+source $PEARL_ROOT/lib/tmux.sh
+source $PEARL_ROOT/lib/ops.sh
 
-export SYNC_HOME=~/Dropbox/
-export PYTHONPATH=$PYTHONPATH:$PEARL_ROOT/lib
-PATH=${PEARL_ROOT}/bin:${PATH}
-export EDITOR=vim
-export VISUAL=$EDITOR # some programs use this instead of EDITOR
-export MANPATH=$MANPATH:$PEARL_ROOT/man
-
-#######################
-
-#>>>>>>>>>>>>>>>>>>>
-#>> Prompt
-#>>>>>>>>>>>>>>>>>>>
-source $PEARL_ROOT/etc/context/def
-
-#>>>>>>>>>>>>>>>>>>>>>
-
-
-#*******************
-#** Bash options
-#*******************
-shopt -s cdspell &> /dev/null
-shopt -s autocd  &> /dev/null
-shopt -s dirspell &> /dev/null
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize &> /dev/null
-
-#*********************
-
-#########################
-# MISC
-#########################
-
-#*** Handle to clean temp directory
-trap "/bin/rm -fr $PEARL_TEMPORARY" QUIT EXIT ABRT KILL TERM
-
-
-#******* Script to trap USR1 signal in order to handle changing directory
-function sigusr2()
-{ 
-  source $PEARL_TEMPORARY/new_cmd
-
-}
-
-trap "sigusr2" USR2       # catch -USR2 signal
-
-# Load the LS_COLORS configuration
-[ -f $PEARL_ROOT/etc/LS_COLORS ] && eval $(dircolors -b $PEARL_ROOT/etc/LS_COLORS)
-
-# This binds Ctrl-O to ranger:
-bind '"\C-o":"\C-u\C-k ranger\C-m"'
-
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-if [ -f ~/.bash_aliases ]; then
-        . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-        . /etc/bash_completion
-fi
-
-
-if [ -n "$TMUX" ]; then
-    # set TERM according to the parent terminal's TERM (see etc/tmux.conf)
-    case "$TERM" in
-        *-256color) export TERM=xterm-256color ;;
-        *) export TERM=screen ;;
-    esac
-
-    # Home/End keys in tmux
-    bind '"\e[1~":"\eOH"'
-    bind '"\e[4~":"\eOF"'
-fi
-
-# Set the terminfo for screen 256
-export TERMINFO_DIRS=$TERMINFO_DIRS:$PEARL_ROOT/share/terminfo
-
+# Set other not category related stuff
+source $PEARL_ROOT/lib/misc.sh

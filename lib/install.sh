@@ -1,54 +1,40 @@
+#!/bin/bash
 
-function pearl_install(){
+function pearl_create_home(){
+    if [ -e $PEARL_HOME/pearlrc ]
+    then
+        source $PEARL_HOME/pearlrc
+    else
+        pearl_logo
+        # Shows informations system
+        echo ""
+        (uname -m && cat /etc/*release)
 
-######################### INSTALLATION STEP ###########################
+        echo ""
+        echo "The pearl configurations are not mandatory but they are strongly recommended."
+        echo "They consist of vim, bash, readline and ranger file manager and many others configurations made by pearl."
+        echo "You can easily change or reset the settings of pearl whenever you want executing:"
+        echo ">> pearl_settings"
+        echo ""
 
-if [ -e $PEARL_HOME/pearlrc ]
-then
+        pearl_settings
 
-    # Checks for updates if pearl was installed from Git
-    #if [ -d $PEARL_ROOT/.git ]
-    #then
-        #builtin cd $PEARL_ROOT
-        #git pull origin master
-        #builtin cd -
-    #fi
+        echo "Creating ~/.config/pearl directory ..."
+        mkdir -p $PEARL_HOME/bkp
+        mkdir -p $PEARL_HOME/mans
+        mkdir -p $PEARL_HOME/etc/context
+        mkdir -p $PEARL_HOME/opt
 
-    source $PEARL_HOME/pearlrc
-else
+        echo "#!/bin/bash" > $PEARL_HOME/pearlrc
+        echo "#This script is used to execute anything you want. " >> $PEARL_HOME/pearlrc
+        echo "# Uncomment and type your Dropbox/Ubuntu One home if it's different from ~/Dropbox/:" >> $PEARL_HOME/pearlrc
+        echo "#export SYNC_HOME=~/Dropbox/" >> $PEARL_HOME/pearlrc
+        chmod +x $PEARL_HOME/pearlrc
 
-    pearl_logo
+        echo ""
+        echo "For more information: man pearl"
 
-    # Shows informations system
-    echo ""
-    (uname -m && cat /etc/*release)
-
-    echo ""
-    echo "The pearl configurations are not mandatory but they are strongly recommended."
-    echo "They consist of vim, bash, readline and ranger file manager and many others configurations made by pearl."
-    echo "You can easily change or reset the settings of pearl whenever you want executing:"
-    echo ">> pearl_settings"
-    echo ""
-
-    pearl_settings
-
-    echo "Creating ~/.config/pearl directory ..."
-    mkdir -p $PEARL_HOME/bkp
-    mkdir -p $PEARL_HOME/mans
-    mkdir -p $PEARL_HOME/etc/context
-    mkdir -p $PEARL_HOME/opt
-
-    echo "#!/bin/bash" > $PEARL_HOME/pearlrc
-    echo "#This script is used to execute anything you want. " >> $PEARL_HOME/pearlrc
-    echo "# Uncomment and type your Dropbox/Ubuntu One home if it's different from ~/Dropbox/:" >> $PEARL_HOME/pearlrc
-    echo "#export SYNC_HOME=~/Dropbox/" >> $PEARL_HOME/pearlrc
-    chmod +x $PEARL_HOME/pearlrc
-
-    echo ""
-    echo "For more information: man pearl"
-
-fi
-#####################################################################################################
+    fi
 
 }
 
@@ -309,6 +295,58 @@ function pearl_update_modules(){
     return 0
 }
 
+
+function pearl_install(){
+    git_command=$(which git);
+
+    if [ "$git_command" != "" ];
+    then
+        git clone git://github.com/fsquillace/pearl $PEARL_ROOT;
+    else
+        _pearl_wget_install
+    fi
+}
+
+
+function _pearl_git_update(){
+    git_command=$(which git);
+    builtin cd $PEARL_ROOT
+    if [ "$1" = "soft"  ]
+    then
+        git pull
+    elif [ "$1" = "" ] || [ "$1" = "hard" ]
+    then
+        git fetch --all
+        git reset --hard origin/master
+    fi
+    builtin cd $OLDPWD
+
+}
+
+function _pearl_wget_install(){
+    if [ ! -f "$PEARL_INSTALL/current.tar.gz" ]
+    then
+        wget https://github.com/fsquillace/pearl/archive/current.tar.gz
+    fi
+
+    builtin cd $PEARL_INSTALL
+    tar xzvf current.tar.gz;
+    mv pearl-current $HOME/.pearl;
+    md5sum current.tar.gz > $HOME/.pearl/pearl.sum
+    cd $HOME;
+}
+
+function _pearl_wget_update(){
+    builtin cd $PEARL_INSTALL
+    wget https://github.com/fsquillace/pearl/archive/current.tar.gz
+    oldSum=$(cat $PEARL_ROOT/pearl.sum)
+        
+    if [ "$(md5sum current.tar.gz)" != "$oldSum" ]
+    then
+        _pearl_wget_install
+    fi
+}
+
 function pearl_update(){
     function up_help(){
         echo "Usage: pearl_update [soft/hard]"
@@ -327,22 +365,17 @@ function pearl_update(){
         return 0
     fi
 
-    if [ -d $PEARL_ROOT/.git ]
+    git_command=$(which git);
+    if [ "$git_command" != "" ] && [ -d "$PEARL_ROOT/.git" ];
     then
-        builtin cd $PEARL_ROOT
-        if [ "$1" = "soft"  ]
-        then
-            git pull
-        elif [ "$1" = "" ] || [ "$1" = "hard" ]
-        then
-            git fetch --all
-            git reset --hard origin/master
-        fi
-        builtin cd -
-
+        _pearl_git_update $1
+        source $PEARL_ROOT/pearl
+    elif [ -f "$PEARL_ROOT/pearl.sum" ]
+    then
+        _pearl_wget_update
         source $PEARL_ROOT/pearl
     else
-        echo "pearl wasn't installed using Git."
+        echo "pearl wasn't installed using either wget or Git."
         echo "May be it was installed by the package manager of the system."
         echo "Use it if you want to update Pearl."
         return 1
@@ -351,4 +384,24 @@ function pearl_update(){
     return 0
 }
 
+
+# This function is able to install/update pearl
+# with either git or wget
+function pearl_install_update(){
+if [ -d $PEARL_ROOT ];
+then
+    pearl_update
+else
+    pearl_install
+fi
+}
+
+
+if [ "${BASH_ARGV}" == "" ]; then
+    PEARL_INSTALL=$(mktemp -d pearl-XXXXX -p /tmp)
+    [ -z $PEARL_ROOT ] && PEARL_ROOT=$HOME/.pearl
+    [ -z $PEARL_HOME ] && PEARL_HOME=$HOME/.config/pearl
+    pearl_install_update
+    rm -rf $PEARL_INSTALL
+fi
 
