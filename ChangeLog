@@ -1,3 +1,7 @@
+pyshell ?.?.?
+- Fixed symc for single file
+- Improved ranger wrapper
+
 pyshell 0.19.7
 - Changed pyshell_install and pyshell_update
 - Introduced screenrc for pyshell config

@@ -495,6 +495,27 @@ Command     Alias     Info
         In order to split, merge, change multiple messages in previous commit see
         http://git-scm.com/book/en/Git-Tools-Rewriting-History
 
+        SUBMODULES:
+        Allows to keep a Git repo as a subdirectory of another Git repo.
+        To add a git project into the 'rack' directory:<command name="git submodule add git://github.com/chneukirchen/rack.git rack"/>
+        To clone a project with submodules:
+        1) git clone:<command name="git clone ...."/>
+        2) init the submodules:<command name="git submodule init"/>
+        3) fetch the modules:<command name="git submodule update"/>
+        The info of the submodules will be stored in .gitmodules
+        Submodules is sometimes odd to use. Check out the doc for any problem: http://git-scm.com/book/en/Git-Tools-Submodules
+
+        SUBTREE MERGING:
+        Is a substitution of the submodules method.
+        Instead of creating a submodule the method creates a branch:
+        1) Create a remote:<command name="git remote add rack_remote git@github.com:schacon/rack.git"/>
+        2) Fetch:<command name="git fetch rack_remote"/>
+        3) Read the root tree of the branch and put the content into 'rack' dir:<command name="git read-tree --prefix=rack/ -u rack_branch"/>
+        4) After any changes from the rack_branch, merge it using:<command name="git merge --squash -s subtree --no-commit rack_branch"/>
+
+        To see the diff between the 'rack' directory and rack_branch:<command name="git diff-tree -p rack_branch"/>
+
+
     </item>
 
     <item name="stashing">
