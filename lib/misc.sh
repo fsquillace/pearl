@@ -654,11 +654,18 @@ function symc() {
             exc_opt=""
             for el in ${OPT_EXCLUDE[@]}; do exc_opt="$exc_opt --exclude $el"; done
 
-            # Calculate the directories
-            du $exc_opt -b "$abs_path" | awk -F '[\t]' '{print $2;}' > /tmp/tmp_symc
+            # List of all directories to exclude only if the abs_path is a directory
+            if [ -d "$abs_path" ]
+            then
+                du $exc_opt -b "$abs_path" | awk -F '[\t]' '{print $2;}' > /tmp/tmp_symc
+            else
+                echo "" > /tmp/tmp_symc
+            fi
 
+            # List of all files and directories
             local DU=`du $exc_opt -ab "$abs_path"`
 
+            # Takes only the file with the satisfied constraints
             if [ "$OPT_MAX_SIZE" != "" ]
             then
                 local FILES=$(echo "$DU" | awk -F '[\t]' -v ms=$OPT_MAX_SIZE '{if($1<ms){print $2;}  }')
@@ -666,7 +673,6 @@ function symc() {
                 local FILES=$(echo "$DU" | awk -F '[\t]' '{print $2;}')
 
             fi
-
 
             echo "$FILES" | grep -x -v -F -f /tmp/tmp_symc | tr -s '\n' '\000' | xargs -0 -I {} cp -f -s -v -a --parents -u --target-directory "$SYNC_HOME" {}
 

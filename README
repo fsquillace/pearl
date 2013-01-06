@@ -432,8 +432,8 @@ Example of using:
     Synchronizes all the files in the '/home/david' and '/etc/' respectively into
     '$SYNC_HOME/home/david' and '$SYNC_HOME/etc' creating symlinks.
 
-    *$ symc* -m 3145728 --exclude Dropbox --exclude .git -e .svn -e .cvs .::
-    Synchronizes all the files in the current directory with size lesser
+    *$ symc* -m 3145728 --exclude Dropbox --exclude .git -e .svn -e .cvs $$~$$::
+    Synchronizes all the files in the home directory with size lesser
     than 3MB (3145728=3MB)  excluding all the .git, .svn, .cvs folders.
     This is awesome and you can use it if you want to save most of your data
     periodically using cron.
