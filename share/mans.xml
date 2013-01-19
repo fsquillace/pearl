@@ -588,6 +588,14 @@ Command     Alias     Info
         Null char input separator:<command name="du -0 -b | awk 'BEGIN{RS=&quot;\x00&quot;}{print $0}'"/>
         Traspose a column into row:<command name="echo -e &quot;a\nb\nc\n&quot; | awk 'BEGIN {RS=&quot;\n&quot;; ORS=&quot; &quot;;print &quot;\n&quot;}  {print $0} END{print &quot;\n\n&quot;}'"/>
         Use of arrays:<command name="$ awk 'BEGIN{ortolano[&quot;banana&quot;]=20; print ortolano[&quot;banana&quot;]}'"/>
+
+        SORTING AN ARRAY:
+        To sort an array according its values (makes a copy):<code>A = asort(squadra,alta);"</code>
+        To sort an array according its indexes (makes a copy):<code>A = asorti(squadra,alta);"</code>
+        To sort the array without making a copy set the PROCINFO array.
+        For sort by index:<code>PROCINFO["sorted_in"] = "@ind_num_asc"</code>
+        For sort by value:<code>PROCINFO["sorted_in"] = "@val_type_asc"</code>
+
 Examples:
         <code>
 #!/usr/bin/awk -f
@@ -2659,8 +2667,9 @@ sorta di task manager in cui è possibile anche visualizzare la presenza di memo
 </item>
 
 <item name="free ">
-visualizza l'utilizzo della memoria RAM e swap
-
+    To check RAM and swap state:<command name="free -m"/>
+    or sing meminfo:<command name="watch -n 1 cat /proc/meminfo"/>
+    To empty the caches:<command name="sudo sysctl -w vm.drop_caches=3"/>
 </item>
 
 <item name="insmod">
@@ -2906,6 +2915,8 @@ Richiesta PUT:<command name="curl -v -L -c cookies.txt -b cookies.txt -T uploadf
 Quando nella form è presente l'oggetto per uplodare file(ad esempio due oggetti nella form: input type=file name=upload e altro input type=submit name=press value=OK), esso può essere fatto tramite il seguente comando curl:<command name="curl -v -c cookies.txt -b cookies.txt -L -F upload=@localfilename -F press=OK [URL]"/>
 
 To know the public IP of your machine:<command name="curl ifconfig.me"/>
+To know the public IP and other more info:<command name="curl http://freegeoip.net/json/"/>
+To know the timezone:<command name="curl http://freegeoip.net/tz/json/US/10"/>
 </item>
 
 <item name="arp">

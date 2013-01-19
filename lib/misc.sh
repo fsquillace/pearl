@@ -1,5 +1,36 @@
 #!/bin/sh
 
+function is_file_open() {
+    lsof | grep $(readlink -f "$1")
+}
+
+function notabs() {
+    # Replace tabs by 4 spaces & remove trailing ones & spaces
+    for f in $(findTxt "$@"); do
+        sed -i -e 's/[	 ]*$//g' "$f"
+        sed -i -e 's/	/    /g' "$f"
+    done
+}
+
+function findTxt() {            # Find only text files
+    find "$@" -type f -exec file {} \; | grep text | cut -d':' -f1
+}
+
+function kill_cmd(){
+    # WIP - Kill every process starting with the pattern passed as a parameter
+    while true; do
+        pid=$(ps -eo pid,args | egrep -e "[0-9]* /bin/bash $1" | grep -v grep | grep -o '[0-9]*')
+        echo "Killing $(ps -eo pid,args | egrep -e "[0-9]* /bin/bash $1" | grep -v grep)"
+        if [ -n "$pid" ]; then
+            kill "$pid"
+        else
+            break
+        fi
+    done
+}
+
+
+
 function confirm_question(){
     # $1: prompt;
 
@@ -105,6 +136,22 @@ else
     fi
 fi
 
+# Config Xdefaults
+grep "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res=$(confirm_question "Do you want to START the Xdefaults config for the urxvt terminal? (Y/n)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
+        apply "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
+    fi
+else
+    local res=$(confirm_question "Do you want to DELETE the Xdefaults config for the urxvt terminal? (y/N)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
+    fi
+fi
 
 }
 

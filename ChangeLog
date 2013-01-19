@@ -1,6 +1,8 @@
 pyshell ?.?.?
 - Fixed symc for single file
 - Improved ranger wrapper
+- Added new handy functions and aliases
+- Added the xdefaults config for uxvrt
 
 pyshell 0.19.7
 - Changed pyshell_install and pyshell_update
