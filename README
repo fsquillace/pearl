@@ -59,7 +59,8 @@ $ source pyshell/pyshell
 If you are using *pyshell* for the first time you probably do not have the
 configuration directory in '$$~$$/.config/.pyshell'. In this case, the command
 'pyshell_settings' will be executed. 'pyshell_settings' will ask you if you want to
-apply new config for the files '.bashrc', '.vimrc', '.inputrc', '.screenrc'. It consists
+apply new config for the files '.bashrc', '.vimrc', '.inputrc', '.screenrc', '.Xdefaults'.
+It consists
 just on appending a line for each of those files. This new configuration are not mandatory
 but they are strongly recommended (see below to have information about the vim, bash and
 readline configurations made by *pyshell*)

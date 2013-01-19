@@ -1,0 +1,197 @@
+!--[Fonts]--!
+urxvt.font: xft:Inconsolata:pixelsize=18:antialias=true:hinting=true
+!urxvt.font: xft:Inconsolata:bold:pixelsize=13:antialias=true:hinting=true
+!urxvt.font: xft:UbuntuMono-R:pixelsize=14:antialias=true:hinting=true
+!urxvt.font: xft:DejaVuLGCSansMono:pixelsize=12:antialias=true:hinting=true
+
+
+!--[Urxvt Options]--!
+URxvt.boldMode: false
+!URxvt.imLocale: es_ES.UTF-8
+URxvt.loginShell: true
+URxvt.saveLines: 10000
+urxvt.geometry: 90x45
+URxvt.borderless: true
+!URxvt.xftAntialias: true
+URxvt.jumpScroll: false
+URxvt.internalBorder: 0
+!Xcursor.theme: CG
+!## teh transparency stuff
+URxvt.inheritPixmap: true
+urxvt.scrollbar: False
+urxvt.scrollstyle: plain
+urxvt.transparent: true
+URxvt.depth: 32
+urxvt.shading: 20
+urxvt.fading: 70
+URxvt.cursorBlink: true
+
+
+! There is also tabbed
+URxvt.perl-ext-common: default,url-select,matcher,keyboard-select
+
+
+!--[Urxvt keyboard-select]--!
+URxvt.keysym.M-Escape:  perl:keyboard-select:activate
+URxvt.keysym.M-s:       perl:keyboard-select:search
+
+
+!--[Urxvt url-select]--!
+URxvt.keysym.M-u:       perl:url-select:select_next
+#URxvt.urlLauncher:      /usr/bin/firefox
+#URxvt.underlineURLs:    true
+#URxvt.perl-ext-common:  default,matcher
+URxvt.matcher.button:   1
+#URxvt.perl-ext:      default,url-select
+URxvt.url-select.launcher:   /usr/bin/firefox -new-tab
+URxvt.url-select.underline: true
+
+
+!--[Urxvt clipboard]--!
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.copyCommand:  xsel -ib
+URxvt.pasteCommand: xsel -ob
+
+
+
+
+!--[Urxvt colors]--!
+
+URxvt.cursorColor: #e7e18c
+URxvt.cursorColor2: #000000
+URxvt.colorBD: #ffffff
+URxvt.colorIT: #bbbbbb
+URxvt.colorUL: #999999
+URxvt.underlineColor: #999999
+URxvt.tintColor: white
+
+
+
+! background black
+!URxvt.background: #000000
+!URxvt.foreground: #ddccbb
+!URxvt.foreground: #FFFFFF
+!URxvt.color0: #000000
+!URxvt.color1: #8a110e
+!URxvt.color2: #669f3d
+!URxvt.color3: #b3751e
+!URxvt.color4: #493d9f
+!URxvt.color5: #9216a3
+!URxvt.color6: #198a9c
+!URxvt.color7: #bfbdc0
+!URxvt.color8: #686773
+!URxvt.color9: #fc5166
+!URxvt.color10: #63ff54
+!URxvt.color11: #ffd75c
+!URxvt.color12: #766eff
+!URxvt.color13: #e151ff
+!URxvt.color14: #57ffec
+!URxvt.color15: #ffffff
+
+
+!background gray
+!URxvt.highlightColor:#444
+!URxvt.background: #1b1d1e
+!URxvt.background: #282626
+!URxvt.foreground: #ccccc6
+!URxvt.color0:#000000
+!URxvt.color1:#af3f6a
+!URxvt.color2:#93d44f
+!URxvt.color3:#e7e18c
+!URxvt.color4:#204a87
+!URxvt.color5:#ff6600
+!URxvt.color6:#89b6e2
+!URxvt.color7:#cccccc
+!URxvt.color8:#555753
+!URxvt.color9:#ff7faa
+!URxvt.color10:#c8e7a8
+!URxvt.color11:#fff796
+!URxvt.color12:#3465a4
+!URxvt.color13:#f57900
+!URxvt.color14:#46a4ff
+!URxvt.color15:#ffffff
+
+
+
+
+!colors:
+!scheme: pnevma
+URxvt.foreground: #696969
+URxvt.background: #282626
+URxvt.foreground: #6F6767
+URxvt.foreground: #ccccc6
+URxvt.background: #3A3636
+URxvt.color0: #363636
+URxvt.color8: #424242
+URxvt.color1: #C37561
+URxvt.color9: #D19485
+URxvt.color2: #A0A57E
+URxvt.color10: #B6B99D
+URxvt.color3: #D1A375
+URxvt.color11: #DEBC9C
+URxvt.color4: #7985A3
+URxvt.color12: #98A1B9
+URxvt.color5: #AB716D
+URxvt.color13: #BE918E
+URxvt.color6: #98B9B1
+URxvt.color14: #CBE6CB
+URxvt.color7: #D0D0D0
+URxvt.color15: #E6E6E6
+
+
+
+
+!background gray
+!URxvt.background:  #262524
+!URxvt.foreground:  #a4a4a4
+
+! COLO!URS
+! Black
+!URxvt.color0:    #000000
+!URxvt.color8:    #000000
+! Red
+!URxvt.color1:    #bf4646
+!URxvt.color9:    #f48a8a
+! Green
+!URxvt.color2:    #67b25f
+!URxvt.color10:   #a5d79f
+! Yellow
+!URxvt.color3:    #cfc44e
+!URxvt.color11:   #e1da84
+! Blue
+!URxvt.color4:    #516083
+!URxvt.color12:   #a2bbff
+! Magenta
+!URxvt.color5:    #ca6eff
+!URxvt.color13:   #e2b0ff
+! Cyan
+!URxvt.color6:    #92b2f8
+!URxvt.color14:   #bacdf8
+! White
+!URxvt.color7:    #d5d5d5
+!URxvt.color15:   #d5d5d5
+
+
+
+! background white
+!URxvt.foreground: #696969
+!URxvt.background: #fffef6
+!URxvt.color0: #363636
+!URxvt.color8: #424242
+!URxvt.color1: #C37561
+!URxvt.color9:  #D19485
+!URxvt.color2: #A0A57E
+!URxvt.color10: #7f8264
+!URxvt.color3: #b58b62
+!URxvt.color11: #DEBC9C
+!URxvt.color4: #1d2b41
+!URxvt.color12: #98A1B9
+!URxvt.color5: #AB716D
+!URxvt.color13: #b4d2c8
+!URxvt.color6: #98B9B1
+!URxvt.color14: #769293
+!URxvt.color7: #9ba0a7
+!URxvt.color15: #6e7383
+
