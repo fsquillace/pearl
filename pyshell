@@ -53,6 +53,8 @@ export SYNC_HOME=~/Dropbox/
 export PYTHONPATH=$PYTHONPATH:$PYSHELL_ROOT/lib
 PATH=${PYSHELL_ROOT}/bin:${PATH}
 export EDITOR=vim
+export VISUAL=$EDITOR # some programs use this instead of EDITOR
+export MANPATH=$MANPATH:$PYSHELL_ROOT/man
 
 # HIST variables
 export HISTFILESIZE=100000
@@ -72,7 +74,7 @@ alias f="fg"
 alias b="bg"
 alias q="exit"
 alias ls="/bin/ls --color=auto"
-alias l="ls -h"
+alias l="ls --color=auto -h"
 alias a="ls -ha"
 alias c="clear"
 alias e='$EDITOR'
@@ -128,6 +130,7 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
     PS1=$prompt
 fi
 
+PROMPT_COMMAND="history -a;$PROMPT_COMMAND" # immediately insert history into history file
 case ${TERM} in
   xterm*|rxvt*|Eterm|aterm|kterm|gnome*|vt100)
     PS1=$prompt
