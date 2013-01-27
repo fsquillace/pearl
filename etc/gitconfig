@@ -1,0 +1,37 @@
+[core]
+    excludesfile = ~/.gitignore
+    editor = vim
+
+[alias]
+	unstage = reset HEAD --
+	co = checkout
+	br = branch
+	st = status
+	ci = commit
+	a = add
+        # Log using color, pager, and a graphical representation of branches/merges
+        l = !git log --pretty=format:'%Cred---------------------------------------------------------------%n%C(red)%h %C(yellow)%d %Cgreen(%ci) %C(red)<%ae>%Creset%n%s%n%n%b%n' --abbrev-commit --date=relative --graph --date-order --stat --color | less -cR
+        # show info about the last commit
+        last = log -1 HEAD
+
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
