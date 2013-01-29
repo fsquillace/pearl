@@ -56,6 +56,9 @@ $if mode=emacs
 # Use the shell like in Octave/Matlab with up and down arrows
 "\e[A":history-search-backward
 "\e[B":history-search-forward
+# Same for C-p and C-n
+"\C-p":history-search-backward
+"\C-n":history-search-forward
 
 $if Bash
   #do history expansion when space entered

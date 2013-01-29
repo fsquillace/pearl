@@ -185,7 +185,7 @@ The most important feature applied with inputrc are:
 
     - Case insensitive typing directories;
     - Typing the prefix of an old command you will get the entire command once
-      typing the up arrow.
+      typing the up/down arrows or Cntrl-p/Cntrl-n keys.
 
 Ranger/commands.py
 ~~~~~~~~~~~~~~~~~~
