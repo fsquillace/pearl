@@ -74,7 +74,7 @@ alias f="fg"
 alias b="bg"
 alias q="exit"
 alias ls="/bin/ls --color=auto"
-alias l="ls --color=auto -h"
+alias l="ls --group-directories-first --color=auto -h"
 alias a="ls -ha"
 alias c="clear"
 alias e='$EDITOR'
@@ -181,6 +181,8 @@ function sigusr2()
 
 trap "sigusr2" USR2       # catch -USR2 signal
 
+# Load the LS_COLORS configuration
+[ -f $PYSHELL_ROOT/etc/LS_COLORS ] && eval $(dircolors -b $PYSHELL_ROOT/etc/LS_COLORS)
 
 # This binds Ctrl-O to ranger:
 bind '"\C-o":"\C-u\C-k ranger\C-m"'
