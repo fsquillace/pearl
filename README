@@ -337,7 +337,7 @@ Example of using:
 
     *$ cmd* 'NUM'::
     Stores the corresponding command specified by the entry. Then, you just
-    need to type Cntrl-h to put it in the command line. 
+    need to type Cntrl-g to put it in the command line. 
 
 MAN2
 ~~~~

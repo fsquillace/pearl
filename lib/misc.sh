@@ -769,8 +769,9 @@ function cmd() {
             cat $PYSHELL_HOME/commands | awk -F '%;%' '{print "\033[01;32m"NR": \033[01;33m"$2"\n\033[01;00m   "$1"\n"}'
         elif [ ${#args[@]} -eq 1 ]; then
             local entry=$(awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands)
-            echo "bind '\"\C-h\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
+            echo "bind '\"\C-g\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
             source $PYSHELL_TEMPORARY/new_cmd
+            echo "Type C-g to get the command"
         else
             echo "Error too many arguments!"
             return 127
