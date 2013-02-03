@@ -90,8 +90,14 @@ Spazio 	        %20
 </dict>
 
 
-<!--- ********************************** BASH SHORTCUTS ***************************************** -->
-<dict name="bash shortcuts">
+<!--- ********************************** BASH ***************************************** -->
+<dict name="bash">
+    <item name="bash binding">
+        To get the list of the current bindings:<command name="bind -p"/>
+        To bind an action with a key:<command name="bind '&quot;\C-p&quot;: beginning-of-line'"/>
+        To unset a bind:<command name="bind '&quot;\C-a&quot;: '"/>
+        To list all input sequences associated with the action:<command name="bind -p | grep beginning-of-line"/>
+    </item>
     <item name="bash shortcuts">
 Ctrl-a          Move to the start of the line.
 Ctrl-e          Move to the end of the line.
@@ -3550,8 +3556,14 @@ operazione inversa del mount
 <!--- ********************************** GESTIONE FILE ***************************************** -->
 <dict name="gestione file">
 
+    <item name="less">
+        To watch the changing in the tail of the file press Shift+f.
+    </item>
+
 <item name="lsof">
     Shows open port with related process:<command name="lsof -i"/>
+    To show the open files of a process given the name:<command name="lsof -p $(pgrep -f firefox)"/>
+    or <command name="lsof -p $(pidof firefox)"/>.
 Visualizza i file aperti del sistema. Per ciascun file mostra il processo che lo ha aperto.
 Se si vuole indicare una specifica cartella:<command name="lsof +D /media/usb"/>
 Se si vuole indicare un intera partizione:<command name="lsof /dev/sdb1"/>

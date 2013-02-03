@@ -7,7 +7,6 @@
 # (update 27-01-2013 working in Dublin)
 # Usage: source pyshell OR bash --rcfile pyshell
 
-
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 [[ $- != *i* ]] && return
@@ -102,7 +101,6 @@ alias isconnect="python -c \"import util.net;print(util.net.is_connect())\""
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
-alias pgrep='ps -ef | grep -i' # using -l make it not portable on Mac
 # Looks up to the history
 alias hgrep='history | /usr/bin/grep -i'
 

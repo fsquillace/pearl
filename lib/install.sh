@@ -42,6 +42,7 @@ else
     echo "#export SYNC_HOME=~/Dropbox/" >> $PYSHELL_HOME/pyshellrc
     chmod +x $PYSHELL_HOME/pyshellrc
 
+    echo "For more information: man pyshell"
 
 fi
 #####################################################################################################

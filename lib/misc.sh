@@ -30,6 +30,24 @@ function kill_cmd(){
 }
 
 
+function s(){
+
+command='
+
+if [ -d $HOME/.pyshell ]
+then
+    cd $HOME/.pyshell
+    git pull
+    cd - &> /dev/null
+    bash -i
+else
+    git clone git://github.com/fsquillace/pyshell $HOME/.pyshell
+    bash --rcfile $HOME/.pyshell/pyshell -i
+fi
+'
+ssh -t $@ "$command"
+
+}
 
 function confirm_question(){
     # $1: prompt;
