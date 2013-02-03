@@ -328,11 +328,10 @@ Example of using:
     Removes the paths specified by the entry.
 
 
-Integration with Ranger and Remind application
-TODO stores TODOs the entries into '$$~$$/reminders' to be integrated with Remind.
-So, you can see the same TODOs in Remind too. TODO also stores all the scan
-paths in '$$~$$/.config/ranger/bookmark' to be integrated with Ranger. The user can
-sign a directory to be scanned for TODOs directly from ranger program by
+Integration with Ranger
+TODO stores all the scan
+paths in '$$~$$/.config/ranger/bookmark' in order to be integrated with Ranger.
+The user can sign a directory to be scanned for TODOs directly from ranger program by
 marking the directory (using the command ':m') with a digit from 0 to 9.
 
 CMD
@@ -655,8 +654,8 @@ several config files. All the temporary directories of the associated shell
 are stored in '$$~$$/.config/pyshell/tmp'.
 
 The bookmark paths are stored into '$$~$$/.config/ranger/bookmarks' in order to get
-compatibility with *ranger* file manager. The TODOs are stored into '$$~$$/.reminders'
-in order to get compatibility with *reminder* commands.
+compatibility with *ranger* file manager. The TODOs are stored into
+'$$~$$/.config/pyshell/todos'.
 
 COPYRIGHT
 ---------

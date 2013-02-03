@@ -669,7 +669,8 @@ function cd() {
     if [ ! -d "$HOME/.config/ranger" ]; then
         mkdir -p "$HOME/.config/ranger"
     fi
-    touch $HOME/.config/ranger/bookmarks
+    local bookmarks_file="$HOME/.config/ranger/bookmarks"
+    touch $bookmarks_file
 
     #################### END OPTION PARSING ############################
 
@@ -679,25 +680,25 @@ function cd() {
         local alphnum="abcdefghilmnopqrstuvwykzxABCDEFGHILMNOPQRSTUVZWYKX0123456789"
         local pos=$(expr $RANDOM % ${#alphnum})
         local key=${alphnum:$pos:1}
-        echo "$key:$abs_path" >> $HOME/.config/ranger/bookmarks
+        echo "$key:$abs_path" >> "$bookmarks_file"
     elif [ "$OPT_REMOVE" != "" ]
     then
-        local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" $HOME/.config/ranger/bookmarks)
-        echo "$bookmrks" > $HOME/.config/ranger/bookmarks
+        local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" "$bookmarks_file")
+        echo "$bookmrks" > "$bookmarks_file"
     elif [ "$OPT_PRINT" != "" ]
     then
-        touch $HOME/.config/ranger/bookmarks
-        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $HOME/.config/ranger/bookmarks
+        touch $bookmarks_file
+        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $bookmarks_file
     elif [ "$OPT_GO" != "" ]
     then
-        local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $HOME/.config/ranger/bookmarks)
+        local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $bookmarks_file)
         builtin cd "$path"
     else
         if [ "$args" != "" ]
         then
             builtin cd $args
         else
-            awk -F ":" '{print $1") "$2}' $HOME/.config/ranger/bookmarks
+            awk -F ":" '{print $1") "$2}' $bookmarks_file
         fi
     fi
 
@@ -870,17 +871,20 @@ function todo(){
 
     # Checks if directory exists
     if [ ! -d "$HOME/.config/ranger" ]; then
-        mkdir -p "$HOME/.config/ranger"
+        mkdir -p "$HOME/.config/ranger_file"
     fi
 
-    touch "$HOME/.config/ranger/bookmarks"
-    touch "$HOME/.reminders"
+    # Just in case the user delete the main files then create them
+    local bookmarks_file="$HOME/.config/ranger/bookmarks"
+    touch "$bookmarks_file"
+    todos_file="$PYSHELL_HOME/todos"
+    touch "$todos_file"
 
 
     if [ "$OPT_REMOVE" != "" ]
     then
-        local out=$(grep "REM MSG" $HOME/.reminders | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
-        echo "$out" > $HOME/.reminders
+        local out=$(grep "REM MSG" $todos_file | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
+        echo "$out" > $todos_file
     elif [ "$OPT_GO" != "" ]
     then
         local path=$(cd -p $OPT_GO)
@@ -894,17 +898,17 @@ function todo(){
         fi
         echo ""
 
-        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
     elif $OPT_LIST
     then
-        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
     else
         if [ ${#args[@]} -eq 1 ]; then
-            # Append the todo in the reminders file
-            echo "REM MSG ${args[0]}" >> $HOME/.reminders
+            # Append the todo in the todos file
+            echo "REM MSG ${args[0]}" >> $todos_file
         elif [ ${#args[@]} -eq 0 ]; then
             # List all todos
-            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $HOME/.config/ranger/bookmarks)
+            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $bookmarks_file)
             for path in $list
             do
                 echo -e "\033[0;33m$path\033[0m"
@@ -917,7 +921,7 @@ function todo(){
                 fi
                 echo ""
             done
-            grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+            grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
         else
             echo "Error too many arguments"
         fi
