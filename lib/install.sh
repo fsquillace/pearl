@@ -214,6 +214,57 @@ fi
 
 }
 
+function pyshell_unistall(){
+    if [ ${#@} -ne 0 ]; then
+        echo "pyshell_update: unrecognized options '$@'"
+        echo "Usage: pyshell_update"
+        return 128
+    fi
+
+    if [ ! -d $PYSHELL_ROOT/.git ]
+    then
+        echo "PyShell wasn't installed using Git."
+        echo "May be it was installed by the package manager of the system."
+        echo "Use it if you want to uninstall Pyshell."
+        return 1
+    fi
+
+    local res=$(confirm_question "Are you sure to DELETE completely Pyshell? (y/N)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        echo "Resetting all the configuration files..."
+        # Bash
+        unapply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
+        # Vim
+        unapply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
+        # Gvim
+        unapply "source $PYSHELL_ROOT/etc/gvimrc" $HOME/.gvimrc
+        # Inputrc
+        unapply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
+        # Ranger
+        unapply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
+        # Screenrc
+        unapply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
+        # XDefautls
+        unapply "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
+        # Gitconfig
+        unapply "\[include\] path = \"$PYSHELL_ROOT/etc/gitconfig\"" $HOME/.gitconfig
+        [ -f $HOME/.gitignore ] && rm -f $HOME/.gitignore
+
+        echo "Removing Pyshell on the system..."
+        rm -rf $PYSHELL_ROOT
+    fi
+
+    local res=$(confirm_question "Are you sure to DELETE the Pyshell config folder too ($PYSHELL_HOME folder)? (y/N)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+       rm -rf $PYSHELL_HOME
+   fi
+
+}
+
+
+
 function pyshell_update(){
     if [ ${#@} -ne 0 ]; then
         echo "pyshell_update: unrecognized options '$@'"
