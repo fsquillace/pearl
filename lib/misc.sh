@@ -30,6 +30,24 @@ function kill_cmd(){
 }
 
 
+function s(){
+
+command='
+
+if [ -d $HOME/.pyshell ]
+then
+    cd $HOME/.pyshell
+    git pull
+    cd - &> /dev/null
+    bash -i
+else
+    git clone git://github.com/fsquillace/pyshell $HOME/.pyshell
+    bash --rcfile $HOME/.pyshell/pyshell -i
+fi
+'
+ssh -t $@ "$command"
+
+}
 
 function confirm_question(){
     # $1: prompt;
@@ -42,119 +60,6 @@ function confirm_question(){
 
     echo "$res"
 }
-
-function pyshell_settings(){
-
-if [ ${#@} -ne 0 ]; then
-    echo "pyshell_settings: unrecognized options '$@'"
-    echo "Usage: pyshell_settings"
-    return 128
-fi
-
-# Config bashrc
-grep "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START pyshell when open a new terminal? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE pyshell when open a new terminal? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "source $PYSHELL_ROOT/pyshell" $HOME/.bashrc
-    fi
-fi
-
-# Config vimrc
-grep "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the pyshell config vim? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the pyshell config vim? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "source $PYSHELL_ROOT/etc/vimrc" $HOME/.vimrc
-    fi
-fi
-
-# Config inputrc
-grep "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the pyshell completion history? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the pyshell completion history? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "\$include $PYSHELL_ROOT/etc/inputrc" $HOME/.inputrc
-    fi
-fi
-
-# Config ranger
-grep "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the pyshell Ranger file manager config? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the pyshell Ranger file manager config? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "exec(open('$PYSHELL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
-    fi
-fi
-
-# Config screenrc
-grep "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the pyshell config for the screen command? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the pyshell config for the screen command? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "source $PYSHELL_ROOT/etc/screenrc" $HOME/.screenrc
-    fi
-fi
-
-# Config Xdefaults
-grep "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the Xdefaults config for the urxvt terminal? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the Xdefaults config for the urxvt terminal? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "# include \"$PYSHELL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
-    fi
-fi
-
-}
-
 
 
 function apply(){
@@ -179,7 +84,7 @@ function apply(){
 function unapply(){
     grep -v -x "$1" "$2" &> /tmp/tmp_file
     cat /tmp/tmp_file > "$2"
-    rm -r /tmp/tmp_file
+    rm -fr /tmp/tmp_file
 }
 
 
@@ -195,10 +100,10 @@ notifier(){
 ## no option return the notify !!
 #if [ -f $TEMPORARY/notify.* ]
 #then
-    
+
     #difout=$(diff $TEMPORARY/pyshell.out $TEMPORARY/notify.out)
     #diferr=$(diff $TEMPORARY/pyshell.err $TEMPORARY/notify.err)
-    
+
 #else
     #difout=""
     #diferr=""
@@ -247,26 +152,6 @@ if [ "$a" = "" ]; then
     fi
 
 fi
-}
-
-function pyshell_update(){
-    if [ ${#@} -ne 0 ]; then
-        echo "pyshell_update: unrecognized options '$@'"
-        echo "Usage: pyshell_update"
-        return 128
-    fi
-
-    if [ -d $PYSHELL_ROOT/.git ]
-    then
-        builtin cd $PYSHELL_ROOT
-        git pull
-        builtin cd -
-    else
-        echo "PyShell wasn't installed using Git."
-        echo "May be it was installed by the package manager of the system."
-        echo "Use it if you want to update Pyshell."
-        return 1
-    fi
 }
 
 function eye(){
@@ -784,7 +669,8 @@ function cd() {
     if [ ! -d "$HOME/.config/ranger" ]; then
         mkdir -p "$HOME/.config/ranger"
     fi
-    touch $HOME/.config/ranger/bookmarks
+    local bookmarks_file="$HOME/.config/ranger/bookmarks"
+    touch $bookmarks_file
 
     #################### END OPTION PARSING ############################
 
@@ -794,25 +680,25 @@ function cd() {
         local alphnum="abcdefghilmnopqrstuvwykzxABCDEFGHILMNOPQRSTUVZWYKX0123456789"
         local pos=$(expr $RANDOM % ${#alphnum})
         local key=${alphnum:$pos:1}
-        echo "$key:$abs_path" >> $HOME/.config/ranger/bookmarks
+        echo "$key:$abs_path" >> "$bookmarks_file"
     elif [ "$OPT_REMOVE" != "" ]
     then
-        local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" $HOME/.config/ranger/bookmarks)
-        echo "$bookmrks" > $HOME/.config/ranger/bookmarks
+        local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" "$bookmarks_file")
+        echo "$bookmrks" > "$bookmarks_file"
     elif [ "$OPT_PRINT" != "" ]
     then
-        touch $HOME/.config/ranger/bookmarks
-        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $HOME/.config/ranger/bookmarks
+        touch $bookmarks_file
+        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $bookmarks_file
     elif [ "$OPT_GO" != "" ]
     then
-        local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $HOME/.config/ranger/bookmarks)
+        local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $bookmarks_file)
         builtin cd "$path"
     else
         if [ "$args" != "" ]
         then
             builtin cd $args
         else
-            awk -F ":" '{print $1") "$2}' $HOME/.config/ranger/bookmarks
+            awk -F ":" '{print $1") "$2}' $bookmarks_file
         fi
     fi
 
@@ -902,8 +788,9 @@ function cmd() {
             cat $PYSHELL_HOME/commands | awk -F '%;%' '{print "\033[01;32m"NR": \033[01;33m"$2"\n\033[01;00m   "$1"\n"}'
         elif [ ${#args[@]} -eq 1 ]; then
             local entry=$(awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands)
-            echo "bind '\"\C-h\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
+            echo "bind '\"\C-g\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
             source $PYSHELL_TEMPORARY/new_cmd
+            echo "Type C-g to get the command"
         else
             echo "Error too many arguments!"
             return 127
@@ -984,17 +871,20 @@ function todo(){
 
     # Checks if directory exists
     if [ ! -d "$HOME/.config/ranger" ]; then
-        mkdir -p "$HOME/.config/ranger"
+        mkdir -p "$HOME/.config/ranger_file"
     fi
 
-    touch "$HOME/.config/ranger/bookmarks"
-    touch "$HOME/.reminders"
+    # Just in case the user delete the main files then create them
+    local bookmarks_file="$HOME/.config/ranger/bookmarks"
+    touch "$bookmarks_file"
+    todos_file="$PYSHELL_HOME/todos"
+    touch "$todos_file"
 
 
     if [ "$OPT_REMOVE" != "" ]
     then
-        local out=$(grep "REM MSG" $HOME/.reminders | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
-        echo "$out" > $HOME/.reminders
+        local out=$(grep "REM MSG" $todos_file | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
+        echo "$out" > $todos_file
     elif [ "$OPT_GO" != "" ]
     then
         local path=$(cd -p $OPT_GO)
@@ -1008,17 +898,17 @@ function todo(){
         fi
         echo ""
 
-        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
     elif $OPT_LIST
     then
-        grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
     else
         if [ ${#args[@]} -eq 1 ]; then
-            # Append the todo in the reminders file
-            echo "REM MSG ${args[0]}" >> $HOME/.reminders
+            # Append the todo in the todos file
+            echo "REM MSG ${args[0]}" >> $todos_file
         elif [ ${#args[@]} -eq 0 ]; then
             # List all todos
-            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $HOME/.config/ranger/bookmarks)
+            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $bookmarks_file)
             for path in $list
             do
                 echo -e "\033[0;33m$path\033[0m"
@@ -1031,7 +921,7 @@ function todo(){
                 fi
                 echo ""
             done
-            grep "REM MSG" $HOME/.reminders | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+            grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
         else
             echo "Error too many arguments"
         fi

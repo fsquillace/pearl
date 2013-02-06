@@ -13,26 +13,27 @@ SYNOPSIS
 
 DESCRIPTION
 -----------
-*pyshell* is an enhanced and lightweight shell framework in Python that allow
-to get better the use of the shell Bash GNU/Linux and automate many daily
-activities of the system administrator.
+*pyshell* is an enhanced and lightweight shell framework that allows
+to improve the use of the shell Bash GNU/Linux and automate many daily
+activities of the system administrator. Basically, *pyshell* contains 
+several variables, functions, aliases, configuration files and commands
+out of the box. *pyshell* also contains important configurations files
+vimrc, bashrc, inputrc and many others.
 
-*pyshell* configures several bash shell options, aliases that helps to improve
-the experience of using the shell. The next sections show all the options and
-aliases enabled in *pyshell*.
-
-*pyshell* also configures three important configurations files vimrc, bashrc,
-inputrc. In particular, vimrc applies a sequence of key bindings for built-in
-functions and main plugins. Finally, bashrc is used to startup *pyshell* and
-inputrc extremely simplify the way of typing the commands. 
+The main goal of pyshell is to provide for both expert and beginner users a
+starting point respectively, for using quickly the shell terminal and learning
+how to create customized functions, aliases and managing configuration files of the
+main open source programs. *pyshell* is not meant to give a static configuration
+for the users but it gives the freedom to customize as much as they want.
 
 INSTALLATION
 ------------
 There are two ways for installing pyshell depending if the user
-has the root permission or not. This is due to the fact that *pyshell*
+has either the root permission or not. This is due to the fact that *pyshell*
 appears extremely useful also in case the user has a non-root
 access to a remote server but, the user wants all the advantages of using
-*pyshell*.
+*pyshell*. Anyway, there is a bash function called *s* (more details in COMMANDS section),
+that allows to automatically install *pyshell* before accessing to a SSH session!
 
 ROOT PERMISSION
 ~~~~~~~~~~~~~~~
@@ -49,17 +50,19 @@ Debian-based.
 
 NON ROOT PERMISSION (GIT REPOSITORY)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-If you do not have root permission, you can directly install *pyshell* by the
+Probably the best way of installing *pyshell* is to place it in a hidden subdirectory
+of $$~$$. If you do not have root permission, you can directly install *pyshell* by the
 git repository. Type the following commands:
 ...................................................................
-$ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/pyshell
-$ source pyshell/pyshell
+$ git clone 'git://github.com/fsquillace/pyshell.git' $HOME/.pyshell
+$ source $HOME/.pyshell/pyshell
 ...................................................................
 
 If you are using *pyshell* for the first time you probably do not have the
 configuration directory in '$$~$$/.config/.pyshell'. In this case, the command
 'pyshell_settings' will be executed. 'pyshell_settings' will ask you if you want to
-apply new config for the files '.bashrc', '.vimrc', '.inputrc', '.screenrc', '.Xdefaults'.
+apply new config for the files '.bashrc', '.vimrc', '.inputrc', '.screenrc', '.Xdefaults',
+'.gvimrc', '.gitconfig', '.gitignore'.
 It consists
 just on appending a line for each of those files. This new configuration are not mandatory
 but they are strongly recommended (see below to have information about the vim, bash and
@@ -83,6 +86,11 @@ UPDATE PYSHELL
 In case *pyshell* was installed with root permission, *pyshell* can be updated using the
 same package manager of the system. If *pyshell* was installed using Git repository,
 *pyshell* provides a handy command to help you update it 'pyshell_update'.
+
+UNINSTALL PYSHELL (Coming soon)
+-------------------------------
+There is no reason to uninstall *pyshell*, it is too awesome :). Anyway, *pyshell* provides
+a nice function 'pyshell_uninstall' that uninstall completely in a really clear way *pyshell* itself.
 
 CONFIGURATIONS
 --------------
@@ -184,7 +192,7 @@ The most important feature applied with inputrc are:
 
     - Case insensitive typing directories;
     - Typing the prefix of an old command you will get the entire command once
-      typing the up arrow.
+      typing the up/down arrows or Cntrl-p/Cntrl-n keys.
 
 Ranger/commands.py
 ~~~~~~~~~~~~~~~~~~
@@ -222,6 +230,12 @@ There are several commands for ranger that *pyshell* introduces:
 *:compress* 'FILE.EXT'::
     Compress the selected files into 'FILE.EXT' where EXT can be any compress
     extension (.tar.gz .zip .rar ...).
+
+GitConfig
+~~~~~~~~~
+A note worth to be noticed is that the gitconfig creates a file in 
+$$~$$/.gitignore in order to have a general gitignore file. You can put all
+the extension files that do not need to be pushed into any git repositories.
 
 COMMANDS
 --------
@@ -314,11 +328,10 @@ Example of using:
     Removes the paths specified by the entry.
 
 
-Integration with Ranger and Remind application
-TODO stores TODOs the entries into '$$~$$/reminders' to be integrated with Remind.
-So, you can see the same TODOs in Remind too. TODO also stores all the scan
-paths in '$$~$$/.config/ranger/bookmark' to be integrated with Ranger. The user can
-sign a directory to be scanned for TODOs directly from ranger program by
+Integration with Ranger
+TODO stores all the scan
+paths in '$$~$$/.config/ranger/bookmark' in order to be integrated with Ranger.
+The user can sign a directory to be scanned for TODOs directly from ranger program by
 marking the directory (using the command ':m') with a digit from 0 to 9.
 
 CMD
@@ -336,7 +349,7 @@ Example of using:
 
     *$ cmd* 'NUM'::
     Stores the corresponding command specified by the entry. Then, you just
-    need to type Cntrl-h to put it in the command line. 
+    need to type Cntrl-g to put it in the command line. 
 
 MAN2
 ~~~~
@@ -439,6 +452,19 @@ Example of using:
     This is awesome and you can use it if you want to save most of your data
     periodically using cron.
 
+S FOR SSH
+~~~~~~~~~
+The *s* command represents a wrapper of SSH that allows to easily install *pyshell* for remote
+host. It uses exactly the same syntax as ssh and just add a bunch of code for install *pyshell*.
+
+Example of using:
+
+    *$ s* myuser@myserver.com::
+    Access as myuser in myserver.com with *ssh*. Before spawn an interactive shell,
+    the *s* check is *pyshell* is already installed into myserver. If *pyshell* is
+    installed *s* updated *pyshell* with the last version, otherwise it creates a
+    copy of *pyshell* in '$$~$$/.pyshell' and spawn a bash terminal with the pyshell
+    configuration file.
 
 
 BACKUP
@@ -502,7 +528,13 @@ MAIN ALIASES
     - *f*=fg
     - *b*=bg
     - *j*=jobs
-    - *l*="ls -h --color"
+    - *a*="ls -ha"
+    - *c*="clear"
+    - *e*='$EDITOR'
+    - *p*='pwd'
+    - *h*='history'
+    - *t*='tree'
+    - *l*="ls --group-directories-first --color=auto -h"
     - *ll*="l -l"
     - *la*="l -a"
     - *c*="clear"
@@ -596,6 +628,12 @@ the hostname information present in the prompt is colorized in function of its v
 In other words, there is a hash function that gives a int value that correspond
 to a color for a given hostname string.
 
+LS_COLORS
+~~~~~~~~~
+The LS_COLORS variable is set in order to have a nice color for each extension file.
+The original configuration was made by 'https://github.com/trapd00r/LS_COLORS'.
+
+
 CONFIG FILES
 ------------
 The config files touched by *pyshell* are:
@@ -603,7 +641,11 @@ The config files touched by *pyshell* are:
 * '$$~$$/.config/ranger/commands.py'
 * '$$~$$/.bashrc'
 * '$$~$$/.vimrc'
+* '$$~$$/.gvimrc'
 * '$$~$$/.inputrc'
+* '$$~$$/.XDefaults'
+* '$$~$$/.gitconfig'
+* '$$~$$/.screenrc'
 
 FILES
 -----
@@ -611,8 +653,9 @@ FILES
 several config files. All the temporary directories of the associated shell 
 are stored in '$$~$$/.config/pyshell/tmp'.
 
-The bookmark paths are stored into '$$~$$/.config/ranger/bookmarks'. The TODOs 
-are stored into '$$~$$/.reminders'.
+The bookmark paths are stored into '$$~$$/.config/ranger/bookmarks' in order to get
+compatibility with *ranger* file manager. The TODOs are stored into
+'$$~$$/.config/pyshell/todos'.
 
 COPYRIGHT
 ---------

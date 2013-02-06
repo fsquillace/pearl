@@ -1,3 +1,9 @@
+
+# Disable the bell and show Ring msg
+vbell off
+vbell_msg "Ring"
+
+# don't display copyright page
 startup_message off
 
 hardstatus off
@@ -5,10 +11,15 @@ hardstatus alwayslastline
 hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W} %c %{g}]'
 
 #Fix for residual editor text
+# Set the altscreen so that when you quit vi, it will go back to
+# what it was before
 altscreen on
 
 # Use 256 colors
 term screen-256color
+
+# scroll back
+defscrollback 1000
 
 #Use X scrolling mechanism
 termcapinfo xterm* ti@:te@

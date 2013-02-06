@@ -3,6 +3,11 @@ pyshell ?.?.?
 - Improved ranger wrapper
 - Added new handy functions and aliases
 - Added the xdefaults config for uxvrt
+- Refactored pyshell script
+- Added git config
+- Added gvim config
+- Big changes in README
+- Added the s function
 
 pyshell 0.19.7
 - Changed pyshell_install and pyshell_update
