@@ -17,7 +17,7 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
-    Library used for PyShell logging.
+    Library used for pearl logging.
     There are three types of messages:
     *   error, is the message when something was gone wrong in the code (ex.
         division by zero, ...);
@@ -31,7 +31,7 @@
 
     It could be better that only the error, warn and info messages are be visible in
     all the cases. debug can be visible only when is activated the
-    environment variable PYSHELL_DEBUG by the user.
+    environment variable PEARL_DEBUG by the user.
 
 '''
 __author__ = 'Filippo Squillace'
@@ -95,9 +95,9 @@ __fmt_debug__='%(asctime)s \033[1;32m%(levelname)s\033[1;m: File %(filename)s:%(
 
 
 # Create an instance of Logger
-py_logger = logging.getLogger('pyshell')
+py_logger = logging.getLogger('pearl')
 try:
-    if os.environ['PYSHELL_DEBUG']=='1':
+    if os.environ['PEARL_DEBUG']=='1':
         # Let root logger handlers see all messages.
         py_logger.setLevel(logging.DEBUG)
     else:

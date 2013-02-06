@@ -18,10 +18,8 @@
 
 '''
 This script allow to search and download packages in AUR Repository.
-This script is independent for the framework PyShell so as, it doesn't
+This script is independent for the framework Pearl so as, it doesn't
 depend on its library and could be used easier.
-Instead of the PyShell logging system pacaur uses the stdout and stderr to
-print the information.
 '''
 __author__ = 'Filippo Squillace'
 __date__ = '12/03/2011'

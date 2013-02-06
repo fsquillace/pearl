@@ -1,11 +1,12 @@
 #!/bin/sh
-# pyshell by Filippo Squillace  
+# pearl by Filippo Squillace  
 # (great update 16-12-2009 date of my last exam in UNICAL :)
 # (update 21-07-2010 one of my last days in Valencia §:(  )
 # (update 07-01-2012 ending the thesis in Valencia)
 # (update 29-01-2012 continue ending thesis in Valencia)
 # (update 27-01-2013 working in Dublin)
-# Usage: source pyshell OR bash --rcfile pyshell
+# (update 06-02-2013 still in Dublin and big day changing the name in pearl!)
+# Usage: source pearl OR bash --rcfile pearl
 
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
@@ -29,31 +30,31 @@ fi
 umask 0022
 
 
-# Define the main pyshell variables
-export PYSHELL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
-export PYSHELL_HOME=~/.config/pyshell
-export PYSHELL_TEMPORARY=$PYSHELL_HOME/tmp/`tty`
-mkdir -p $PYSHELL_TEMPORARY
+# Define the main pearl variables
+export PEARL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
+export PEARL_HOME=~/.config/pearl
+export PEARL_TEMPORARY=$PEARL_HOME/tmp/`tty`
+mkdir -p $PEARL_TEMPORARY
 # Variable for logging system
-export PYSHELL_DEBUG=0
+export PEARL_DEBUG=0
 
 # Import the functions from misc.sh and install.sh
-source $PYSHELL_ROOT/lib/misc.sh
-source $PYSHELL_ROOT/lib/install.sh
+source $PEARL_ROOT/lib/misc.sh
+source $PEARL_ROOT/lib/install.sh
 
-# Install pyshell if it is not installed yet
-pyshell_install
+# Install pearl if it is not installed yet
+pearl_install
 
 #####################
 # Variables
 #####################
 
 export SYNC_HOME=~/Dropbox/
-export PYTHONPATH=$PYTHONPATH:$PYSHELL_ROOT/lib
-PATH=${PYSHELL_ROOT}/bin:${PATH}
+export PYTHONPATH=$PYTHONPATH:$PEARL_ROOT/lib
+PATH=${PEARL_ROOT}/bin:${PATH}
 export EDITOR=vim
 export VISUAL=$EDITOR # some programs use this instead of EDITOR
-export MANPATH=$MANPATH:$PYSHELL_ROOT/man
+export MANPATH=$MANPATH:$PEARL_ROOT/man
 
 # HIST variables
 export HISTFILESIZE=100000
@@ -84,10 +85,10 @@ alias t='tree'
 alias ll="l -l"
 alias la="a -l"
 
-alias share="cd ${PYSHELL_ROOT}/share"
+alias share="cd ${PEARL_ROOT}/share"
 alias home="cd ${HOME}"
-alias etc="cd ${PYSHELL_ROOT}/etc"
-alias bin="cd ${PYSHELL_ROOT}/bin"
+alias etc="cd ${PEARL_ROOT}/etc"
+alias bin="cd ${PEARL_ROOT}/bin"
 
 # Allows to keep aliases in sudo
 alias sudo="sudo "
@@ -109,7 +110,7 @@ alias hgrep='history | /usr/bin/grep -i'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Open screen+irssi
-alias scrssi="screen -S scrssi -aARd -c ${PYSHELL_ROOT}/etc/screenrc -t irssi irssi; clear"
+alias scrssi="screen -S scrssi -aARd -c ${PEARL_ROOT}/etc/screenrc -t irssi irssi; clear"
 
 #@@@@@@@@@@@@@@@@@@@
 
@@ -167,20 +168,20 @@ shopt -s checkwinsize &> /dev/null
 #########################
 
 #*** Handle to clean temp directory
-trap "/bin/rm -fr $PYSHELL_TEMPORARY" QUIT EXIT ABRT KILL TERM
+trap "/bin/rm -fr $PEARL_TEMPORARY" QUIT EXIT ABRT KILL TERM
 
 
 #******* Script to trap USR1 signal in order to handle changing directory
 function sigusr2()
 { 
-  source $PYSHELL_TEMPORARY/new_cmd
+  source $PEARL_TEMPORARY/new_cmd
 
 }
 
 trap "sigusr2" USR2       # catch -USR2 signal
 
 # Load the LS_COLORS configuration
-[ -f $PYSHELL_ROOT/etc/LS_COLORS ] && eval $(dircolors -b $PYSHELL_ROOT/etc/LS_COLORS)
+[ -f $PEARL_ROOT/etc/LS_COLORS ] && eval $(dircolors -b $PEARL_ROOT/etc/LS_COLORS)
 
 # This binds Ctrl-O to ranger:
 bind '"\C-o":"\C-u\C-k ranger\C-m"'

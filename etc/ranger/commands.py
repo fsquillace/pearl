@@ -100,7 +100,7 @@ class sync(Command):
     allow_abbrev = False
    
     def execute(self):
-        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
 
         if (self.arg(1) == '-l' or self.arg(1) == '--list') and len(self.args)==2:
             self.fm.execute_command('source '+misc_lib+'; sync -l; sleep 5')
@@ -167,7 +167,7 @@ class symc(Command):
    
     def execute(self):
 
-        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
 
         if (self.arg(1) == '-s' or self.arg(1) == '--show') and\
                 len(self.args)==2:
@@ -234,8 +234,8 @@ class trash(Command):
     allow_abbrev = False
     
     def execute(self):
-        trash_dir = os.environ['PYSHELL_TEMPORARY']
-        misc_lib = os.environ['PYSHELL_ROOT']+'/lib/misc.sh'
+        trash_dir = os.environ['PEARL_TEMPORARY']
+        misc_lib = os.environ['PEARL_ROOT']+'/lib/misc.sh'
 
         os.system('mkdir -p '+ trash_dir)
         

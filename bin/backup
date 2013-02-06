@@ -42,21 +42,21 @@ from optparse import OptionParser
 
 
     
-if os.path.exists(os.environ["PYSHELL_HOME"]+'/etc/backup.conf'):
-    bkp_conf_path = os.environ["PYSHELL_HOME"]+'/etc/backup.conf'
+if os.path.exists(os.environ["PEARL_HOME"]+'/etc/backup.conf'):
+    bkp_conf_path = os.environ["PEARL_HOME"]+'/etc/backup.conf'
         
-elif os.path.exists(os.environ["PYSHELL_ROOT"]+'/etc/backup.conf'):
-    bkp_conf_path = os.environ["PYSHELL_ROOT"]+'/etc/backup.conf'
+elif os.path.exists(os.environ["PEARL_ROOT"]+'/etc/backup.conf'):
+    bkp_conf_path = os.environ["PEARL_ROOT"]+'/etc/backup.conf'
         
 else:
     warn('The config file doesn\'t exist. Put it into '+\
-         os.environ["PYSHELL_HOME"]+'/etc/backup.conf')
+         os.environ["PEARL_HOME"]+'/etc/backup.conf')
     exit(1)
         
 conf = Property(bkp_conf_path, True)
 
 
-# To default it corresponds to os.environ["PYSHELL_HOME"]+'/bkp/'
+# To default it corresponds to os.environ["PEARL_HOME"]+'/bkp/'
 bkp_dir = conf.get('bkp_dir')
 
 #----------------------------------------------------------------------

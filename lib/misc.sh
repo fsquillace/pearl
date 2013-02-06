@@ -34,15 +34,15 @@ function s(){
 
 command='
 
-if [ -d $HOME/.pyshell ]
+if [ -d $HOME/.pearl ]
 then
-    cd $HOME/.pyshell
+    cd $HOME/.pearl
     git pull
     cd - &> /dev/null
     bash -i
 else
-    git clone git://github.com/fsquillace/pyshell $HOME/.pyshell
-    bash --rcfile $HOME/.pyshell/pyshell -i
+    git clone git://github.com/fsquillace/pearl $HOME/.pearl
+    bash --rcfile $HOME/.pearl/pearl -i
 fi
 '
 ssh -t $@ "$command"
@@ -88,12 +88,12 @@ function unapply(){
 }
 
 
-function pyshell_logo(){
-cat "$PYSHELL_ROOT/share/logo/logo-ascii.txt"
+function pearl_logo(){
+cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 }
 
 notifier(){
-## Check out the log files $TEMPORARY/pyshell.out $TEMPORARY/pyshell.err and notify the user
+## Check out the log files $TEMPORARY/pearl.out $TEMPORARY/pearl.err and notify the user
 ## -e show the error
 ## -o show the output
 ## -a show all
@@ -101,8 +101,8 @@ notifier(){
 #if [ -f $TEMPORARY/notify.* ]
 #then
 
-    #difout=$(diff $TEMPORARY/pyshell.out $TEMPORARY/notify.out)
-    #diferr=$(diff $TEMPORARY/pyshell.err $TEMPORARY/notify.err)
+    #difout=$(diff $TEMPORARY/pearl.out $TEMPORARY/notify.out)
+    #diferr=$(diff $TEMPORARY/pearl.err $TEMPORARY/notify.err)
 
 #else
     #difout=""
@@ -122,8 +122,8 @@ notifier(){
 
 
 ## Update 
-    #cp $TEMPORARY/pyshell.out $TEMPORARY/notify.out
-    #cp $TEMPORARY/pyshell.err $TEMPORARY/notify.err
+    #cp $TEMPORARY/pearl.out $TEMPORARY/notify.out
+    #cp $TEMPORARY/pearl.err $TEMPORARY/notify.err
 
     echo -e "\e[1;31m! \e[0m \e[1;33m! \e[0m"
 }
@@ -144,11 +144,11 @@ if [ "$a" = "" ]; then
     elif [ "$show_stdout" = "false" -a "$show_stderr" = "false" ]; then
     	sleep $2 && nohup $1 &> /dev/null &
     elif [ "$show_stdout" = "true" -a "$show_stderr" = "false" ]; then
-        sleep $2 && nohup $1 1>> $TEMPORARY/pyshell.out 2>> /dev/null &
+        sleep $2 && nohup $1 1>> $TEMPORARY/pearl.out 2>> /dev/null &
     elif [ "$show_stdout" = "false" -a "$show_stderr" = "true" ]; then
-        sleep $2 && nohup $1 2>> $TEMPORARY/pyshell.err 1>> /dev/null &
+        sleep $2 && nohup $1 2>> $TEMPORARY/pearl.err 1>> /dev/null &
     elif [ "$show_stdout" = "true" -a "$show_stderr" = "true" ]; then
-        sleep $2 && nohup $1 1>> $TEMPORARY/pyshell.out 2>> $TEMPORARY/pyshell.err &
+        sleep $2 && nohup $1 1>> $TEMPORARY/pearl.out 2>> $TEMPORARY/pearl.err &
     fi
 
 fi
@@ -238,14 +238,14 @@ function eye(){
 
 # Trash command
 function trash(){
-    mkdir -p $PYSHELL_TEMPORARY
+    mkdir -p $PEARL_TEMPORARY
 
     if [ -z "$1" ] || [ "$1" = -s ] || [ "$1" = --show ]
     then
-        ls --color -lh -a $PYSHELL_TEMPORARY
+        ls --color -lh -a $PEARL_TEMPORARY
     elif [ "$1" = -e ] || [ "$1" = --empty ]
     then
-        rm -rf $PYSHELL_TEMPORARY/*
+        rm -rf $PEARL_TEMPORARY/*
     elif [ "$1" = -h ] || [ "$1" = --help ]
     then
         echo "Usage:"
@@ -254,7 +254,7 @@ function trash(){
         echo -e "trash [-e || --empty]\t\tEmpties the trash"
         echo -e "trash [-h || --help]\t\tDisplays this"
     else
-        mv --backup=numbered -f -t $PYSHELL_TEMPORARY "$@"
+        mv --backup=numbered -f -t $PEARL_TEMPORARY "$@"
     fi
 
 }
@@ -343,26 +343,26 @@ function sync() {
     fi
 
     # If the file doesn't exist create it with a default entry
-    if [ ! -f $PYSHELL_HOME/syncs ]
+    if [ ! -f $PEARL_HOME/syncs ]
     then
-        echo "/,~/Dropbox" >> $PYSHELL_HOME/syncs
+        echo "/,~/Dropbox" >> $PEARL_HOME/syncs
     fi
 
     if $OPT_LIST #|| [ "$1" == "--list" ]
     then
-        cat -n $PYSHELL_HOME/syncs | sed -e 's/,/  ->  /g'
+        cat -n $PEARL_HOME/syncs | sed -e 's/,/  ->  /g'
 
     elif $OPT_REMOVE #|| [ "$1" == "--remove" ]
     then
-        sed -e "${2}d" $PYSHELL_HOME/syncs | tee $PYSHELL_HOME/syncs
+        sed -e "${2}d" $PEARL_HOME/syncs | tee $PEARL_HOME/syncs
 
     elif $OPT_ADD #|| [ "$1" == "--add" ]
     then
-        echo "$(readlink -f $ARG1_ADD),$ARG2_ADD" >> $PYSHELL_HOME/syncs
+        echo "$(readlink -f $ARG1_ADD),$ARG2_ADD" >> $PEARL_HOME/syncs
     else
         # Get the line of syncs
-        local sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PYSHELL_HOME/syncs)
-        local sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PYSHELL_HOME/syncs)
+        local sync_src=$(awk -v num=$1 -F ',' 'NR == num {print $1}' $PEARL_HOME/syncs)
+        local sync_dest=$(awk -v num=$1 -F ',' 'NR == num {print $2}' $PEARL_HOME/syncs)
         shift;
 
         #introduce --exclude option
@@ -748,14 +748,14 @@ function cmd() {
         return 0
     fi
 
-    touch $PYSHELL_HOME/commands
+    touch $PEARL_HOME/commands
 
 
     if $OPT_REMOVE
     then
         if [ ${#args[@]} -eq 1 ]; then
-            local cmds=$(sed -e "${args[0]}d" $PYSHELL_HOME/commands)
-            echo "$cmds" > $PYSHELL_HOME/commands
+            local cmds=$(sed -e "${args[0]}d" $PEARL_HOME/commands)
+            echo "$cmds" > $PEARL_HOME/commands
         else
             echo "Error the --remove option needs only one argument."
             return 127
@@ -769,7 +769,7 @@ function cmd() {
             local comments=${args[1]}
         fi
         if [ ${#args[@]} -le 2 ]; then
-            echo "${args[0]}%;%$comments" >> $PYSHELL_HOME/commands
+            echo "${args[0]}%;%$comments" >> $PEARL_HOME/commands
         else
             echo "Error the --add option needs maximum two arguments"
         fi
@@ -777,7 +777,7 @@ function cmd() {
     elif $OPT_PRINT
     then
         if [ ${#args[@]} -eq 1 ]; then
-            awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands
+            awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PEARL_HOME/commands
         else
             echo "Error the --print option needs only one argument."
             return 127
@@ -785,11 +785,11 @@ function cmd() {
     else
         # If no file is spcified list all commands
         if [ ${#args[@]} -eq 0 ]; then
-            cat $PYSHELL_HOME/commands | awk -F '%;%' '{print "\033[01;32m"NR": \033[01;33m"$2"\n\033[01;00m   "$1"\n"}'
+            cat $PEARL_HOME/commands | awk -F '%;%' '{print "\033[01;32m"NR": \033[01;33m"$2"\n\033[01;00m   "$1"\n"}'
         elif [ ${#args[@]} -eq 1 ]; then
-            local entry=$(awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PYSHELL_HOME/commands)
-            echo "bind '\"\C-g\":\"$entry\"'"  > $PYSHELL_TEMPORARY/new_cmd
-            source $PYSHELL_TEMPORARY/new_cmd
+            local entry=$(awk -v num=${args[0]} -F '%;%' 'NR == num {print $1}' $PEARL_HOME/commands)
+            echo "bind '\"\C-g\":\"$entry\"'"  > $PEARL_TEMPORARY/new_cmd
+            source $PEARL_TEMPORARY/new_cmd
             echo "Type C-g to get the command"
         else
             echo "Error too many arguments!"
@@ -810,7 +810,7 @@ function screen(){
       folder=$(basename $dir)
 
       builtin cd $dir
-      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd -c ${PYSHELL_ROOT}/etc/screenrc
+      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd -c ${PEARL_ROOT}/etc/screenrc
       clear
       builtin cd -
   elif [ "$1" == "-k" ]
@@ -877,7 +877,7 @@ function todo(){
     # Just in case the user delete the main files then create them
     local bookmarks_file="$HOME/.config/ranger/bookmarks"
     touch "$bookmarks_file"
-    todos_file="$PYSHELL_HOME/todos"
+    todos_file="$PEARL_HOME/todos"
     touch "$todos_file"
 
 

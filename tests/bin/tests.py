@@ -10,15 +10,15 @@ import todo
 
 #class BackupTestCase(unittest.TestCase):
 #    def setUp(self):
-#        self.root_tests = '/tmp/pyshell-tests/'
+#        self.root_tests = '/tmp/pearl-tests/'
 #        
-#        os.environ["PYSHELL_HOME"] = self.root_tests + os.environ["PYSHELL_HOME"]
+#        os.environ["PEARL_HOME"] = self.root_tests + os.environ["PEARL_HOME"]
 #        os.environ["HOME"] = self.root_tests + os.environ["HOME"]
 #        
-#        os.system('mkdir -p '+ self.root_tests + os.environ["PYSHELL_HOME"]+ '/etc');
-#        os.system('mkdir -p '+ self.root_tests + os.environ["PYSHELL_HOME"]+ '/backups');
+#        os.system('mkdir -p '+ self.root_tests + os.environ["PEARL_HOME"]+ '/etc');
+#        os.system('mkdir -p '+ self.root_tests + os.environ["PEARL_HOME"]+ '/backups');
 #        
-#        self.path = self.root_tests + os.environ["PYSHELL_HOME"] + '/etc/backup.conf'
+#        self.path = self.root_tests + os.environ["PEARL_HOME"] + '/etc/backup.conf'
 #        
 #        s = """
 #paths = ['/boot/grub/menu.lst', '/etc/modprobe.d/my_blacklist.conf', \
@@ -29,7 +29,7 @@ import todo
 #'/etc/hibernate/', '/etc/ppp/options-mobile', '/etc/ppp/peers/',\
 #'/etc/ppp/chatscripts/', '/etc/ppp/wait-dialup-hardware']
 #
-#bkp_dir = '/tmp/pyshell/backups'
+#bkp_dir = '/tmp/pearl/backups'
 #
 #execs = {'pkglist': 'pacman -Qqe', 'pkglistfull':'pacman -Qq'}
 #        """
@@ -37,31 +37,31 @@ import todo
 #        f.write(s)
 #        f.close()
 #        
-#        os.environ["PYSHELL_HOME"] = '/tmp/pyshell/'
+#        os.environ["PEARL_HOME"] = '/tmp/pearl/'
 #        
 #    def tearDown(self):
 #        """
 #        Deletes the file for the next tests.
 #        """
-#        if os.path.exists('/tmp/pyshell'):
-#            os.system('rm -rf /tmp/pyshell')
+#        if os.path.exists('/tmp/pearl'):
+#            os.system('rm -rf /tmp/pearl')
 #
 #    
 #    def test_do_backup(self):
 #        backup.do_backup(None, False)
-#        lis = os.listdir('/tmp/pyshell/backups')
+#        lis = os.listdir('/tmp/pearl/backups')
 #        print(lis)
 #        self.assertEqual(len(lis), 1)
         
         
 class TodoTestCase(unittest.TestCase):
     def setUp(self):
-        self.root_tests = '/tmp/pyshell-tests/'
+        self.root_tests = '/tmp/pearl-tests/'
         
-        os.environ["PYSHELL_HOME"] = self.root_tests + os.environ["PYSHELL_HOME"]
+        os.environ["PEARL_HOME"] = self.root_tests + os.environ["PEARL_HOME"]
         os.environ["HOME"] = self.root_tests + os.environ["HOME"]
         
-        os.system('mkdir -p '+ self.root_tests + os.environ["PYSHELL_HOME"]);
+        os.system('mkdir -p '+ self.root_tests + os.environ["PEARL_HOME"]);
         os.system('mkdir -p '+ self.root_tests + os.environ["HOME"] + '.config/ranger/');
         
         
@@ -74,7 +74,7 @@ class TodoTestCase(unittest.TestCase):
 
     
     def test_do_backup(self):
-        lis = os.listdir('/tmp/pyshell/backups')
+        lis = os.listdir('/tmp/pearl/backups')
         print(lis)
         self.assertEqual(len(lis), 1)
         

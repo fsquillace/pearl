@@ -40,21 +40,21 @@ import xml.dom.minidom
 
 import util.painter as painter
 
-if os.path.exists(os.environ["PYSHELL_HOME"]+'/etc/man2.conf'):
-    conf_path = os.environ["PYSHELL_HOME"]+'/etc/man2.conf'
+if os.path.exists(os.environ["PEARL_HOME"]+'/etc/man2.conf'):
+    conf_path = os.environ["PEARL_HOME"]+'/etc/man2.conf'
         
-elif os.path.exists(os.environ["PYSHELL_ROOT"]+'/etc/man2.conf'):
-    conf_path = os.environ["PYSHELL_ROOT"]+'/etc/man2.conf'
+elif os.path.exists(os.environ["PEARL_ROOT"]+'/etc/man2.conf'):
+    conf_path = os.environ["PEARL_ROOT"]+'/etc/man2.conf'
         
 else:
     warn('The config file doesn\'t exist. Put it into '+\
-         os.environ["PYSHELL_HOME"]+'/etc/man2.conf')
+         os.environ["PEARL_HOME"]+'/etc/man2.conf')
     #exit(1)
 
 
 conf = Property(conf_path, False)
 
-# To default it corresponds to os.environ["PYSHELL_ROOT"]+"/share/mans.xml"'
+# To default it corresponds to os.environ["PEARL_ROOT"]+"/share/mans.xml"'
 url_xml = conf.get('url_xml')
 
 #dtd = etree.DTD(StringIO("""

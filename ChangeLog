@@ -1,13 +1,14 @@
-pyshell ?.?.?
+pearl 1.5.2
 - Fixed symc for single file
 - Improved ranger wrapper
 - Added new handy functions and aliases
 - Added the xdefaults config for uxvrt
-- Refactored pyshell script
+- Refactored pearl script
 - Added git config
 - Added gvim config
 - Big changes in README
 - Added the s function
+- Bid day: project changed to pearl!
 
 pyshell 0.19.7
 - Changed pyshell_install and pyshell_update
