@@ -3184,8 +3184,8 @@ permette di conoscere il tempo di connessione
 </item>
 </dict>
 
-<!--- ********************************** ACCOUNT E UTENTE ***************************************** -->
-<dict name="account utente">
+<!--- ********************************** USER & GROUP ***************************************** -->
+<dict name="user &amp; group">
 
 <item name="finger">
 [-sl][utente][@macchina]ottieni info su un utente o sulla macchina, quale e' l'ultima volta che è acceduto al sistema. -s forma breve, -l forma estesa.
@@ -3223,8 +3223,25 @@ permette di cambiare utente
 
 <item name="who">
 fornisce info sugli utenti connessi al sistema
+</item>
+
+<item name="last">
+    Show the last users that accessed into the system.
+    Ogni accesso viene di solito memorizzato su un file quando esiste /var/log/wtmp.
+    Con last si può visualizzare tale file. n indica le righe da visualizzare.
+    con -f indichiamo un altro file es /var/log/secure,
+    -d permette di conoscere in login remoti nn solo l'utente ma il nome host e l'IP associato,
+    -i è like -d ma l'IP è in forma 0.0.0.0
+
+    To show the last accesses of the user feel:<command name="last feel"/>
 
 </item>
+
+<item name="lastb">
+gli accessi BAD vengono memorizzati in /var/log/btmp  e visualizzati con tale comando. Le opzioni sono le stesse del comando last
+
+</item>
+
 
 <item name="w -f utente">
 mostra gli utenti collegati al sistema e cosa stanno facendo.-f indica il terminale, IDLE indica il tempo in cui l'utente non ha fatto nulla, JCPU e' il tempo totale di CPU usato da quell'utente, PCPU e' il tempo totale di CPU usato per quel dato momento
@@ -3865,11 +3882,6 @@ sono presenti tutti i percorsi per i vari tipi di log del sistema. es. /var/log/
 
 </item>
 
-<item name="last -n">
-ogni accesso viene di solito memorizzato su un file quando esiste /var/log/wtmp. con last si può visualizzare tale file. n indica le righe da visualizzare. con -f indichiamo un altro file es /var/log/secure, -d permette di conoscere in login remoti nn solo l'utente ma il nome host e l'IP associato, -i è like -d ma l'IP è in forma 0.0.0.0
-
-</item>
-
 <item name="/etc/services">
 lista delle porte standard
 
@@ -3877,11 +3889,6 @@ lista delle porte standard
 
 <item name="/etc/securetty">
 Questo ?le permette di con?gurare quale device TTY è concesso all?utente root. possono per esempio essere concessi dev TTY remoti(tipo ttyS0) o locali (tipo tty1) basta applicare un commento # se si vuole fare in modo tale da avere più sicurezza conviene disabilitare i device remoti
-
-</item>
-
-<item name="lastb">
-gli accessi BAD vengono memorizzati in /var/log/btmp  e visualizzati con tale comando. Le opzioni sono le stesse del comando last
 
 </item>
 

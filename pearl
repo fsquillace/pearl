@@ -87,6 +87,7 @@ alias la="a -l"
 
 alias share="cd ${PEARL_ROOT}/share"
 alias home="cd ${HOME}"
+alias ~="cd ${HOME}"
 alias etc="cd ${PEARL_ROOT}/etc"
 alias bin="cd ${PEARL_ROOT}/bin"
 
@@ -111,6 +112,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # Open screen+irssi
 alias scrssi="screen -S scrssi -aARd -c ${PEARL_ROOT}/etc/screenrc -t irssi irssi; clear"
+
+# If the system has htop use it!
+[ -e /usr/bin/htop ] && alias top="/usr/bin/htop"
 
 #@@@@@@@@@@@@@@@@@@@
 
