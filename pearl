@@ -74,7 +74,15 @@ alias f="fg"
 alias b="bg"
 alias q="exit"
 alias ls="/bin/ls --color=auto"
-alias l="ls --group-directories-first --color=auto -h"
+
+# Only the newer version of ls support the option --group-directories-first
+ls --group-directories-first &> /dev/null
+if [ "$?" -eq 0 ]; then
+    alias l="ls --group-directories-first --color=auto -h"
+else
+    alias l="ls --color=auto -h"
+fi
+
 alias a="ls -ha"
 alias c="clear"
 alias e='$EDITOR'
