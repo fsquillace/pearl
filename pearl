@@ -137,7 +137,7 @@ PROMPT_COMMAND="history -a;$PROMPT_COMMAND" # immediately insert history into hi
 case ${TERM} in
   xterm*|rxvt*|Eterm|aterm|kterm|gnome*|vt100)
     PS1=$prompt
-    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+    PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND}'printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
     ;;
 
   screen)
