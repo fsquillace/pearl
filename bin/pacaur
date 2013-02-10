@@ -30,12 +30,21 @@ __version__ = "0.1.2"
 
 
 
-import urllib.request
-import urllib.parse
 import subprocess
 import json
 from optparse import OptionParser
 import sys
+
+reqlib = None
+if sys.version_info.major == 3:
+    import urllib.request as reqlib
+    import urllib.parse as parselib
+else:
+    import urllib2 as reqlib
+    import urllib as parselib
+
+
+
 
 AUR_SEARCH_URL='http://aur.archlinux.org/rpc.php?'
 PACMAN_SEARCH_URL='http://projects.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/'
@@ -44,11 +53,14 @@ AUR_URL='http://aur.archlinux.org/'
 
 def query(type, arg):
     query={'type':type, 'arg':arg}
-    enc_query =  urllib.parse.urlencode(query)
-    f = urllib.request.urlopen( AUR_SEARCH_URL + enc_query )
+    enc_query =  parselib.urlencode(query)
+    f = reqlib.urlopen( AUR_SEARCH_URL + enc_query )
 
     # str convertion is necessary for Py3K
-    res = str(f.read(), encoding='utf-8')
+    if sys.version_info.major == 3:
+        res = str(f.read(), encoding='utf-8')
+    else:
+        res = str(f.read())
     f.close()
 
     return json.loads(res)
@@ -88,7 +100,8 @@ def information(pack):
         sys.stderr.write(res+'\n')
         exit(1)
     for k,v in res.items():
-        sys.stdout.write(k+': '+v+'\n')
+        sys.stdout.write(str(k)+': '+str(v)+'\n')
+
 
 
 if __name__ == '__main__':
