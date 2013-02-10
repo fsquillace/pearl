@@ -38,6 +38,7 @@ from optparse import OptionParser
 import sys
 
 AUR_SEARCH_URL='http://aur.archlinux.org/rpc.php?'
+PACMAN_SEARCH_URL='http://projects.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/'
 AUR_URL='http://aur.archlinux.org/'
 
 
@@ -61,7 +62,10 @@ def search(pack):
         exit(1)
 
     for r in res:
-        sys.stdout.write('\033[1;29m'+r['Name']+'\033[1;m \033[1;32m'+r['Version']+'\033[1;m \033[1;31m'+r['NumVotes']+'\033[1;m\n\t'+r['Description']+'\n')
+        sys.stdout.write('\033[1;29m'+r['Name']+\
+                '\033[1;m \033[1;32m'+r['Version']+\
+                '\033[1;m \033[1;31m'+str(r['NumVotes'])+\
+                '\033[1;m\n\t'+r['Description']+'\n')
 
 
 def download(pack):

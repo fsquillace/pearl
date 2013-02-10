@@ -1,3 +1,0 @@
-[submodule "opt/ranger"]
-	path = opt/ranger
-	url = git://git.savannah.nongnu.org/ranger.git
