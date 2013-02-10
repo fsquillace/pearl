@@ -15,8 +15,9 @@ hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u
 # what it was before
 altscreen on
 
+# Not all terminals recognize 256 colors so, by default, $TERM is set to "screen"
 # Use 256 colors
-term screen-256color
+#term screen-256color
 
 # scroll back
 defscrollback 1000
