@@ -273,7 +273,7 @@ function pearl_update(){
         echo "soft: try to merge with the changes you made. In case of conflict it raises an error."
     }
 
-    if [ ${#@} -lt 1 ]; then
+    if [ ${#@} -gt 1 ]; then
         echo "pearl_update: unrecognized options '$@'"
         up_help
         return 128
