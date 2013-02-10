@@ -41,8 +41,20 @@ then
     cd - &> /dev/null
     bash -i
 else
-    git clone git://github.com/fsquillace/pearl $HOME/.pearl
-    bash --rcfile $HOME/.pearl/pearl -i
+
+    res="none"
+    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    do
+        read -p "Do you want to install pearl in ~/.pearl? (Y/n)> " res
+    done
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
+        git clone git://github.com/fsquillace/pearl $HOME/.pearl
+        bash --rcfile $HOME/.pearl/pearl -i
+    else
+        bash -i
+    fi
+
 fi
 '
 ssh -t $@ "$command"
