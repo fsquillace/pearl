@@ -267,24 +267,45 @@ function pearl_unistall(){
 
 
 function pearl_update(){
-    if [ ${#@} -ne 0 ]; then
+    function up_help(){
+        echo "Usage: pearl_update [soft/hard]"
+        echo "hard (default): overwrite the changes you might have done in pearl folder"
+        echo "soft: try to merge with the changes you made. In case of conflict it raises an error."
+    }
+
+    if [ ${#@} -lt 1 ]; then
         echo "pearl_update: unrecognized options '$@'"
-        echo "Usage: pearl_update"
+        up_help
         return 128
+    fi
+
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        up_help
+        return 0
     fi
 
     if [ -d $PEARL_ROOT/.git ]
     then
         builtin cd $PEARL_ROOT
-        git pull
+        if [ "$1" = "soft"  ]
+        then
+            git pull
+        elif [ "$1" = "" ] || [ "$1" = "hard" ]
+        then
+            git fetch --all
+            git reset --hard origin/master
+        fi
         builtin cd -
+
+        source $PEARL_ROOT/pearl
     else
         echo "pearl wasn't installed using Git."
         echo "May be it was installed by the package manager of the system."
         echo "Use it if you want to update Pearl."
         return 1
     fi
-}
 
+    return 0
+}
 
 
