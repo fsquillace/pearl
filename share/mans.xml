@@ -3075,11 +3075,18 @@ controlla la configurazione di TCP_WRAPPER segnalando config errate sui file /et
 
 </item>
 
-<item name="tcpdump -i eth0 -F file">
-sniffa pacchetti sull'interfaccia di rete specificata, che verranno memorizzati su file. Esiste anche il comando ethereal
-Display traffic about DNS:<command name="tcpdump -i eth1 'udp port 53'"/>
-Display all FTP session to 202.54.1.5:<comand name="tcpdump -i eth1 'dst 202.54.1.5 and (port 21 or 20'"/>
-Use wireshark to view detailed information about files:<command name="tcpdump -n -i eth1 -s 0 -w output.txt src or dst port 80"/>
+<item name="tcpdump">
+    Sniff packets from the interface eth0 and dump to file:<command name="tcpdump -i eth0 -F file"/>
+
+    Display traffic about DNS:<command name="tcpdump -i eth1 'udp port 53'"/>
+    Display all FTP session to 202.54.1.5:<command name="tcpdump -i eth1 'dst 202.54.1.5 and (port 21 or 20)'"/>
+    Display all HTTP session to 192.168.1.5:<command name="tcpdump -ni eth0 'dst 192.168.1.5 and tcp and port http'"/>
+    Use wireshark to view detailed information about files:<command name="tcpdump -n -i eth1 -s 0 -w output.txt src or dst port 80"/>
+
+    To display all IPv4 HTTP packets to and from port 80,
+    i.e. print only packets that contain data, not,
+    for example, SYN and FIN packets and ACK-only packets, enter:
+    <command name="tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2)) - ((tcp[12]&amp;0xf0)&lt;&lt;2)) != 0)'"/>
 </item>
 
 <item name="ifconfig eth0 192.168.0.1/24">
