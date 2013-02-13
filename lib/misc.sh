@@ -664,7 +664,8 @@ function cd() {
         echo "Usage: cd [OPT] [KEY]"
         echo -e "cd\tList all the entries"
         echo -e "cd -g [KEY]\tGo to the directory specified by the key"
-        echo -e "cd [-a || --add] PATH\tAdd the specified PATH"
+        echo -e "cd [-a || --add] ENTRY [PATH]\tAdd the specified PATH assigning the ENTRY."
+        echo -e "\t\t\tThe entry key can be an alphanumeric char. The path is the current wd if PATH is not specified"
         echo -e "cd [[-r || --remove] KEY\tRemove an entry"
         echo -e "cd [-p || --print] KEY\tPrint the PATH entry (useful for pipe command)"
         echo -e "cd [-h || --help]\tDisplays this"
@@ -688,11 +689,28 @@ function cd() {
 
     if [ "$OPT_ADD" != ""  ]
     then
-        local abs_path=$(readlink -f "$OPT_ADD")
-        local alphnum="abcdefghilmnopqrstuvwykzxABCDEFGHILMNOPQRSTUVZWYKX0123456789"
-        local pos=$(expr $RANDOM % ${#alphnum})
-        local key=${alphnum:$pos:1}
-        echo "$key:$abs_path" >> "$bookmarks_file"
+        # Checks first if key is an alphanumeric char
+        local alphnum="abcdefghilmnopqrstuvwykzxjABCDEFGHILMNOPQRSTUVZWYKXJ0123456789"
+        if [ "${#OPT_ADD}" -ne "1"  ] || [[ ! "$alphnum" == *"$OPT_ADD"* ]]; then
+            echo "The entry key $OPT_ADD is not valid. It can only be an alphanumeric char."
+            return 128
+        fi
+
+        local path=${args}
+        if [ -z "$path" ]; then
+            local path="."
+        fi
+
+        local abs_path=$(readlink -f "$path")
+        if [ ! -d "$abs_path" ]; then
+            echo "$abs_path is not a directory."
+            return 128
+        fi
+
+        # The commented code allow to create a random key
+        #local pos=$(expr $RANDOM % ${#alphnum})
+        #local key=${alphnum:$pos:1}
+        echo "$OPT_ADD:$abs_path" >> "$bookmarks_file"
     elif [ "$OPT_REMOVE" != "" ]
     then
         local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" "$bookmarks_file")
