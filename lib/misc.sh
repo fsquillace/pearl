@@ -860,20 +860,24 @@ function screen(){
 
 
 function todo(){
-    local TEMP=`getopt -o g:r:lh --long go:,remove:,list,help  -n 'todo' -- "$@"`
+    local TEMP=`getopt -o p:g:r:d:lh --long priority:go:,remove:,disable:,list,help  -n 'todo' -- "$@"`
 
     if [ $? != 0 ] ; then echo "Error on parsing the command line. Try todo -h" >&2 ; return ; fi
 
     # Note the quotes around `$TEMP': they are essential!
     eval set -- "$TEMP"
 
+    local OPT_PRIORITY=""
     local OPT_REMOVE=""
+    local OPT_DISABLE=""
     local OPT_GO=""
     local OPT_LIST=false
     local OPT_HELP=false
     while true ; do
 	case "$1" in
+            -p|--priority) shift; OPT_PRIORITY="$1" ; shift ;;
             -g|--go) shift; OPT_GO="$1" ; shift ;;
+            -d|--disable) shift; OPT_DISABLE="$1" ; shift ;;
             -r|--remove) shift; OPT_REMOVE="$1" ; shift ;;
             -l|--list) OPT_LIST=true ; shift ;;
             -h|--help) OPT_HELP=true ; shift ;;
@@ -891,13 +895,47 @@ function todo(){
     if $OPT_HELP
     then
         echo "Usage:"
-        echo -e "todo [TODO]\t\tScan the files starting in the directories of the bookmarks having an integer entry key and prints the lines having TODO words. You can also add a TODO in the general list."
-        echo -e "todo [-r || --remove <num>]\t\tRemove a todo in the list"
-        echo -e "todo [-g || --go <num>]\t\tScan for TODOs only for the entry specified"
-        echo -e "todo [-l || --list]\t\tList only the general TODO list without scan any folder"
-        echo -e "todo [-h || --help]\t\tDisplays this"
+        echo -e "todo [-g || --go <key>] [TODO]\t\tDetect the todos starting from the directories of the bookmarks having an integer entry key and prints only the lines having TODO words. You can also add a TODO in the general list."
+        echo "Options:"
+        echo -e "-p --priority <num> <key>\t\tAdd a priority to the todo. Possible values from the most important: 1,2,3,4,5 (default 3)"
+        echo -e "-d --disable <key>\t\tDisable temporary a todo in the list"
+        echo -e "-r --remove <key>\t\tRemove a todo in the list"
+        echo -e "-g --go <key>\t\tScan for TODOs only for the entry specified"
+        echo -e "-l --list\t\tList only the general TODO list without scan any folder"
+        echo -e "-h --help\t\tDisplays this"
         return 0
     fi
+
+
+    function sort_todos(){
+        # Print lines sorted only if they really exist
+        [ -f "$1" ] && cat "$1" | sort -n
+    }
+    function print_todos(){
+    sort_todos $1  | awk -F [:] '{last=$3;for(i=4;i<=NF;i++){last=last":"$i}; col=195+$1; if( $2 == "1"){ msg=1}else{msg=col} print "\033[38;5;"msg"m"NR") "last}'
+    }
+
+    function print_scan_todos(){
+        local path="$1"
+        echo -e "\033[0;33m$path\033[0m"
+        local res=$(eye -c -r -w "$path" TODO | awk '{print "\t"$0}')
+        if [ "$res" != "" ]; then
+            echo "$res"
+        else
+            echo -e "\t\033[0;36mNothing TODO!\033[0m"
+        fi
+    }
+    function update_todos_file(){
+        # Update the content to the todos file
+        if [ "$2" == ""  ]; then
+            rm -rf "$1"
+        else
+            [ -f "$1" ] && echo "$2" > "$1"
+        fi
+    }
+
+    # The format of the todos file is for each row to have:
+    # <priority>:<disabled>:<todo>
 
     # Checks if directory exists
     if [ ! -d "$HOME/.config/ranger" ]; then
@@ -907,55 +945,60 @@ function todo(){
     # Just in case the user delete the main files then create them
     local bookmarks_file="$HOME/.config/ranger/bookmarks"
     touch "$bookmarks_file"
-    todos_file="$PEARL_HOME/todos"
-    touch "$todos_file"
+    todos_main_file="$PEARL_HOME/todos"
+    touch "$todos_main_file"
+
+    if [ "$OPT_GO" != "" ]; then
+        local todos_file="$(cd -p "$OPT_GO")/.todos"
+    else
+        local todos_file="$todos_main_file"
+    fi
 
 
     if [ "$OPT_REMOVE" != "" ]
     then
-        local out=$(grep "REM MSG" $todos_file | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
-        echo "$out" > $todos_file
-    elif [ "$OPT_GO" != "" ]
+        local out=$(sort_todos "$todos_file" | awk -v q=$OPT_REMOVE '(NR!=q){print $0}')
+        update_todos_file "$todos_file" "$out"
+    elif [ "$OPT_DISABLE" != "" ]
     then
-        local path=$(cd -p $OPT_GO)
-        echo -e "\033[0;33m$path\033[0m"
-        local res=$(eye -c -r -w "$path" TODO | awk '{print "\t"$0}')
-        if [ "$res" != "" ]
-        then
-            echo "$res"
-        else
-            echo -e "\t\033[0;36mNothing TODO!\033[0m"
+        local out=$(sort_todos "$todos_file" | awk -F [:] -v q=$OPT_DISABLE '{last=$3; for(i=4;i<=NF;i++){last=last":"$i}; if(NR==q){print $1":1:"last} else{print $0}}')
+        update_todos_file "$todos_file" "$out"
+    elif [ "$OPT_PRIORITY" != "" ]
+    then
+        if [ -z "$args" ]; then
+            echo "You didn't specify the todo key."
+            return 128
         fi
-        echo ""
-
-        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        local out=$(sort_todos "$todos_file" | awk -F [:] -v k="$args" -v q="$OPT_PRIORITY" '{last=$3; for(i=4;i<=NF;i++){last=last":"$i}; if(NR==k){print q":"$2":"last} else{print $0}}')
+        update_todos_file "$todos_file" "$out"
     elif $OPT_LIST
     then
-        grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+        print_todos $todos_file
     else
         if [ ${#args[@]} -eq 1 ]; then
             # Append the todo in the todos file
-            echo "REM MSG ${args[0]}" >> $todos_file
+            # Default todo has priority 3
+            echo "3:0:${args[0]}" >> "$todos_file"
         elif [ ${#args[@]} -eq 0 ]; then
-            # List all todos
-            local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $bookmarks_file)
-            for path in $list
-            do
-                echo -e "\033[0;33m$path\033[0m"
-                local res=$(eye -c -r -w "$path" TODO | awk '{print "\t"$0}')
-                if [ "$res" != "" ]
-                then
-                    echo "$res"
-                else
-                    echo -e "\t\033[0;36mNothing TODO!\033[0m"
-                fi
+            if [ "$OPT_GO" != "" ]; then
+                print_scan_todos $(cd -p "$OPT_GO")
                 echo ""
-            done
-            grep "REM MSG" $todos_file | sed -e 's/REM MSG//g' | awk '{print "\033[1;32m"NR") "$0"\033[0m"}'
+                print_todos "$todos_file"
+                echo ""
+            else
+                # List all todos
+                local list=$(sed -e '/^[^0-9]\+\:/d' -e 's/^[0-9]\+\://g' $bookmarks_file)
+                for path in $list
+                do
+                    print_scan_todos "$path"
+                    print_todos "$path"/.todos
+                    echo ""
+                done
+                print_todos "$todos_file"
+            fi
         else
             echo "Error too many arguments"
         fi
-
     fi
 
 }
