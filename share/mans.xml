@@ -92,6 +92,57 @@ Spazio 	        %20
 
 <!--- ********************************** BASH ***************************************** -->
 <dict name="bash">
+    <item name="history">
+        Permette di visualizzare lo storico dei comandi.
+        -c cancella tutto, num indica il num di comandi da visualizzare.
+        Il file è denominato .bash_history ed è localizzato nella dir home dell'utente:
+        <command name="history [-c] [num]"/>
+
+        The most recent command containing the "string":<command name="!?string"/>
+
+        Take the command that either is in the row "num" (it can be negative) or has "string" as prefix:
+        <command name="!n"/> or <command name="!string"/>
+        Substitute string1 with string2 in the previous command:<command name="^string1^string2^"/>
+    </item>
+
+    <item name="multitasking">
+        Stop the execution of the script until all the background jobs have finished or until
+        the specified job has finished:<command name="wait %job"/>
+
+        Bring the process as foreground:<command name="fg %job"/>
+
+        Execute directly a job in background:<command name="comando &amp; "/>
+
+        Execute a job in background:<command name="bg %job"/>
+
+        Kill a background job:<command name="kill %job"/>
+
+        List all the current jobs:<command name="jobs"/>
+
+        ctrl+c kill the current job, ctrl+z suspend the current job:
+        <command name="ctrl+c e ctrl+z"/>
+
+    </item>
+
+    <item name="redirection i/o and pipe">
+        Il ; consente l'esecuzione sequenziale dei comandi:<comand name="comand1 ; comand2"/>
+        Esegue comand2 solo se comand1 è stato eseguito con successo:<command name="comand1 &amp;&amp; comand2"/>
+        Esegue comand2 solo se comand1 ha generato un errore:<command name="comand1 || comand2"/>
+        Permette l'esecuzione simultanea:<command name="comand1 &amp; comand2 &amp; comand3"/>
+
+        <command name=":&gt; file opp &gt;file"/>
+
+        Redirige e accoda lo stdOut nel file &quot;file&quot;.
+        0=stdIn, 1=stdOut, 2=stdErr.
+        &amp;&gt;&quot;file&quot; redirige stdErr e stdOut in &quot;file&quot;:
+        <command name="comando 1&gt;&gt;file"/>
+
+        Sopprime l'output:<command name="comando 1&gt;/dev/null"/>
+        Legge le righe contenute nel file con descittore 3:
+        <command name="while read riga &lt;&amp;3 do {echo riga}"/>
+
+    </item>
+
     <item name="bash binding">
         To get the list of the current bindings:<command name="bind -p"/>
         To bind an action with a key:<command name="bind '&quot;\C-p&quot;: beginning-of-line'"/>
@@ -125,6 +176,65 @@ Alt-p           Non-incremental reverse search of history.
 !$              Last argument of last command
 !^              First argument of last command
 ^abc^xyz        Replace first occurance of abc with xyz in last command and execute it
+    </item>
+
+    <item name="array">
+        To define an array:
+        <code>
+            # One value array
+            array[0]=value
+            # Empty array
+            declare -a arrayB
+            # Another declaration
+            declare -a array=('valore' 'valore' 'valore')
+            # Again another declaration
+            array=('valore' 'valore' 'valore')
+        </code>
+        To assign a value to the array:
+        <code>
+            arrayB[$i]=10
+        </code>
+        To iterate among the elements:
+        <code>
+            for v in ${arrayA[@]};do
+                echo $v
+            done
+        </code>
+
+        To define an ASSOCIATIVE ARRAY:
+        <code>
+            declare -A userpass
+            userpass=( ["Ennio"]="123456" ["Pippo"]="1q2w3e4r" ["Luigi"]="B0sc0l4nd14" )
+        </code>
+
+        Other possible options of declare:
+        *  -i Declare an array with only integers.
+        *  -r Declare an array read-only.
+        *  -u Convert the values of the array in uppercase.
+        *  -l Convert the values of the array in lowercase.
+
+        To get the lenght of the array:<code>echo "${#array[@]}"</code>
+
+        To extract the elements of an array:
+        <code>
+            echo ${array[@]:3} # Extract the elements beginning to the third elements
+            echo ${array[@]:0:3} # Extract the first three elements.
+            echo ${array[-1]} # Extract the last element
+        </code>
+
+        To change elements inside an array:
+        <code>
+            echo ${array[@],} # i primi caratteri di ogni parola si visualizzeranno in minuscolo
+            echo ${array[@],,} # tutti i caratteri di ogni parola saranno in minuscolo
+            echo ${array[@]^} # i primi caratteri di ogni parola si visualizzeranno in maiuscolo
+            echo ${array[@]^^} # tutti i caratteri di ogni parola saranno in maiuscolo
+
+            echo ${array[@]/uno/} # Delete the first occurrence on every element.
+            echo ${array[@]//uno/} # Delete all the occurrences on every element.
+
+            echo ${array[@]/t/a} # Substitute the first occurrence "t" with "a".
+            echo ${array[@]//t/a} # Substitute all the occurrences "t" with "a".
+        </code>
     </item>
 </dict>
 
@@ -185,31 +295,6 @@ Command     Alias     Info
 
     <item name="chatting">
         To a private chat:<command name="/query nick"/>
-    </item>
-
-</dict>
-
-<!--- ******************************* AT  ******************************** -->
-<dict name="at">
-    <item name="general commands">
-        I comandi sono at, batch, atq, e atrm:
-          *  at esegue i comandi in un momento specificato.
-          *  atq elenca i lavori in attesa dell’utente, a meno che l’utente non sia il superutente;
-             in tal caso, tutti i lavori sono elencati.
-          *  atrm elimina uno dei lavori in attesa, identificati dal loro numero.
-          *  batch esegue comandi quando permesso dal livello di carico del sistema,
-             in altre parole, quando il carico medio scende sotto 1.5,
-             o il valore specificato nella chiamata di atd
-    </item>
-
-    <item name="at">
-        To execute at script.sh at 20.00 send an email of the output and insert the job into the queue a:<command name="at -m -q a -f script.sh 20.00"/>
-        Other possible values of time are &quot;midnight Friday&quot;
-    </item>
-    <item name="other command atrm, atq">
-        To see the list of jobs:<command name="atq"/>
-        To see the detail of the job number 3:<command name="at -c 3"/>
-        To remove the job number 3:<command name="atrm 3"/>
     </item>
 
 </dict>
@@ -797,6 +882,9 @@ $(EXECUTABLE): $(OBJECTS)
         To grab the output into a file:<command name="script -c &quot;xinput test ID&quot; | cat /tmp/key.log"/>
         To get the ID of the keyboard type:<command name="xinput --list"/>
     </item>
+
+
+
 </dict>
 
 
@@ -867,46 +955,6 @@ $(EXECUTABLE): $(OBJECTS)
 
         Look https://wiki.archlinux.org/index.php/Pacman_Tips#Custom_local_repository for more details.
 
-    </item>
-</dict>
-
-<!--- ********************************* Netcfg, network daemons and automatic connection  ***************************************** -->
-<dict name="netcfg, network daemons and automatic connection">
-    <item name="netcfg">
-        1. Define a network in /etc/network.d/ called mynetwork (copy one of the examples in the examples directory)
-        2. Connection:<command name="netcfg mynetwork"/>
-        3. Disconnection:<command name="netcfg down mynetwork"/>
-        4. To Access at the menu any time (require dialog package):<command name="netcfg-menu"/>
-    </item>
-    <item name="automatic connection">
-        You need to install the following package:
-        * wpa_actiond - for automatic/roaming wireless connection
-        * ifplugd - for automatic ethernet connection
-        
-        To connect profile during boot:
-        1. Edit /etc/rc.conf
-            NETWORKS=(mynetwork yournetwork)
-            DAEMONS=(... net-profiles ...)
-        
-        To connect to wireless networks with roaming support:
-        1. Edit /etc/rc.conf
-            WIRELESS_INTERFACE="wlan0"
-            DAEMONS=(... net-auto-wireless ...)
-
-        To connect to wired networks:
-        1. edit /etc/rc.conf
-            WIRED_INTERFACE="eth0"
-            DAEMONS=(... net-auto-wired ...)
-    </item>
-    <item name="network">
-        Use /etc/rc.conf to configure the network (interfaces, dhcp or static ip, gateway, etc...)
-        To restart the daemon:<command name="/etc/rc.d/network restart"/>
-    </item>
-    <item name="Create a daemon to change mac">
-        1. Create a script set-hw-addr in /etc/rc.d/
-        2. In rc.conf put it prior to network daemon:
-        DAEMONS=(... set-hw-addr network ...)
-        3. Look at the source in https://wiki.archlinux.org/index.php/Configuring_Network#Change_MAC.2Fhardware_address
     </item>
 </dict>
 
@@ -1437,15 +1485,15 @@ Evitare le directory .svn usando find<command name="find . -name .svn -prune -o 
         Specificare il browser da usare su /etc/etter.conf
     </item>
 
-<item name="man in the middle (mitm)">
-    Per abilitare l'inoltro dei pacchetti fare in questo modo (da non utilizzare con il comando fragrouter):<command name="echo 1 &gt; /proc/sys/net/ipv4/ip-forward"/>
-    Se non funziona provare:<command name="sudo sysctl -w net.ipv4.ip_forward=0"/>
+    <item name="man in the middle (mitm)">
+        Per abilitare l'inoltro dei pacchetti fare in questo modo (da non utilizzare con il comando fragrouter):<command name="echo 1 &gt; /proc/sys/net/ipv4/ip-forward"/>
+        Se non funziona provare:<command name="sudo sysctl -w net.ipv4.ip_forward=0"/>
 
-La prima operazione da fare è il comando arpspoof. Consideriamo i seguenti IP: IP_VICTIM è l'IP della vittima e IP_SERVER.
-I comandi da eseguire sono:<command name="arpspoof -t IP_VICTIM IP_SERVER"/> e <command name="arpspoof -t IP_SERVER IP_VICTIM"/>
+        La prima operazione da fare è il comando arpspoof. Consideriamo i seguenti IP: IP_VICTIM è l'IP della vittima e IP_SERVER.
+        I comandi da eseguire sono:<command name="arpspoof -t IP_VICTIM IP_SERVER"/> e <command name="arpspoof -t IP_SERVER IP_VICTIM"/>
 
-La successiva operazione è fare in modo che il mitm possa inoltrare effettivamente i pacchetti in transito:<command name="fragrouter -B1"/>
-</item>
+        La successiva operazione è fare in modo che il mitm possa inoltrare effettivamente i pacchetti in transito:<command name="fragrouter -B1"/>
+    </item>
 
 <item name="sniffing">
 Questa è un operazione che va fatta una volta che il pc è in mitm!!
@@ -1531,34 +1579,6 @@ free_mem(first_matrix);
 }
 </code>
 </item>
-</dict>
-
-<!--- ********************************** HISTORY ***************************************** -->
-<dict name="history">
-<item name="history">
-Permette di visualizzare lo storico dei comandi. -c cancella tutto, num indica il num di comandi da visualizzare. il file è denominato .bash_history ed è localizzato nella dir home dell'utente : <command name="history [-c] [num]"/>
-</item>
-<item name="!?string">
-Si riferisce al più recente comando contenente la string: <command name="!?string"/>
-</item>
-<item name="![num or string]">
-Si riferisce al comando nella riga num (num può anche essere negativo) o che inizia per &quot;string&quot;: <command name="!n"/>
-</item>
-<item name="^string1^string2">
-Sostituisce string1 con string2 nel precedente comando: <command name="^string1^string2^"/>
-</item>
-</dict>
-
-<!--- ********************************** TRAFFIC CONTROL ***************************************** -->
-<dict name="traffic control">
-
-<item name="tc">
-Il comando tc serve alla configurazione del traffico in ingresso e uscita di una interfaccia di rete attraverso tecniche di shaping, scheduling, accodamento, etc..
-
-Per rimuovere il qdisc esistente: <command name="tc qdisc del dev $eth root"/>
-Per mostrare il qdisc esistente: <command name="tc -s qdisc show dev $eth"/>
-</item>
-
 </dict>
 
 <!--- ********************************** Ripristino e installazione di sistemi GNU/Linux ***************************************** -->
@@ -2470,123 +2490,6 @@ stampaNomeEdEta.call(cane, 7);
 
 </dict>
 
-
-<!--- ********************************** IPTABLES ***************************************** -->
-<dict name="iptables">
-
-<item name="iptables-save [-c] [-t table] &gt; /etc/iptables-save">
-Serve per salvare l'insieme di regole (rule-set) all'interno di un file. -c serve a mantenere memorizzati i contatori dei byte e dei pacchetti. Qst opzione può servire quando occorre chiudere il firewall, in qst modo le info relative alle quantità di byte e pacchetti rimangono comunque memorizzate. -t indica quali tabelle memorizzare (nat, mangle, filter, raw) nel file se omesso memorizza tutte le tabelle nel file.
-
-</item>
-
-<item name="iptables-restore [-c] [-n] &lt; /etc/iptables-save">
-Serve a caricare il file fornito da iptables-save nel kernel.  -c serve a mantenere memorizzati i contatori dei byte e dei pacchetti. Qst opzione può servire quando occorre chiudere il firewall, in qst modo le info relative alle quantità di byte e pacchetti rimangono comunque memorizzate.-n dice a iptables-restore di non sovrascrivere le regole precedenti. Di default le regole gia' esistenti vengono eliminate.
-
-</item>
-
-<item name="iptables [-t table] command [match] [target/jump] ">
-
-</item>
-
-</dict>
-
-<!--- ********************************** NFS ***************************************** -->
-<dict name="nfs">
-
-<item name="LATO SERVER">
-Pacchetti necessari:apt-get install nfs-kernel-server nfs-common portmap. PASSI DA FARE: 1) scrivere in /etc/exports i permessi (es /home/ 192.168.210.128/24(rw)) leggere il manuale (man exports). 2) Riavviare il server: /etc/init.d/nfs-kernel-server restart oppure con exportfs -a. 3) Per verificare l'esportazione showmount -e
-
-</item>
-
-<item name="LATO CLIENT">
-Pacchetti necessari:apt-get install portmap nfs-common. PASSI DA FARE: mount 192.168.210.1:/home/ /mnt/HomeDiUbuntu 2) Se si vuole avviare al boot si modifica /etc/fstab cosi: 192.168.210.1:/home/ /mnt/HomeDiUbuntu nfs rsize=8192,wsize=8192,timeo=14,intr
-
-</item>
-
-</dict>
-
-<!--- ********************************** MULTITASKING ***************************************** -->
-<dict name="multitasking">
-
-<item name="wait %job">
-Arresta l'secuzione dello script finche' tutti i job in esecuzione in background non sono terminati, o finchè non è terminato il job o il processo il cui ID è stato passato come opzione
-
-</item>
-
-<item name="fg %job">
-porta il processo in foreground
-
-</item>
-
-<item name="comando &amp; ">
-il comando viene eseguito direttamente in background
-
-</item>
-
-<item name="bg %job">
-fa girare in background un job sospeso
-
-</item>
-
-<item name="kill %job">
-termina un job in background
-
-</item>
-
-<item name="jobs">
-elenca i job presenti
-
-</item>
-
-<item name="ctrl+c e ctrl+z">
-ctrl+c fa terminare il job corrente, ctrl+z fa sospendere il job corrente
-
-</item>
-
-</dict>
-
-<!--- ********************************** REDIREZIONE I/O E PIPE DI COMUNICAZIONE***************************************** -->
-<dict name="redirezione i/o e pipe di comunicazione">
-
-<item name="comand1 ; comand2">
-Il ; consente l'esecuzione sequenziale dei comandi
-</item>
-
-<item name="comand1 &amp;&amp; comand2">
-Esegue comand2 solo se comand1 è stato eseguito con successo.
-</item>
-
-<item name="comand1 || comand2">
-Esegue comand2 solo se comand1 ha generato un errore.
-</item>
-
-<item name="comand1 &amp; comand2 &amp; comand3">
-Permette l'esecuzione simultanea..
-</item>
-
-<item name=":&gt; file opp &gt;file">
-
-</item>
-
-
-<item name="comando 1&gt;&gt;file">
-redirige e accoda lo stdOut nel file &quot;file&quot;. 0=stdIn, 1=stdOut, 2=stdErr. &amp;&gt;&quot;file&quot; redirige stdErr e stdOut in &quot;file&quot;
-
-</item>
-
-<item name="comando 1&gt;/dev/null">
-sopprime l'output
-
-</item>
-
-
-<item name="while read riga &lt;&amp;3 do {echo riga}">
-legge le righe contenute nel file con descittore 3
-
-</item>
-
-</dict>
-
 <!--- ********************************** APT ***************************************** -->
 <dict name="apt">
 
@@ -2815,7 +2718,25 @@ permette di fornire info sulle librerie (sorte di .dll) utilizzate dal comando
 esegue comandi ad una certa data. è necessario che sia attivo il demone crond(attivabile con /etc/rc2.d/S89cron start). -e modifica il file di conf -l lo visualizza -r lo rimuove
 
 </item>
+    <item name="at">
+        The general commands are:
+        I comandi sono at, batch, atq, e atrm:
+          *  at esegue i comandi in un momento specificato.
+          *  atq elenca i lavori in attesa dell’utente, a meno che l’utente non sia il superutente;
+             in tal caso, tutti i lavori sono elencati.
+          *  atrm elimina uno dei lavori in attesa, identificati dal loro numero.
+          *  batch esegue comandi quando permesso dal livello di carico del sistema,
+             in altre parole, quando il carico medio scende sotto 1.5,
+             o il valore specificato nella chiamata di atd
 
+        To execute at script.sh at 20.00 send an email of the output
+        and insert the job into the queue a:<command name="at -m -q a -f script.sh 20.00"/>
+        Other possible values of time are &quot;midnight Friday&quot;
+
+        To see the list of jobs:<command name="atq"/>
+        To see the detail of the job number 3:<command name="at -c 3"/>
+        To remove the job number 3:<command name="atrm 3"/>
+    </item>
 
 <item name="init 0123456Ss">
 permette di spostarsi sui vari runlevel
@@ -2872,6 +2793,127 @@ restituisce il percorso di &quot;comando&quot; utile per capire se il comando e'
 
 <!--- ********************************** NETWORK ***************************************** -->
 <dict name="network">
+    <item name="netcfg">
+        1. Define a network in /etc/network.d/ called mynetwork (copy one of the examples in the examples directory)
+        2. Connection:<command name="netcfg mynetwork"/>
+        3. Disconnection:<command name="netcfg down mynetwork"/>
+        4. To Access at the menu any time (require dialog package):<command name="netcfg-menu"/>
+    </item>
+    <item name="automatic connection">
+        You need to install the following package:
+        * wpa_actiond - for automatic/roaming wireless connection
+        * ifplugd - for automatic ethernet connection
+
+        To connect profile during boot:
+        1. Edit /etc/rc.conf
+            NETWORKS=(mynetwork yournetwork)
+            DAEMONS=(... net-profiles ...)
+
+        To connect to wireless networks with roaming support:
+        1. Edit /etc/rc.conf
+            WIRELESS_INTERFACE="wlan0"
+            DAEMONS=(... net-auto-wireless ...)
+
+        To connect to wired networks:
+        1. edit /etc/rc.conf
+            WIRED_INTERFACE="eth0"
+            DAEMONS=(... net-auto-wired ...)
+    </item>
+    <item name="network">
+        Use /etc/rc.conf to configure the network (interfaces, dhcp or static ip, gateway, etc...)
+        To restart the daemon:<command name="/etc/rc.d/network restart"/>
+    </item>
+    <item name="Create a daemon to change mac">
+        1. Create a script set-hw-addr in /etc/rc.d/
+        2. In rc.conf put it prior to network daemon:
+        DAEMONS=(... set-hw-addr network ...)
+        3. Look at the source in https://wiki.archlinux.org/index.php/Configuring_Network#Change_MAC.2Fhardware_address
+    </item>
+
+    <item name="tc">
+        Il comando tc serve alla configurazione del traffico in ingresso e uscita di una
+        interfaccia di rete attraverso tecniche di shaping, scheduling, accodamento, etc..
+
+        Per rimuovere il qdisc esistente: <command name="tc qdisc del dev $eth root"/>
+        Per mostrare il qdisc esistente: <command name="tc -s qdisc show dev $eth"/>
+    </item>
+
+    <item name="iptables">
+        General syntax:<command name="iptables [-t table] command [match] [target/jump] "/>
+
+        DISPLAY
+        Display (-L) numbered (--line-numbers) firewall rules without DNS resolution (-n):
+        <command name="iptables -n -L -v --line-numbers"/>
+
+        STOP/START/RESTART FIREWALL
+        Service:<command name="service iptables [stop/start/restart]"/>
+        Delete all rules:<command name="iptables -F"/>
+        Delete a chain:<command name="iptables -X"/>
+        Delete all rule for a table:<command name="iptables -t [nat|mangle] -F"/>
+
+        SET DEFAULT POLICY
+        <command name="iptables -P INPUT DROP"/>
+
+        DELETE FIREWALL RULES
+        Delete the rule numbered four (using --line-numbers to get the number):
+        <command name="iptables -D INPUT 4"/>
+        Delete from a particular rule:
+        <command name="iptables -D INPUT -s 202.54.1.1 -j DROP"/>
+
+        INSERT OR APPEND FIREWALL RULES
+        To insert in position 2:<command name="iptables -I INPUT 2 -s 202.54.1.2 -j DROP"/>
+        To append:<command name="iptables -A INPUT -i eth1 -s 192.168.0.0/24 -j DROP"/>
+
+        SAVE/RESTORE
+        Serve per salvare l'insieme di regole (rule-set) all'interno di un file. -c serve a mantenere memorizzati i contatori dei byte e dei pacchetti. Qst opzione può servire quando occorre chiudere il firewall, in qst modo le info relative alle quantità di byte e pacchetti rimangono comunque memorizzate. -t indica quali tabelle memorizzare (nat, mangle, filter, raw) nel file se omesso memorizza tutte le tabelle nel file.
+        <command name="iptables-save [-c] [-t table] &gt; /etc/iptables/mytables.rules"/>
+
+        Serve a caricare il file fornito da iptables-save nel kernel.  -c serve a mantenere memorizzati i contatori dei byte e dei pacchetti. Qst opzione può servire quando occorre chiudere il firewall, in qst modo le info relative alle quantità di byte e pacchetti rimangono comunque memorizzate.-n dice a iptables-restore di non sovrascrivere le regole precedenti. Di default le regole gia' esistenti vengono eliminate.
+        <command name="iptables-restore [-c] [-n] &lt; /etc/iptables/mytables.rules"/>
+
+
+        VARIOUS EXAMPLES
+        To block port 80 on IP range:<command name="iptables -A INPUT -i eth1 -p tcp -s 192.168.1.0/24 --dport 80 -j DROP"/>
+
+        To block traffic for Facebook:
+        Get the IP:<command name="host -t a www.facebook.com"/>
+        Get the belonging CIDR associated:<command name="whois 69.171.228.40 | grep CIDR"/>
+        Block all the outgoing traffic for that CIDR:<command name="iptables -A OUTPUT -p tcp -d 69.171.224.0/19 -j DROP"/>
+
+        To Log packets in /var/log/messages:<command name="iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix &quot;IP_SPOOF A: &quot;"/>
+
+        To log for 5 minutes with a limit of 5 entries:<command name="iptables -A INPUT -i eth1 -s 10.0.0.0/8 -m limit --limit 5/m --limit-burst 7 -j LOG --log-prefix &quot;IP_SPOOF A: &quot;"/>
+
+        To drop packates from a MAC address:<command name="iptables -A INPUT -m mac --mac-source 00:0F:EA:91:04:08 -j DROP"/>
+
+        To block a ping request:<command name="iptables -A INPUT -p icmp --icmp-type echo-request -j DROP"/>
+        Other icmp-type are:
+        *  echo-reply
+        *  destination-unreachable
+        *  time-exceeded
+
+        To open a range of ports (supposing the default policy is DROP):
+        <command name="iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 7000:7010 -j ACCEPT "/>
+        To open for a range of IPs:
+        <command name="iptables -A INPUT -p tcp -dport 80 -m iprange --src-range 192.168.1.100-192.168.1.200 -j ACCEPT"/>
+
+        To limit to 3 connections for the same host (--syn is equivalent to --tcp-flags SYN,RST,ACK,FIN SYN):
+        <command name="iptables -A INPUT -p tcp -dport 22 --syn -m connlimit --connlimit-above 3 -j REJECT"/>
+
+
+    </item>
+
+    <item name="nfs">
+        Server side:
+        Pacchetti necessari:apt-get install nfs-kernel-server nfs-common portmap. PASSI DA FARE: 1) scrivere in /etc/exports i permessi (es /home/ 192.168.210.128/24(rw)) leggere il manuale (man exports). 2) Riavviare il server: /etc/init.d/nfs-kernel-server restart oppure con exportfs -a. 3) Per verificare l'esportazione showmount -e
+        Client side:
+        Pacchetti necessari:apt-get install portmap nfs-common. PASSI DA FARE: mount 192.168.210.1:/home/ /mnt/HomeDiUbuntu 2) Se si vuole avviare al boot si modifica /etc/fstab cosi: 192.168.210.1:/home/ /mnt/HomeDiUbuntu nfs rsize=8192,wsize=8192,timeo=14,intr
+    </item>
+
+    <item name="tcptraceroute">
+        To track the route for a TCP connection in a particular port to a host:<command name="tcptraceroute -np 3306 192.168.1.1"/>
+    </item>
+
     <item name="hping">
         Modes are:
         *  --udp
@@ -3056,11 +3098,6 @@ Esiste un ulteriore comando denominato ss che consente di controllare i socket a
 
 </item>
 
-<item name="iptables">
-fa da firewall per il filtraggio di pacchetti(non so bene)
-
-</item>
-
 <item name="ipchains -A input -j REJECT -s XXX.XXX.XXX.XXX -d 0/0 -p all">
 inibisce le connessione al sistema da parte XXX.XXX.XXX.XXX, applicando una regola.
 
@@ -3076,12 +3113,14 @@ controlla la configurazione di TCP_WRAPPER segnalando config errate sui file /et
 </item>
 
 <item name="tcpdump">
-    Sniff packets from the interface eth0 and dump to file:<command name="tcpdump -i eth0 -F file"/>
+    Sniff packets from the interface eth0 and read the filtering rule from file:<command name="tcpdump -i eth0 -F file"/>
+
+    Display traffic from a particular host(-p avoid promiscous mode of the interface):<command name="tcpdump -p -nv host 192.168.1.1"/>
 
     Display traffic about DNS:<command name="tcpdump -i eth1 'udp port 53'"/>
     Display all FTP session to 202.54.1.5:<command name="tcpdump -i eth1 'dst 202.54.1.5 and (port 21 or 20)'"/>
     Display all HTTP session to 192.168.1.5:<command name="tcpdump -ni eth0 'dst 192.168.1.5 and tcp and port http'"/>
-    Use wireshark to view detailed information about files:<command name="tcpdump -n -i eth1 -s 0 -w output.txt src or dst port 80"/>
+    Use wireshark to view detailed information about files (-s 0 allow to get all the bytes of the packages):<command name="tcpdump -n -i eth1 -s 0 -w output.txt src or dst port 80"/>
 
     To display all IPv4 HTTP packets to and from port 80,
     i.e. print only packets that contain data, not,
@@ -3189,8 +3228,116 @@ consente (temporaneamente) di cambiare il nome del computer(host). Se lo si vuol
 permette di conoscere il tempo di connessione
 
 </item>
-</dict>
 
+<item name="iwconfig">
+analogo di ifconfig, serve a settare i parametri citati prima.
+
+</item>
+<item name="iwlist">
+fa uno scan per i peer o gli AP, o elenca le funzionalit? del driver
+
+</item>
+<item name="iwspy">
+colleziona statistiche su un peer remoto della LAN
+
+</item>
+<item name="iwpriv">
+parametri specifici del driver
+
+</item>
+<item name="iwevent">
+monitor di eventi sull'interfaccia
+
+</item>
+
+<item name="wlanconfig ">
+
+</item>
+
+<item name="airodump-ng">
+sniffa pacchetti. --ivs specifica solo pacchetti ivs, -w &quot;file&quot; scrive i pacchetti in un file, -c &quot;chan&quot; indica il canale nel quale sniffare, -bssid &quot;AP&quot; indica l'AP in cui sniffare
+Sniffa i pacchetti contenti IV:<commands name="airodump-ng -c $chan -w capturefile --ivs ath1"/>
+</item>
+
+<item name="aircrack-ng opts file_dump">
+    Programma per trovare la kiave:<command name="aircrack-ng -a 1 -e $AP -b final_dump.pcap"/>
+
+    Serve per crakkare una kiave, -e essid, -b bssid, -a algoritmo ad es. 1 per WEP o 2 per WPA, -n num si usa per specificare il num di bit della kiave se si conosce, -f num es 3 o 4 piu' e' piccolo e piu' il tempo diminuisce ma le possibilit? di trovare la kiave diminuiscono, -w file serve per la WPA per un dizionario che puo' essere scaricato opp generato da JohnTheRipper
+</item>
+
+<item name="ivstools --merge &lt;ivs file 1&gt; &lt;ivs file 2&gt; .. &lt;output file&gt;">
+Fonde in un singolo file tanti dump diversi
+</item>
+
+<item name="mergecap [options] -w &lt;outfile|-&gt; &lt;infile&gt; ...">
+simile a ivstools. fa parte di wireshark. es: mergecap -T ieee-802-11 -w final_dump.pcap dump1.pcap dump2.pcap dump3.pcap
+
+</item>
+
+
+<item name="airdecap-ng">
+decritta un pacchetto WEP/WPA data una chiave valida. 
+
+</item>
+
+<item name="kstats">
+data una chiave valida, ed un dump, dice quale attacco statistico funziona meglio. 
+
+</item>
+<item name="makeivs">
+genera un file pcap di test per provare il cracking con aircrack-ng. 
+
+</item>
+
+<item name="packetforge-ng">
+    Forgia un pacchetto in modo da poterlo usare con aireplay-ng.
+    Genera un pacchetto da essere utilizzato con aireplay -2 per iniettare pacchetti di tipo
+    arp-request nella rete, e fare l'airodump:
+    <command name="packetforge-ng -0 -a $AP -h $WIFI -k 255.255.255.255 -l 255.255.255.255 -y ilFile.xor -w file"/>
+</item>
+
+<item name="airmon-ng">
+mette la scheda wireless in monitor mode. es airmon-ng start ath1
+
+</item>
+
+<item name="aireplay">
+    Inietta del traffico artificiale verso la rete. 
+
+    Fake Authentication Serve per individuare se AP risponde come tempo mettere es 10 opp 0 sec.
+    Se AP non risponde, pu? darsi ci sia firewall MAC, in ogni caso non funzionera' airodump:
+    <command name="aireplay-ng -e #ssid rete# -a #macAP# -h #mioMAC# --fakeauth #tempo# #nomescheda#"/>
+
+    Questo programma funziona similmente ad uno sniffer, andando alla ricerca dei pacchetti ARP request,
+    ovvero i pacchetti interessanti al fine del crakkaggio. Una volta ottenuto,
+    inizia a rimandarlo all'AP che risponder? con degli IV che verranno sniffati da airodump:
+    <command name="aireplay-ng --arpreplay -b #macAP# -h -#mioMAC# #nomescheda#"/>
+
+    Attacco di deautenticazione, Questo attacco puo' essere usato per recuperare un SSID nascosto
+    (cioe' che non e'broadcast), catturare una handshake WPA a 4 vie o lanciare un attacco
+    di tipo Denial of Service. Lo scopo dell'attacco ? di obbligare il client a ri-autenticarsi che,
+    consente all'aggressore di falsare gli indirizzi MAC:
+    <command name="aireplay-ng -0 $numVolte -a $AP -c $client ath0"/>
+
+    Decriptare pacchetti WEP senza conoscere la chiave. Vengono creati due file pcap:
+    uno per il pacchetto decifrato e l'altro per il relativo keystream. il file .cap puo' essere
+    letto da un lettore (es. tcpdump); mentre il file .xor puo' essere utilizzato per falsare
+    pacchetti e inviarli:<command name="aireplay-ng -4 -h $client ath0"/>
+
+    Permette di ricavare il keystream con la tecnica del fragment:<command name="aireplay-ng -5 -b $AP -h $WIFI ath1"/>
+
+    Ritrasmissione di un pacchetto alterato con arpforge:<command name="aireplay -2 -r forge-arp.cap ath0"/>
+
+    tcpdump per leggere un plaintext ottenuto con aireplay-ng -4:
+    <command name="tcpdump -s 0 -n -e -r replay_dec-0916-114019.cap"/>
+
+</item>
+
+<item name="arpforge replay_dec-0916-114019.xor 1 $manDest $macSource $ipSource $ipDest forge-arp.cap">
+Falsifica i pacchetti da un host all'altro. si puo recuperare il keystream con aireplay-ng -4
+</item>
+
+</dict>
 <!--- ********************************** USER & GROUP ***************************************** -->
 <dict name="user &amp; group">
 
@@ -3626,6 +3773,8 @@ Cancellare tutte le directory .svn: <command name="find . -depth -type d -name .
 con -cmin &quot;minuti&quot; e mmin &quot;minuti&quot; fa la ricerca di file cambiati e modificati nell'arco di &quot;minuti&quot;. 
 un utilizzo più complesso e' find ~/ -name 'core*' -exec &quot;comando&quot; {} \; che Cancella tutti i file core presenti nella directory home dell'utente. Con vicino &quot;COMANDO&quot; c'e' {}, allora find sostituisce &quot;{}&quot; con il percorso completo del file selezionato.
 
+
+Find the files modified on a specific date(works for find version >=4.3.3):<command name="find . -type f -name &quot;*.py&quot; -newermt 2013-02-07 ! -newermt 2013-02-08 -ls"/>
 </item>
 
 <item name="locate -e -i file /slocate file">
@@ -4150,150 +4299,4 @@ analizzatori lessicali (non conosco bene)
 </item>
 
 </dict>
-
-<!--- ********************************** WIFI ***************************************** -->
-<dict name="wifi">
-
-<item name="iwconfig">
-analogo di ifconfig, serve a settare i parametri citati prima.
-
-</item>
-<item name="iwlist">
-fa uno scan per i peer o gli AP, o elenca le funzionalit? del driver
-
-</item>
-<item name="iwspy">
-colleziona statistiche su un peer remoto della LAN
-
-</item>
-<item name="iwpriv">
-parametri specifici del driver
-
-</item>
-<item name="iwevent">
-monitor di eventi sull'interfaccia
-
-</item>
-
-<item name="wlanconfig ">
-
-</item>
-
-</dict>
-
-<!--- ********************************** WIFI CRACK ***************************************** -->
-<dict name="wifi crack">
-
-<item name="airodump-ng">
-sniffa pacchetti. --ivs specifica solo pacchetti ivs, -w &quot;file&quot; scrive i pacchetti in un file, -c &quot;chan&quot; indica il canale nel quale sniffare, -bssid &quot;AP&quot; indica l'AP in cui sniffare
-Sniffa i pacchetti contenti IV:<commands name="airodump-ng -c $chan -w capturefile --ivs ath1"/>
-</item>
-
-<item name="aircrack-ng opts file_dump">
-serve per crakkare una kiave, -e essid, -b bssid, -a algoritmo ad es. 1 per WEP o 2 per WPA, -n num si usa per specificare il num di bit della kiave se si conosce, -f num es 3 o 4 piu' e' piccolo e piu' il tempo diminuisce ma le possibilit? di trovare la kiave diminuiscono, -w file serve per la WPA per un dizionario che puo' essere scaricato opp generato da JohnTheRipper
-</item>
-
-<item name="ivstools --merge &lt;ivs file 1&gt; &lt;ivs file 2&gt; .. &lt;output file&gt;">
-Fonde in un singolo file tanti dump diversi
-</item>
-
-<item name="mergecap [options] -w &lt;outfile|-&gt; &lt;infile&gt; ...">
-simile a ivstools. fa parte di wireshark. es: mergecap -T ieee-802-11 -w final_dump.pcap dump1.pcap dump2.pcap dump3.pcap
-
-</item>
-
-
-<item name="airdecap-ng">
-decritta un pacchetto WEP/WPA data una chiave valida. 
-
-</item>
-
-<item name="kstats">
-data una chiave valida, ed un dump, dice quale attacco statistico funziona meglio. 
-
-</item>
-<item name="  ">
-
-</item>
-<item name="makeivs">
-genera un file pcap di test per provare il cracking con aircrack-ng. 
-
-</item>
-
-<item name="packetforge-ng">
-forgia un pacchetto in modo da poterlo usare con aireplay-ng. 
-
-</item>
-
-<item name="airmon-ng">
-mette la scheda wireless in monitor mode. es airmon-ng start ath1
-
-</item>
-
-<item name="aireplay-ng">
-inietta del traffico artificiale verso la rete. 
-
-</item>
-
-</dict>
-
-<!--- ********************************** AIREPLAY ***************************************** -->
-<dict name="aireplay">
-
-<item name="aireplay-ng -e #ssid rete# -a #macAP# -h #mioMAC# --fakeauth #tempo# #nomescheda#">
- Fake Authentication Serve per individuare se AP risponde come tempo mettere es 10 opp 0 sec. Se AP non risponde, pu? darsi ci sia firewall MAC, in ogni caso non funzionera' airodump
-
-</item>
-
-
-<item name="aireplay-ng --arpreplay -b #macAP# -h -#mioMAC# #nomescheda#">
- questo programma funziona similmente ad uno sniffer, andando alla ricerca dei pacchetti ARP request, ovvero i pacchetti interessanti al fine del crakkaggio. Una volta ottenuto, inizia a rimandarlo all'AP che risponder? con degli IV che verranno sniffati da airodump
-
-</item>
-
-
-<item name="aireplay-ng -0 $numVolte -a $AP -c $client ath0">
- Attacco di deautenticazione, Questo attacco puo' essere usato per recuperare un SSID nascosto (cioe' che non e'broadcast), catturare una handshake WPA a 4 vie o lanciare un attacco di tipo Denial of Service. Lo scopo dell'attacco ? di obbligare il client a ri-autenticarsi che, consente all'aggressore di falsare gli indirizzi MAC.
-
-</item>
-
-
-<item name="aireplay-ng -4 -h $client ath0">
-Decriptare pacchetti WEP senza conoscere la chiave. Vengono creati due file pcap: uno per il pacchetto decifrato e l'altro per il relativo keystream. il file .cap puo' essere letto da un lettore (es. tcpdump); mentre il file .xor puo' essere utilizzato per falsare pacchetti e inviarli.
-
-</item>
-
-
-<item name="aireplay-ng -5 -b $AP -h $WIFI ath1">
-Permette di ricavare il keystream con la tecnica del fragment
-
-</item>
-
-
-<item name="aireplay -2 -r forge-arp.cap ath0">
-Ritrasmissione di un pacchetto alterato con arpforge
-
-</item>
-
-</dict>
-
-<!--- ********************************** WIFI OTHER***************************************** -->
-<dict name="wifi other">
-
-<item name="arpforge replay_dec-0916-114019.xor 1 $manDest $macSource $ipSource $ipDest forge-arp.cap">
-Falsifica i pacchetti da un host all'altro. si puo recuperare il keystream con aireplay-ng -4
-</item>
-
-<item name="packetforge-ng -0 -a $AP -h $WIFI -k 255.255.255.255 -l 255.255.255.255 -y ilFile.xor -w file">
-Genera un pacchetto da essere utilizzato con aireplay -2 per iniettare pacchetti di tipo arp-request nella rete, e fare l'airodump
-</item>
-
-<item name="tcpdump -s 0 -n -e -r replay_dec-0916-114019.cap">
-tcpdump per leggere un plaintext ottenuto con aireplay-ng -4
-</item>
-<item name="aircrack-ng -a 1 -e $AP -b final_dump.pcap">
-Programma per trovare la kiave
-</item>
-</dict>
-
 </dicts>
