@@ -1,5 +1,5 @@
 #!/bin/sh
-# pearl by Filippo Squillace  
+# pearl by Filippo Squillace
 # (great update 16-12-2009 date of my last exam in UNICAL :)
 # (update 21-07-2010 one of my last days in Valencia §:(  )
 # (update 07-01-2012 ending the thesis in Valencia)
@@ -32,6 +32,10 @@ umask 0022
 
 # Define the main pearl variables
 export PEARL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
+if [ ! -d $PEARL_ROOT ]; then
+    echo "Error: Could not set PEARL_ROOT env because $PEARL_ROOT does not exist."
+    return 1
+fi
 export PEARL_HOME=~/.config/pearl
 export PEARL_TEMPORARY=$PEARL_HOME/tmp/`tty`
 mkdir -p $PEARL_TEMPORARY
