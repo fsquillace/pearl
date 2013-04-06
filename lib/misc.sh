@@ -840,7 +840,7 @@ function screen(){
       folder=$(basename $dir)
 
       builtin cd $dir
-      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd -c ${PEARL_ROOT}/etc/screenrc
+      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd
       clear
       builtin cd -
   elif [ "$1" == "-k" ]
