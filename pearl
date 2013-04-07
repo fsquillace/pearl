@@ -133,34 +133,8 @@ alias scrssi="screen -S scrssi -aARd -c ${PEARL_ROOT}/etc/screenrc -t irssi irss
 #>>>>>>>>>>>>>>>>>>>
 #>> Prompt
 #>>>>>>>>>>>>>>>>>>>
+source $PEARL_ROOT/etc/context/def
 
-# Colorize the hostname
-hstcol=$(hostname | sum - | awk '{print 31 + $0 % 6}')
-
-prompt="\[\033[01;31m\][\$(if [[ \$? == 0 ]]; then echo \"\[\033[01;32m\]v\"; else echo \"\[\033[01;31m\]x\"; fi) \[\033[1;32m\]\t \[\033[1;33m\]\j \[\033[01;31m\]\u@\[\033[01;${hstcol}m\]\h \[\033[01;34m\]\W \[\033[01;35m\]\$\[\033[01;31m\]]> \[\033[00m\]"
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-    PS1=$prompt
-fi
-
-PROMPT_COMMAND="history -a;$PROMPT_COMMAND" # immediately insert history into history file
-case ${TERM} in
-  xterm*|rxvt*|Eterm|aterm|kterm|gnome*|vt100)
-    PS1=$prompt
-    #PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-    ;;
-
-  screen)
-    PS1=$prompt
-    ;;
-
-  *)
-    ;;
-esac
-
-unset prompt hstcol
 #>>>>>>>>>>>>>>>>>>>>>
 
 

@@ -104,6 +104,22 @@ function pearl_logo(){
 cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 }
 
+# Switch to a particular context
+# $1: context file in etc/context/
+# If the context doesn't exists it gives an error
+function pearl_switch(){
+    local context="$PEARL_ROOT/etc/context/$1"
+
+    if [ ! -f "$PEARL_ROOT/etc/context/$1" ]
+    then
+        echo "Error: the context doesn't exist."
+        return 128
+    fi
+    source $PEARL_ROOT/pearl
+    source $context
+}
+
+
 notifier(){
 ## Check out the log files $TEMPORARY/pearl.out $TEMPORARY/pearl.err and notify the user
 ## -e show the error

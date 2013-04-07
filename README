@@ -468,6 +468,35 @@ Example of using:
     copy of *pearl* in '$$~$$/.pearl' and spawn a bash terminal with the pearl
     configuration file.
 
+PROMPT CONTEXT
+~~~~~~~~~~~~~~
+There is a command called 'pearl_switch' that allow to change the appearance of the terminal.
+Each context is stored in '$PEARL_ROOT/etc/context' and it is a script that simply change the
+environment variable 'PS1' and 'PROMPT_COMMAND'. There are three main contexts available:
+
+* def - It is the default context. It will show the basic information.
+-----------------------------------
+[22:00:09 0 feel@myarch pearl $]>
+-----------------------------------
+* dev - It is used for development purpose. It shows information of the current git branch.
+--------------------------------------------
+[22:00:09 0 {master} feel@myarch pearl $]>
+--------------------------------------------
+* ops - It is used for system administration. Useful for checking memory, load avg, etc.
+The first three columns measure CPU and IO utilization of the last one, five, and 15 minute periods.
+The fourth column shows the number of currently running processes and the total number of processes.
+The last column displays the last process ID used.
+--------------------------------------------
+678/3844MB      0.47 0.51 0.52 2/273 30568
+[22:03:56 0  feel@myarch pearl $]>
+--------------------------------------------
+
+In order to change the context type:
+
+-----------------------------------
+pearl_switch <context_name>
+-----------------------------------
+You can create your own context just creating a file in '$PEARL_ROOT/etc/context'.
 
 BACKUP
 ~~~~~~
