@@ -2972,10 +2972,24 @@ Consente di ricavare l'indirizzo MAC a partire dall'indirizzo IP:<command name="
 </item>
 
 <item name="nmap">
-Ottimo host discovery:<command name="nmap -sP -n 192.168.1.0-255"/>
-Ottimo scan di porte con pacchetti SYN:<command name="sudo nmap -sS -sV -n -A 192.168.1.1"/>
-Ottimo scan di porte con pacchetti ACK:<command name="sudo nmap -sA -sV -n -A 192.168.1.1"/>
-Ottimo scan di porte con pacchetti NULL:<command name="sudo nmap -sN -sV -n -A 192.168.1.1"/>
+
+    Host discovery (ping scan):<command name="nmap -sP -n 192.168.1.0-255"/>
+
+    PORTS SCAN:
+    Using SYN packets:<command name="sudo nmap -sS -n 192.168.1.*"/>
+    Using ACK packets:<command name="sudo nmap -sA -n -A 192.168.1.1"/>
+    Using NULL:<command name="sudo nmap -sN -n -A 192.168.1.1"/>
+    Detect remote services version number(sV) and OS (A):<command name="sudo nmap -A -sV 192.168.1.1"/>
+    When protected by firewall:<command name="sudo nmap -PN 192.168.1.1"/>
+    Scan specific port (with Tcp or Udp):<command name="sudo nmap -p U:53,111,137,T:21-25,80,139,8080 192.168.1.1"/>
+
+    To read a list of host in a file and scan them:<command name="sudo nmap -iL /tmp/file.txt"/>
+
+    Show interface list and routes:<command name="sudo nmap --iflist"/>
+
+    MAC spoof:<command name="sudo nmap --spoof-mac MAC-ADDRESS-HERE 192.168.1.1"/>
+
+    Awesome GUI interface is zenmap
 </item>
 
 <item name="sshd-generate">
