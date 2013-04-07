@@ -3447,7 +3447,14 @@ mostra gli utenti collegati al sistema e cosa stanno facendo.-f indica il termin
     </item>
 
     <item name="compress pdf files">
-        With ghostscript:<command name="gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf"/>
+        With ghostscript:
+        <command name="gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf"/>
+        Possible values are:
+        -dPDFSETTINGS=/screen   (qualità da schermo, 72 dpi)
+        -dPDFSETTINGS=/ebook    (bassa qualità, 150 dpi )
+        -dPDFSETTINGS=/printer  (alta qualità, 300 dpi )
+        -dPDFSETTINGS=/prepress (alta qualità, preserva i colori, 300 dpi)
+        -dPDFSETTINGS=/default  (quasi identico a /screen)
     </item>
 
 

@@ -647,7 +647,7 @@ function symc() {
 }
 
 
-# This function integrate cd and cd2 in the same command
+# This function is a wrapper for cd including some functionalities
 function cd() {
     #################### BEGIN OPTION PARSING ############################
     local TEMP=`getopt -o g:a:r:p:h --long go:,add:,remove:,print:,help -n 'cd' -- "$@"`
