@@ -681,7 +681,7 @@ function cd() {
         echo -e "cd\tList all the entries"
         echo -e "cd -g [KEY]\tGo to the directory specified by the key"
         echo -e "cd [-a || --add] ENTRY [PATH]\tAdd the specified PATH assigning the ENTRY."
-        echo -e "\t\t\tThe entry key can be an alphanumeric char. The path is the current wd if PATH is not specified"
+        echo -e "\t\t\tThe entry key must contain alphanumeric and underscore chars. The path is the current wd if PATH is not specified"
         echo -e "cd [[-r || --remove] KEY\tRemove an entry"
         echo -e "cd [-p || --print] KEY\tPrint the PATH entry (useful for pipe command)"
         echo -e "cd [-h || --help]\tDisplays this"
@@ -693,22 +693,17 @@ function cd() {
         args+=("$arg")
     done
 
-
-    # Checks if directory and files exists
-    if [ ! -d "$HOME/.config/ranger" ]; then
-        mkdir -p "$HOME/.config/ranger"
-    fi
-    local bookmarks_file="$HOME/.config/ranger/bookmarks"
-    touch $bookmarks_file
-
     #################### END OPTION PARSING ############################
+
+    local bookmarks_file="$PEARL_HOME/bookmarks"
+    touch $bookmarks_file
 
     if [ "$OPT_ADD" != ""  ]
     then
         # Checks first if key is an alphanumeric char
-        local alphnum="abcdefghilmnopqrstuvwykzxjABCDEFGHILMNOPQRSTUVZWYKXJ0123456789"
-        if [ "${#OPT_ADD}" -ne "1"  ] || [[ ! "$alphnum" == *"$OPT_ADD"* ]]; then
-            echo "The entry key $OPT_ADD is not valid. It can only be an alphanumeric char."
+        if ! echo "$OPT_ADD" | grep '^\w*$' > /dev/null
+        then
+            echo "The entry key $OPT_ADD is not valid. It must only contain alphanumeric and underscore chars."
             return 128
         fi
 
@@ -733,7 +728,6 @@ function cd() {
         echo "$bookmrks" > "$bookmarks_file"
     elif [ "$OPT_PRINT" != "" ]
     then
-        touch $bookmarks_file
         awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $bookmarks_file
     elif [ "$OPT_GO" != "" ]
     then
@@ -794,8 +788,9 @@ function cmd() {
         return 0
     fi
 
-    touch $PEARL_HOME/commands
+    #################### END OPTION PARSING ############################
 
+    touch $PEARL_HOME/commands
 
     if $OPT_REMOVE
     then
