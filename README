@@ -254,41 +254,40 @@ all the available commands.
 
 CD
 ~~~
-Allows to list all your favorite bookmark paths. It is aliased in the classical
-cd built-in command. Type *cd --help* to see all the available options.
+Allows to list all your favorite bookmark paths.
+Each path is identified by an alphanumeric string (underscore included).
+You can easily pass from the current directory to one in the bookmark simply
+typing the entry.
+Type *cd --help* to see all the available options.
 
 Example of using:
 
-    *$ cd -g* 4::
+    *$ cd -g* my_project::
     Changes to the directory in the fourth entry.
 
     *$ cd*::
     Lists all the entries.
 
-    *$ cd -a* .::
+    *$ cd -a* pippo .::
     Adds the current directory into the table.
 
     *$ cd -r* 4::
     Removes the fourth entry.
 
-Integration with Ranger application
-CD stores the entries in '$$~$$/.config/ranger/bookmark' to be integrated with
-Ranger. So, if you add an entry directly with ranger you will see it in cd
-command too.
-
 SCREEN
 ~~~~~~
-The classic *screen* command is wrapped using a bash function that adds a new option '-g'.
-It creates a new screen in the directory specified according the bookmark files.
+The classic *screen* command is wrapped using a bash function that adds a new option '-g' or '--go'.
+Basically, it creates a new screen in the directory specified according the bookmark files.
 Moreover, if a screen already exists for such directory, it recalls the same screen.
 It is extremely useful when you want to use screen as an *IDE* and to recall your project
 whenever you want. Cool!
 If you are using multiple terminals and you call an already attached screen in another terminal,
 it automatically detaches and reattaches into the new terminal. The session name of each screen,
 listed using '-list' option, is called according to the related directory.
-In order to close all windows of a screen session the option '-k' can be used. It basically executes
+In order to close all windows of a screen session the option '-k' or '--kill' can be used. It basically executes
 the command 'quit' of screen for the specified session.
-Furthermore, when using screen with '-g' option a nice statusbar will appear in the bottom of the terminal.
+Furthermore, when using screen with '-g' option a nice statusbar will appear in the bottom of the terminal if 
+the configuration file 'screenrc' from 'pearl_settings' was activated.
 
 Example of using:
 
@@ -677,6 +676,7 @@ The config files touched by *pearl* are:
 * '$$~$$/.XDefaults'
 * '$$~$$/.gitconfig'
 * '$$~$$/.screenrc'
+* '$$~$$/.zshrc'
 
 FILES
 -----
@@ -684,9 +684,9 @@ FILES
 several config files. All the temporary directories of the associated shell 
 are stored in '$$~$$/.config/pearl/tmp'.
 
-The bookmark paths are stored into '$$~$$/.config/ranger/bookmarks' in order to get
-compatibility with *ranger* file manager. The TODOs are stored into
-'$$~$$/.config/pearl/todos'.
+The bookmark paths are stored into '$$~$$/.config/pearl/bookmarks'.
+The TODOs are stored into '$$~$$/.config/pearl/todos'.
+The commands are stored in '$$~$$/.config/pearl/commands'.
 
 COPYRIGHT
 ---------
