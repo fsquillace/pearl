@@ -724,11 +724,15 @@ function cd() {
         echo "$OPT_ADD:$abs_path" >> "$bookmarks_file"
     elif [ "$OPT_REMOVE" != "" ]
     then
+        grep "${OPT_REMOVE}:.*" ~/.config/pearl/bookmarks &> /dev/null || return 1
+
         local bookmrks=$(sed -e "/$OPT_REMOVE:.*/d" "$bookmarks_file")
         echo "$bookmrks" > "$bookmarks_file"
     elif [ "$OPT_PRINT" != "" ]
     then
-        awk -F ":" -v q=$OPT_PRINT '(q==$1){print $2}' $bookmarks_file
+        output=$(grep "${OPT_PRINT}:.*" ~/.config/pearl/bookmarks | cut -d: -f2)
+        [ "$output" == "" ] && return 1
+        echo "$output"
     elif [ "$OPT_GO" != "" ]
     then
         local path=$(awk -F ":" -v q=$OPT_GO '(q==$1){print $2}' $bookmarks_file)
@@ -843,29 +847,56 @@ function cmd() {
 
 
 function screen(){
-  if [ "$1" == "-g" ]
-  then
-      dir=$(cd -p $2)
-      # Create an hash of the dir to get an id of the directory
-      hashdir=$(echo $dir  | sum - | awk '{print $1}')
-      folder=$(basename $dir)
+    local OPT_GO=""
+    local OPT_KILL=""
+    local OPT_HELP=false
+    local args=()
+    while [ "$1" != "" ] ; do
+	case "$1" in
+	    -g|--go) shift; OPT_GO="$1" ; shift ;;
+	    -k|--kill) shift; OPT_KILL="$1" ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) args+=("$1") ; shift ;;
+	esac
+    done
 
-      builtin cd $dir
-      /usr/bin/screen -S "$folder-$2-$hashdir" -aARd
-      clear
-      builtin cd -
-  elif [ "$1" == "-k" ]
-  then
-      dir=$(cd -p $2)
-      # Create an hash of the dir to get an id of the directory
-      hashdir=$(echo $dir  | sum - | awk '{print $1}')
-      folder=$(basename $dir)
+    #################### END OPTION PARSING ############################
 
-      /usr/bin/screen -S "$folder-$2-$hashdir" -X quit
+    if $OPT_HELP
+    then
+        /usr/bin/screen --help
+        echo ""
+        echo "Extra usage from the wrapper:"
+        echo -e "screen [-g || --go <key>]\t\tGo to the directory selected by the key and create a screen"
+        echo -e "screen [-k || --kill <key>]\t\tKill the screen identified by the key"
+        echo -e "screen [-h || --help]\t\t\tDisplays this"
+        return 0
+    fi
 
-  else
-      /usr/bin/screen $@
-  fi
+    if [ "$OPT_GO" != "" ]
+    then
+        dir=$(cd -p $OPT_GO)
+        # Create an hash of the dir to get an id of the directory
+        hashdir=$(echo $dir  | sum - | awk '{print $1}')
+        folder=$(basename $dir)
+
+        builtin cd $dir
+        /usr/bin/screen -S "$folder-${OPT_GO}-$hashdir" -aARd
+        clear
+        builtin cd -
+    elif [ "$OPT_KILL" != "" ]
+    then
+        dir=$(cd -p $OPT_KILL)
+        # Create an hash of the dir to get an id of the directory
+        hashdir=$(echo $dir  | sum - | awk '{print $1}')
+        folder=$(basename $dir)
+
+        /usr/bin/screen -S "$folder-$OPT_KILL-$hashdir" -X quit
+
+    else
+        /usr/bin/screen ${args[@]}
+    fi
 }
 
 
