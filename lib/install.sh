@@ -162,6 +162,23 @@ else
     fi
 fi
 
+# Config tmux.conf
+grep "source $PEARL_ROOT/etc/tmux.conf" $HOME/.tmux.conf &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res=$(confirm_question "Do you want to START the pearl config for tmux command? (Y/n)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
+        apply "source $PEARL_ROOT/etc/tmux.conf" $HOME/.tmux.conf
+    fi
+else
+    local res=$(confirm_question "Do you want to DELETE the pearl config for tmux command? (y/N)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "source $PEARL_ROOT/etc/tmux.conf" $HOME/.tmux.conf
+    fi
+fi
+
 # Config Xdefaults
 grep "# include \"$PEARL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults &> /dev/null
 if [ "$?" != "0" ]

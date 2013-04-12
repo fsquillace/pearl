@@ -85,7 +85,7 @@ function apply(){
     fi
     # Check if already exists the
     # line into the file
-    grep "$1" "$2" &> /dev/null
+    grep -x "$1" "$2" &> /dev/null
     if [ "$?" = "1" ]
     then
         echo "" >> $2

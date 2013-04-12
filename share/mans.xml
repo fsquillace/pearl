@@ -2608,6 +2608,7 @@ rimuove un modulo in memoria. -a rimuove tutti i moduli
 <item name="ps">
     Lists of the process in execution:<command name="ps -e"/>
     Shows with more details:<command name="ps aux"/>
+    Shows the process tree:<command name="ps fax"/>
     Shows all processes for the getty command with customied fields:<command name="ps -C getty -o user,pid,tty,time,comm"/>
     Shows the first 10 processes sorted by CPU usage:<command name="ps aux | sort -n -k 3 | tail -10"/>
     Shows the first 10 processes sorted by Memory usage:<command name="ps aux | sort -n -k 4 | tail -10"/>
