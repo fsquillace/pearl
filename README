@@ -276,30 +276,38 @@ Example of using:
 
 SCREEN
 ~~~~~~
-The classic *screen* command is wrapped using a bash function that adds a new option '-g' or '--go'.
-Basically, it creates a new screen in the directory specified according the bookmark files.
+The classic *screen* command is wrapped using a bash function that adds two new options
+'-g' or '--go' and '-k' or '--kill'.
+Basically, it creates a new screen in the directory specified according the bookmark files shown
+with *cd* command.
 Moreover, if a screen already exists for such directory, it recalls the same screen.
 It is extremely useful when you want to use screen as an *IDE* and to recall your project
 whenever you want. Cool!
 If you are using multiple terminals and you call an already attached screen in another terminal,
 it automatically detaches and reattaches into the new terminal. The session name of each screen,
 listed using '-list' option, is called according to the related directory.
+So, the screen session are named as follows '<key>-<folder_name>-<folder_hash>' which
+'key' is the key entry in the bookmarks file,
+'folder_name' is the folder of the entry in the bookmarks file and
+'folder_hash' is an hash of the folder path used in order to avoid conflicts between folders with the same name.
+If *screen* doesn't find the key specified with '-g' option in the bookmarks file, it will creates
+a new session from the current directory. In this case a session is identified only by its key and, so, the session is named without any folder_name and folder_hash like '<key>--'.
 In order to close all windows of a screen session the option '-k' or '--kill' can be used. It basically executes
 the command 'quit' of screen for the specified session.
-Furthermore, when using screen with '-g' option a nice statusbar will appear in the bottom of the terminal if 
-the configuration file 'screenrc' from 'pearl_settings' was activated.
+Furthermore, when using screen with '-g' option a nice statusbar will appear in the bottom
+of the terminal if the configuration file 'screenrc' from 'pearl_settings' was activated.
 
 Example of using:
 
-    *$ screen -g* 0*::
-    Creates a new screen to the directory specified in the bookmark with entry 0.
-    If the screen already exists it recall the old screen.
+    *$ screen -g* my_project*::
+    Creates a new screen to the directory specified in the bookmark with entry my_project.
+    If the screen session already exists it recall the old screen session.
 
     *$ screen -list*::
     Lists the already created lists.
 
-    *$ screen -k 0*::
-    Close the session for the bookmark with entry 0.
+    *$ screen -k my_project*::
+    Close the session for the bookmark with entry my_project.
 
 TODO
 ~~~~

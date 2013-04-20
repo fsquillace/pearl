@@ -874,29 +874,46 @@ function screen(){
         return 0
     fi
 
+    if [ "$OPT_GO" != "" ] && [ "$OPT_KILL" != "" ]
+    then
+        echo "The options --go and --kill cannot be togheter."
+        return 1
+    fi
+
+    if [ "$OPT_GO" != "" ] || [ "$OPT_KILL" != "" ]
+    then
+
+        [ "$OPT_GO" != "" ] && local OPT="$OPT_GO"
+        [ "$OPT_KILL" != "" ] && local OPT="$OPT_KILL"
+
+        local dir=$(cd -p $OPT)
+        if [ "$dir" == "" ]
+        then
+            local dir="."
+            local hashdir=""
+            local folder=""
+        else
+            # Create an hash of the dir to get an id of the directory
+            local hashdir=$(echo $dir  | sum - | awk '{print $1}')
+            local folder=$(basename $(readlink -f "$dir" ))
+        fi
+        builtin cd $dir
+    fi
+
     if [ "$OPT_GO" != "" ]
     then
-        dir=$(cd -p $OPT_GO)
-        # Create an hash of the dir to get an id of the directory
-        hashdir=$(echo $dir  | sum - | awk '{print $1}')
-        folder=$(basename $dir)
-
-        builtin cd $dir
-        /usr/bin/screen -S "$folder-${OPT_GO}-$hashdir" -aARd
+        /usr/bin/screen -S "${OPT_GO}-$folder-$hashdir" -aARd
         clear
         builtin cd -
     elif [ "$OPT_KILL" != "" ]
     then
-        dir=$(cd -p $OPT_KILL)
-        # Create an hash of the dir to get an id of the directory
-        hashdir=$(echo $dir  | sum - | awk '{print $1}')
-        folder=$(basename $dir)
-
-        /usr/bin/screen -S "$folder-$OPT_KILL-$hashdir" -X quit
+        /usr/bin/screen -S "${OPT_KILL}-$folder-$hashdir" -X quit
 
     else
         /usr/bin/screen ${args[@]}
     fi
+
+    return 0
 }
 
 
