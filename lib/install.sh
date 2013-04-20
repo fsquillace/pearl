@@ -196,6 +196,23 @@ else
     fi
 fi
 
+# Config liquidpromptrc
+grep "source \"$PEARL_ROOT/etc/liquidpromptrc\"" $HOME/.liquidpromptrc &> /dev/null
+if [ "$?" != "0" ]
+then
+    local res=$(confirm_question "Do you want to START the liquidprompt config? (Y/n)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
+        apply "source \"$PEARL_ROOT/etc/liquidpromptrc\"" $HOME/.liquidpromptrc
+    fi
+else
+    local res=$(confirm_question "Do you want to DELETE the liquidpromptrc config? (y/N)> ")
+
+    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+        unapply "source \"$PEARL_ROOT/etc/liquidpromptrc\"" $HOME/.liquidpromptrc
+    fi
+fi
+
 # Config gitconfig
 grep "\[include\] path = \"$PEARL_ROOT/etc/gitconfig\"" $HOME/.gitconfig &> /dev/null
 if [ "$?" != "0" ]
