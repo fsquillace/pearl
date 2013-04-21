@@ -197,13 +197,13 @@ function eye(){
 
     if $OPT_HELP
     then
-        echo "Usage: eye [options] [path] pattern"
-        echo "Options:"
-        echo "-h, --help            show this help message and exit"
-        echo "-c, --case-sensitive  Case sensitive."
-        echo "-r, --recursive       Recursive."
-        echo "-w, --whole-words     Whole words."
-        echo "-p, --pdf             Search in .pdf files too."
+        echo -e "Usage: eye [options] [path] pattern"
+        echo -e "Options:"
+        echo -e "\t-c, --case-sensitive  Case sensitive."
+        echo -e "\t-r, --recursive       Recursive."
+        echo -e "\t-w, --whole-words     Whole words."
+        echo -e "\t-p, --pdf             Search in .pdf files too."
+        echo -e "\t-h, --help            Show this help message"
         return 0
     fi
 
@@ -263,11 +263,12 @@ function trash(){
         rm -rf $PEARL_TEMPORARY/*
     elif [ "$1" = -h ] || [ "$1" = --help ]
     then
-        echo "Usage:"
-        echo -e "trash FILE1 FILE2 ...\t\tMoves to trash the files"
-        echo -e "trash [-s || --show]\t\tShows the trash"
-        echo -e "trash [-e || --empty]\t\tEmpties the trash"
-        echo -e "trash [-h || --help]\t\tDisplays this"
+        echo "Usage: trash file1 file2 ...."
+        echo -e "Moves to trash the files"
+        echo -e "Options:"
+        echo -e "\t-s, --show       Shows the trash"
+        echo -e "\t-e, --empty      Empties the trash"
+        echo -e "\t-h, --help       Show this help message"
     else
         mv --backup=numbered -f -t $PEARL_TEMPORARY "$@"
     fi
@@ -347,13 +348,14 @@ function sync() {
 
     if $OPT_HELP # [ "$1" = --help ] && [ "$#" == 1 ]
     then
-        echo "Usage:"
-        echo -e "sync [-R || --reverse] <num> FILE1 FILE2 ...\tSync files or directories"
-        echo -e "\t\tusing the <num> entry"
-        echo -e "sync [-l || --list]\t\tList all the sync entry"
-        echo -e "sync [-a || --add] <local src> <local/remote dest>\t\tAdd a sync entry"
-        echo -e "sync [-r || --remove] <num>\t\tREmove a sync entry"
-        echo -e "sync [-h || --help]\t\tDisplays this"
+        echo "Usage: symc [options] [file1 file2 ...]"
+        echo -e "Options:"
+        echo -e "\t-R, --reverse] <num>                          Sync files or directories"
+        echo -e "\t                                              using the <num> entry"
+        echo -e "\t-l, --list                                    List all the sync entry"
+        echo -e "\t-a, --add <local src> <local/remote dest>     Add a sync entry"
+        echo -e "\t-r, --remove <num>                            Remove a sync entry"
+        echo -e "\t-h, --help                                    Show this help message"
         return 0
     fi
 
@@ -511,14 +513,15 @@ function symc() {
 
     if $OPT_HELP
     then
-        echo "Usage:"
-        echo -e "symc [FILE1 FILE2] ...\tLink symbolic files or directories instead of copying (by default takes the current directory)"
-        echo -e "symc [[-m || --max-size] BYTES] [FILE1] ...\tMax size in BYTES for each file to be symced."
-        echo -e "symc [[-e || --exclude] PATTERN] [FILE1] ...\tExclude some file or directory that match to the PATTERN."
-        echo -e "symc [-u || --unlink] [FILE1 FILE2] ...\tRemove the sym link of files or directories"
-        echo -e "symc [-c || --clean]\tDelete broken sym links in the sync directory"
-        echo -e "symc [-s || --show]\tShows the sync directory"
-        echo -e "symc [-h || --help]\tDisplays this"
+        echo "Usage: symc [options] [file1 file2 ...]"
+        echo -e "Link symbolic files or directories instead of copying (by default takes the current directory)"
+        echo -e "Options:"
+        echo -e "\t-m, --max-size BYTES        Max size in BYTES for each file to be symced."
+        echo -e "\t-e, --exclude PATTERN       Exclude some file or directory that match to the PATTERN."
+        echo -e "\t-u, --unlink                Remove the sym link of files or directories"
+        echo -e "\t-c, --clean                 Delete broken sym links in the sync directory"
+        echo -e "\t-s, --show                  Shows the sync directory"
+        echo -e "\t-h, --help                  Show this help message"
         return 0
     fi
 
@@ -664,14 +667,16 @@ function cd() {
 
     if $OPT_HELP
     then
-        echo "Usage: cd [OPT] [KEY]"
-        echo -e "cd\tList all the entries"
-        echo -e "cd -g [KEY]\tGo to the directory specified by the key"
-        echo -e "cd [-a || --add] ENTRY [PATH]\tAdd the specified PATH assigning the ENTRY."
-        echo -e "\t\t\tThe entry key must contain alphanumeric and underscore chars. The path is the current wd if PATH is not specified"
-        echo -e "cd [[-r || --remove] KEY\tRemove an entry"
-        echo -e "cd [-p || --print] KEY\tPrint the PATH entry (useful for pipe command)"
-        echo -e "cd [-h || --help]\tDisplays this"
+        echo "Usage: cd [options] [key]"
+        echo -e "List all the bookmarks entries"
+        echo -e "Options:"
+        echo -e "\t-g, --go [key]              Go to the directory specified by the key"
+        echo -e "\t-a, --add <entry> [path]    Add the specified PATH assigning the ENTRY."
+        echo -e "\t                            The entry key must contain alphanumeric and underscore chars."
+        echo -e "\t                            The path is the current wd if PATH is not specified."
+        echo -e "\t-r, --remove key            Remove an entry"
+        echo -e "\t-p, --print key             Print the PATH entry (useful for pipe command)"
+        echo -e "\t-h, --help                  Show this help message"
         return 0
     fi
 
@@ -770,12 +775,13 @@ function cmd() {
 
     if $OPT_HELP
     then
-        echo "Usage:"
-        echo -e "cmd <num>\t\tTake the command from the list and store to the history. Type Ctrl+h to paste into the command line."
-        echo -e "cmd [-p || --print] <num>\t\tPrint the entry selected"
-        echo -e "cmd [-a || --add] <cmd> [<comments>]\t\tAdd a command with comments"
-        echo -e "cmd [-r || --remove] <num>\t\tRemove a command entry"
-        echo -e "cmd [-h || --help]\t\tDisplays this"
+        echo "Usage: cmd [options] <num>"
+        echo -e "Take the command from the list and store to the history. Type Ctrl+h to paste into the command line."
+        echo -e "Options:"
+        echo -e "\t-p, --print <num>               Print the entry selected"
+        echo -e "\t-a, --add <cmd> [<comments>]    Add a command with comments"
+        echo -e "\t-r, --remove <num>              Remove a command entry"
+        echo -e "\t-h, --help                      Show this help message"
         return 0
     fi
 
@@ -832,8 +838,11 @@ function cmd() {
     return 0
 }
 
+function tmux(){
 
-function screen(){
+    local tmux_command=$(which tmux 2> /dev/null)
+    [ -f "$tmux_command" ] && tmux_command="/usr/bin/tmux"
+
     local OPT_GO=""
     local OPT_KILL=""
     local OPT_HELP=false
@@ -852,12 +861,13 @@ function screen(){
 
     if $OPT_HELP
     then
-        /usr/bin/screen --help
+        $tmux_command --help
         echo ""
-        echo "Extra usage from the wrapper:"
-        echo -e "screen [-g || --go <key>]\t\tGo to the directory selected by the key and create a screen"
-        echo -e "screen [-k || --kill <key>]\t\tKill the screen identified by the key"
-        echo -e "screen [-h || --help]\t\t\tDisplays this"
+        echo -e "Extra usage form the wrapper: tmux [options]"
+        echo -e "Options:"
+        echo -e "\t-g, --go              Go to the directory selected by the key and create a tmux session"
+        echo -e "\t-k, --kill            Kill the tmux session identified by the key"
+        echo -e "\t-h, --help            Show this help message"
         return 0
     fi
 
@@ -884,20 +894,94 @@ function screen(){
             local hashdir=$(echo $dir  | sum - | awk '{print $1}')
             local folder=$(basename $(readlink -f "$dir" ))
         fi
-        builtin cd $dir
     fi
 
     if [ "$OPT_GO" != "" ]
     then
-        /usr/bin/screen -S "${OPT_GO}-$folder-$hashdir" -aARd
+        builtin cd $dir
+        $tmux_command new-session -AD -s "${OPT_GO}-$folder-$hashdir"
         clear
         builtin cd -
     elif [ "$OPT_KILL" != "" ]
     then
-        /usr/bin/screen -S "${OPT_KILL}-$folder-$hashdir" -X quit
+        $tmux_command kill-session -t "${OPT_KILL}-$folder-$hashdir"
+    else
+        $tmux_command ${args[@]}
+    fi
+
+    return 0
+}
+
+function screen(){
+
+    local screen_command=$(which screen 2> /dev/null)
+    [ -f "$screen_command" ] && screen_command="/usr/bin/screen"
+
+    local OPT_GO=""
+    local OPT_KILL=""
+    local OPT_HELP=false
+    local args=()
+    while [ "$1" != "" ] ; do
+	case "$1" in
+	    -g|--go) shift; OPT_GO="$1" ; shift ;;
+	    -k|--kill) shift; OPT_KILL="$1" ; shift ;;
+            -h|--help) OPT_HELP=true ; shift ;;
+            --) shift ; break ;;
+	    *) args+=("$1") ; shift ;;
+	esac
+    done
+
+    #################### END OPTION PARSING ############################
+
+    if $OPT_HELP
+    then
+        $screen_command --help
+        echo ""
+        echo -e "Extra usage form the wrapper: screen [options]"
+        echo -e "Options:"
+        echo -e "\t-g, --go              Go to the directory selected by the key and create a screen session"
+        echo -e "\t-k, --kill            Kill the screen session identified by the key"
+        echo -e "\t-h, --help            Show this help message"
+        return 0
+    fi
+
+    if [ "$OPT_GO" != "" ] && [ "$OPT_KILL" != "" ]
+    then
+        echo "The options --go and --kill cannot be togheter."
+        return 1
+    fi
+
+    if [ "$OPT_GO" != "" ] || [ "$OPT_KILL" != "" ]
+    then
+
+        [ "$OPT_GO" != "" ] && local OPT="$OPT_GO"
+        [ "$OPT_KILL" != "" ] && local OPT="$OPT_KILL"
+
+        local dir=$(cd -p $OPT)
+        if [ "$dir" == "" ]
+        then
+            local dir="."
+            local hashdir=""
+            local folder=""
+        else
+            # Create an hash of the dir to get an id of the directory
+            local hashdir=$(echo $dir  | sum - | awk '{print $1}')
+            local folder=$(basename $(readlink -f "$dir" ))
+        fi
+    fi
+
+    if [ "$OPT_GO" != "" ]
+    then
+        builtin cd $dir
+        $screen_command -S "${OPT_GO}-$folder-$hashdir" -aARd
+        clear
+        builtin cd -
+    elif [ "$OPT_KILL" != "" ]
+    then
+        $screen_command -S "${OPT_KILL}-$folder-$hashdir" -X quit
 
     else
-        /usr/bin/screen ${args[@]}
+        $screen_command ${args[@]}
     fi
 
     return 0
@@ -940,15 +1024,17 @@ function todo(){
 
     if $OPT_HELP
     then
-        echo "Usage:"
-        echo -e "todo [-g || --go <key>] [TODO]\t\tDetect the todos starting from the directories of the bookmarks having an integer entry key and prints only the lines having TODO words. You can also add a TODO in the general list."
+        echo -e "Usage: todo [TODO]"
+        echo -e "Detect the todos starting from the directories of the bookmarks having an integer entry key"
+        echo -e "and prints only the lines having TODO words. You can also add a TODO in the general list."
         echo "Options:"
-        echo -e "-p --priority <num> <key>\t\tAdd a priority to the todo. Possible values from the most important: 1,2,3,4,5 (default 3)"
-        echo -e "-d --disable <key>\t\tDisable temporary a todo in the list"
-        echo -e "-r --remove <key>\t\tRemove a todo in the list"
-        echo -e "-g --go <key>\t\tScan for TODOs only for the entry specified"
-        echo -e "-l --list\t\tList only the general TODO list without scan any folder"
-        echo -e "-h --help\t\tDisplays this"
+        echo -e "\t-p, --priority <num> <key>     Add a priority to the todo."
+        echo -e "\t                               Possible values from the most important: 1,2,3,4,5 (default 3)"
+        echo -e "\t-d, --disable <key>            Disable temporary a todo in the list"
+        echo -e "\t-r, --remove <key>             Remove a todo in the list"
+        echo -e "\t-g, --go <key>                 Scan for TODOs only for the entry specified"
+        echo -e "\t-l, --list                     List only the general TODO list without scan any folder"
+        echo -e "\t-h, --help                     Displays this"
         return 0
     fi
 
