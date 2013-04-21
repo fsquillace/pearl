@@ -29,35 +29,22 @@ function kill_cmd(){
     done
 }
 
-
 function s(){
 
 command='
-
-if [ -d $HOME/.pearl ]
+if [ -d $HOME/.pearl ];
 then
-    cd $HOME/.pearl
-    git pull
-    cd - &> /dev/null
-    bash -i
+    cd $HOME/.pearl;
+    git pull;
+    cd - &> /dev/null;
+    bash -i;
 else
-
-    res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
-    do
-        read -p "Do you want to install pearl in ~/.pearl? (Y/n)> " res
-    done
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        git clone git://github.com/fsquillace/pearl $HOME/.pearl
-        bash --rcfile $HOME/.pearl/pearl -i
-    else
-        bash -i
-    fi
-
+    git clone git://github.com/fsquillace/pearl $HOME/.pearl;
+    bash --rcfile $HOME/.pearl/pearl -i;
 fi
+[ -x $HOME ] || ( sudo mkdir $HOME && sudo chown $HOME; cd $HOME )
 '
-ssh -t $@ "$command"
+ssh -t $@ "/bin/bash -c \"$command\""
 
 }
 
