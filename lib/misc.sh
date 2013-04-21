@@ -841,7 +841,7 @@ function cmd() {
 function tmux(){
 
     local tmux_command=$(which tmux 2> /dev/null)
-    [ -f "$tmux_command" ] && tmux_command="/usr/bin/tmux"
+    [ ! -f "$tmux_command" ] && tmux_command="/usr/bin/tmux"
 
     local OPT_GO=""
     local OPT_KILL=""
@@ -915,7 +915,7 @@ function tmux(){
 function screen(){
 
     local screen_command=$(which screen 2> /dev/null)
-    [ -f "$screen_command" ] && screen_command="/usr/bin/screen"
+    [ ! -f "$screen_command" ] && screen_command="/usr/bin/screen"
 
     local OPT_GO=""
     local OPT_KILL=""
