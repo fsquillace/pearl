@@ -17,6 +17,7 @@
 
 " Add the plugin contained in Pearl
 set runtimepath+=$PEARL_ROOT/etc/vim/
+set runtimepath+=$PEARL_ROOT/etc/vim/after/
 
 set encoding=utf8
 
