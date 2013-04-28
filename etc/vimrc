@@ -1,6 +1,7 @@
 " vimrc file.
 "
-" Maintainer:	Filippo Squillace <sqoox85@gmail.com>
+" Maintainer:	Filippo Squillace <feel.squally@gmail.com>
+" Last change:	2013 Apr 28
 " Last change:	2011 Feb 17
 "
 " To use it, copy it to
@@ -13,6 +14,9 @@
 """""""""""""""""""""""""""""""""""
 " GLOBAL VIM SETTINGS
 """""""""""""""""""""""""""""""""""
+
+" Add the plugin contained in Pearl
+set runtimepath+=$PEARL_ROOT/etc/vim/
 
 set encoding=utf8
 
@@ -283,43 +287,6 @@ nmap <Leader>so :wa<CR>:so ~/.vim/sessions/
 nmap <Leader>sr :!rm ~/.vim/sessions/
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGINS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""
-" Nerd Commenter
-"""""""""""""""""""
-map <C-,> <Leader>c<Space>
-
-""""""""""""""""""""
-" Minibuffer plugin
-""""""""""""""""""""
-"let g:miniBufExplMapWindowNavVim = 1
-"let g:miniBufExplMapWindowNavArrows = 1
-"let g:miniBufExplMapCTabSwitchBufs = 1
-"let g:miniBufExplModSelTarget = 1
-
-"""""""""""""""""""
-" TaskList
-"""""""""""""""""""
-" TaskList already has leader keybinding
-"map \t :TaskList<CR>
-
-""""""""""""""""""
-" TagList
-""""""""""""""""""
-map <Leader>p :TlistToggle<CR>
-
-let g:Tlist_Ctags_Cmd = "/usr/bin/ctags" "~/.vim/plugin/ctags/bin/ctags
-
-""""""""""""""""""
-" BufExplorer
-""""""""""""""""""
-map <Leader>b :BufExplorer<CR>
-map <Leader>v :BufExplorerVerticalSplit<CR>
-map <Leader>h :BufExplorerHorizontalSplit<CR>
-
 """""""""""""""""""
 " OmniComplete
 """""""""""""""""""
@@ -351,6 +318,23 @@ map <Leader>h :BufExplorerHorizontalSplit<CR>
 "inoremap <tab> <c-r>=Smart_TabComplete()<CR>
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PLUGINS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""""""""""""""""""
+" Nerd Commenter
+"""""""""""""""""""
+map <C-,> <Leader>c<Space>
+
+""""""""""""""""""
+" BufExplorer
+""""""""""""""""""
+map <Leader>b :BufExplorer<CR>
+map <Leader>v :BufExplorerVerticalSplit<CR>
+map <Leader>h :BufExplorerHorizontalSplit<CR>
+
+
 " Mappings used for completions when type . char
 "imap <silent> <buffer> . .<C-X><C-O>
 "imap <silent> <expr> <buffer> <CR> pumvisible() ? "<CR><C-R>=(col('.')-1&&match(getline(line('.')), '\\.',
@@ -358,72 +342,11 @@ map <Leader>h :BufExplorerHorizontalSplit<CR>
       "\ : "<CR>"
 
 
-"""""""""""""""""""""""""""""
-" ConqueTerm
-"""""""""""""""""""""""""""""
-"map Z :ConqueTerm bash<CR>
-
 """"""""""""""""""""""""""""
 " SuperTab
 """"""""""""""""""""""""""""
 " Makes all types of completions!!
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabContextDefaultCompletionType = "<c-n>" " for spell correction <c-x>s or for thesaurus <c-x><c-t>
-
-""""""""""""""""""""""""""""
-" Pylint
-"""""""""""""""""""""""""""
-autocmd FileType python compiler pylint
-
-"""""""""""""""""""""""""""""
-" Latex-suite
-""""""""""""""""""""""""""""
-" REQUIRED. This makes vim invoke Latex-Suite when you open a tex file.
-"filetype plugin on
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-" set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse Latex-Suite. Set your grep
-" program to always generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
-"filetype indent on
-
-" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
-" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
-" The following changes the default filetype back to 'tex':
-" let g:tex_flavor='latex'
-
-
-"""""""""""""""""""""""""""""
-" PyDiction
-""""""""""""""""""""""""""""
-let g:pydiction_location = '/usr/share/pydiction/complete-dict'
-
-
-""""""""""""""""""""""""""""""""""""""
-" Project
-""""""""""""""""""""""""""""""""""""""
-"let g:proj_flags = "imstgc"
-
-
-
-
-""""""""""""""""""""""""""""""""""""""
-" CUDA highlighting
-""""""""""""""""""""""""""""""""""""""
-au BufNewFile,BufRead *.cu set ft=cu
-au BufNewFile,BufRead *.cu.h set ft=cu
-
-
-""""""""""""""""""""""""""""""""""""""
-" Ruby on Rails
-""""""""""""""""""""""""""""""""""""""
-" Change which file opens after executing :Rails command
-let g:rails_default_file='config/database.yml'
-
 
 
