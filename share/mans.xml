@@ -236,6 +236,17 @@ Alt-p           Non-incremental reverse search of history.
             echo ${array[@]//t/a} # Substitute all the occurrences "t" with "a".
         </code>
     </item>
+
+    <item name="Variables">
+        $@: Array variable of the parameters
+        $#: Number of parameters
+        ${FUNCNAME}: Array variable containing the function in the execution call stack
+    </item>
+
+    <item name="compgen">
+        Provides completion generation.
+        To get the list of pearl function: <command name="compgen -abck pearl_"/>
+    </item>
 </dict>
 
 <!--- ********************************** MULTIMEDIA IMAGE VIDEO MUSIC ***************************************** -->
