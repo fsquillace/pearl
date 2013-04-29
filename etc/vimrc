@@ -323,6 +323,14 @@ nmap <Leader>sr :!rm ~/.vim/sessions/
 " PLUGINS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pathogen (https://github.com/tpope/vim-pathogen)
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Easy install plugin in private directory
+" Can be used to install syntastic (https://github.com/scrooloose/syntastic)
+" and many other useful plugins
+call pathogen#infect()
+
 """""""""""""""""""
 " Nerd Commenter
 """""""""""""""""""
@@ -342,12 +350,10 @@ map <Leader>h :BufExplorerHorizontalSplit<CR>
       "\ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>"
       "\ : "<CR>"
 
-
 """"""""""""""""""""""""""""
 " SuperTab
 """"""""""""""""""""""""""""
 " Makes all types of completions!!
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabContextDefaultCompletionType = "<c-n>" " for spell correction <c-x>s or for thesaurus <c-x><c-t>
-
 
