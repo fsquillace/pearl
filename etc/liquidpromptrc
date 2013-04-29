@@ -22,11 +22,11 @@ LP_LOAD_THRESHOLD=60
 
 # The maximum percentage of the screen width used to display the path
 # Recommended value is 35
-LP_PATH_LENGTH=35
+LP_PATH_LENGTH=10
 
 # How many directories to keep at the beginning of a shortened path
 # Recommended value is 2
-LP_PATH_KEEP=2
+LP_PATH_KEEP=1
 
 # Do you want to display the hostname, even if not connected through network?
 # Defaults to 0 (do not display hostname when localy connected)
