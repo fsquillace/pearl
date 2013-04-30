@@ -473,7 +473,7 @@ PROMPT CONTEXT
 ~~~~~~~~~~~~~~
 There is a command called 'pearl_switch' that allow to change the appearance of the terminal.
 Each context is stored in '$PEARL_ROOT/etc/context' and it is a script that simply change the
-environment variable 'PS1' and 'PROMPT_COMMAND'. There are four main contexts available:
+environment variable 'PS1' and 'PROMPT_COMMAND'. There are three main contexts available:
 
 * def - It is the default context. It will show the basic information.
 -----------------------------------
@@ -491,14 +491,16 @@ The last column displays the last process ID used.
 678/3844MB      0.47 0.51 0.52 2/273 30568
 [22:03:56 0  feel@myarch pearl $]>
 --------------------------------------------
-* liquidprompt - It is a famous prompt for both bash and zsh. For further info go here: 'https://github.com/nojhan/liquidprompt'
 
 In order to change the context type:
 
 -----------------------------------
 pearl_switch <context_name>
 -----------------------------------
-You can create your own context just creating a file in '$PEARL_ROOT/etc/context'.
+
+You can install the famous *liquidprompt*, that works for both bash and zsh, just typing
+*pearl_install_liquidprompt*. For further info go here: 'https://github.com/nojhan/liquidprompt'
+You can create your own context just creating a file in '$PEARL_HOME/etc/context'.
 
 BACKUP
 ~~~~~~

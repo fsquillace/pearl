@@ -96,8 +96,9 @@ cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 # If the context doesn't exists it gives an error
 function pearl_switch(){
     local context="$PEARL_ROOT/etc/context/$1"
+    [ -f $context ] || context="$PEARL_HOME/etc/context/$1"
 
-    if [ ! -f "$PEARL_ROOT/etc/context/$1" ]
+    if [ ! -f "$context" ]
     then
         echo "Error: the context doesn't exist."
         return 128
