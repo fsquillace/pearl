@@ -900,9 +900,14 @@ function tmux(){
     if [ "$OPT_GO" != "" ]
     then
         builtin cd $dir
+        # Set always the same PWD directory for the session
+        if ! $tmux_command has-session -t "${OPT_GO}-$folder-$hashdir"  &> /dev/null
+        then
+            $tmux_command new-session -d -s "${OPT_GO}-$folder-$hashdir" &> /dev/null
+            $tmux_command set-option -t "${OPT_GO}-$folder-$hashdir" default-path $PWD &> /dev/null
+        fi
         $tmux_command new-session -AD -s "${OPT_GO}-$folder-$hashdir"
-        clear
-        builtin cd -
+        builtin cd $OLDPWD
     elif [ "$OPT_KILL" != "" ]
     then
         $tmux_command kill-session -t "${OPT_KILL}-$folder-$hashdir"
