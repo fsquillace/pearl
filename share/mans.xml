@@ -393,6 +393,7 @@ Command     Alias     Info
         For a concise list of commits:<command name="git log --pretty=oneline"/>
         To log only a branch but not the commit of master:<command name="git log name_branch --not master"/>
         For a detailed use of log see:http://progit.org/book/ch2-3.html
+        For searching inside the repository (it has the same interface of POSIX):<command name="git grep -i -v -n KEYWORD"/>
     </item>
 
     <item name="ignoring files">
