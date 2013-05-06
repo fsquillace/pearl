@@ -283,13 +283,10 @@ whenever you want. Cool!
 If you are using multiple terminals and you call an already attached session in another terminal,
 it automatically detaches and reattaches into the new terminal. The session name,
 listed using '-list' option for screen and 'ls' for tmux, is called according to the related directory.
-So, the sessions are named as follows '<key>-<folder_name>-<folder_hash>' which
-'key' is the key entry in the bookmarks file,
-'folder_name' is the folder of the entry in the bookmarks file and
-'folder_hash' is an hash of the folder path used in order to avoid conflicts between folders with the same name.
+So, the sessions are named as '<key>' which 'key' is the key entry in the bookmarks file.
 If *screen* or *tmux* do not find the key specified with '-g' option in the bookmarks file, it will creates
 a new session from the current directory. In this case a session is identified only by its key and, so,
-the session is named without any folder_name and folder_hash like '<key>--'.
+the session is named as '<key>'.
 In order to close all windows of a session the option '--kill' ('-k') can be used. It basically executes
 the command 'quit' of screen of 'kill-session' off tmux for the specified session.
 Furthermore, when using screen or tmux with '-g' option a nice statusbar will appear in the bottom

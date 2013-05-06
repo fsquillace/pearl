@@ -1,5 +1,6 @@
 <?xml version="1.0" ?><!DOCTYPE dicts [
-        <!ELEMENT dict (item)>
+        <!ELEMENT dicts (dict)*>
+        <!ELEMENT dict (item)*>
         <!ELEMENT item (#PCDATA | command | code)*>
         <!ELEMENT command EMPTY>
         <!ELEMENT code (#PCDATA)>
@@ -59,6 +60,65 @@ Spazio 	        %20
 } 	        %7D
 ~ 	        %7E
 </item>
+</dict>
+
+
+<!--- ********************************** DNS LOOKUP ***************************************** -->
+<dict name="dns lookup">
+    <item name="overview">
+        The DNS lookup commands will allow to get answer to various dns queries
+        such as:
+        * the IP address (A)
+        * mail exchanges (MX)
+        * name servers (NS)
+        * canonical name (cname)
+        * text annotations (TXT)
+        * ANY (all) type.
+    </item>
+    <item name="host command">
+        To get IP address:<command name="host -t a cyberciti.biz"/>
+        To find out the Domain Mail Server:<command name="host -t mx cyberciti.biz"/>
+        To find Out the Domain Name Servers:<command name="host -t ns cyberciti.biz"/>
+        To find Out the Domain SOA Record:<command name="host -t soa cyberciti.biz"/>
+        To find Out the CNAME:<command name="host -t cname cyberciti.biz"/>
+
+        To get all the Domain Records:<command name="host -a cyberciti.biz"/>
+
+        To query Particular Name Server:<command name="host cyberciti.biz ns2.nixcraft.net"/>
+
+        Test your dns lookup using IPv6 query transport:<command name="host -6 cyberciti.biz"/>
+
+        Reverse IP lookup:<command name="host 75.126.153.206"/>
+        Get TTL Information:<command name="host -v -t a cyberciti.biz"/>
+    </item>
+    <item name="dig command">
+        IT is more powerful than host command.
+        Usage:<command name="dig @ns.example.com example.com TYPE"/>
+
+        To trace for resolving the name:<command name="dig +trace cyberciti.biz"/>
+
+        To get short answer:<command name="dig +short cyberciti.biz txt"/>
+        To display all Domain Records:<command name="dig +noall +answer cyberciti.biz any"/>
+
+
+        Reverse IP lookup:<command name="dig -x 75.126.153.206 +short"/>
+
+        To get the TTL:<command name="dig +nocmd +noall +answer cyberciti.biz a"/>
+
+        A good command is:<command name="dig +nocmd +noall +answer +ttlid aaaa www.cyberciti.biz"/>
+        Few important options are:
+        * +nocmd    Toggles the printing of the initial comment in the output
+                    identifying the version of dig and the query options that
+                    have been applied. This comment is printed by default.
+        * +noall    Set or clear all display flags.
+        * +answer   Display [do not display] the answer section of a reply.
+                    The default is to display it.
+        * +ttlid    Display [do not display] the TTL when printing the record.
+        * +short    Display only the value of the query
+        * +tcp      Use TCP protocol instead of UDP
+
+        To discover the real TTL from the authoritative server:<command name="dig +trace +nocmd +noall +answer +ttlid aaaa www.cyberciti.biz"/>
+    </item>
 </dict>
 
 <!--- ********************************** SYSTEMD ***************************************** -->
@@ -125,7 +185,7 @@ Spazio 	        %20
     </item>
 
     <item name="redirection i/o and pipe">
-        Il ; consente l'esecuzione sequenziale dei comandi:<comand name="comand1 ; comand2"/>
+        Il ; consente l'esecuzione sequenziale dei comandi:<command name="comand1 ; comand2"/>
         Esegue comand2 solo se comand1 è stato eseguito con successo:<command name="comand1 &amp;&amp; comand2"/>
         Esegue comand2 solo se comand1 ha generato un errore:<command name="comand1 || comand2"/>
         Permette l'esecuzione simultanea:<command name="comand1 &amp; comand2 &amp; comand3"/>
@@ -431,7 +491,7 @@ Command     Alias     Info
 
         To push a local branch to remote repo:<command name="git push (remote) (branch)"/>
         For example:<command name="git push origin master"/>
-        If you want to change the name of the remote branch:<comand name="git push origin serverfix:awesomebranch"/>
+        If you want to change the name of the remote branch:<command name="git push origin serverfix:awesomebranch"/>
         Note: This command works only if you cloned and if nobody has pushed in the meantime.
 
         To see info about a remote:<command name="git remote show origin"/>
@@ -1616,7 +1676,7 @@ Adesso riavviate il sistema e troverete nel grub la voce “Ubuntu”, seleziona
 <item name="Installare Grub nel MBR e in un'altra partizione utilizzando chainloader">
     Entrare in gurb con privilegi di root:<command name="sudo grub"/>
     Per conoscere la partizione in cui è installato il proprio GRUB:<command name="find /boot/grub/stage1"/>
-    Dal risultato ottenuto definire che quella partizione è la partizione principale<commanf name="root (hd0,0)"/>
+    Dal risultato ottenuto definire che quella partizione è la partizione principale<command name="root (hd0,0)"/>
 
     Installare il grub nel MBR:<command name="setup (hd0)"/>
     E per la partizione:<command name="setup (hd0,0)"/>
@@ -3283,7 +3343,7 @@ monitor di eventi sull'interfaccia
 
 <item name="airodump-ng">
 sniffa pacchetti. --ivs specifica solo pacchetti ivs, -w &quot;file&quot; scrive i pacchetti in un file, -c &quot;chan&quot; indica il canale nel quale sniffare, -bssid &quot;AP&quot; indica l'AP in cui sniffare
-Sniffa i pacchetti contenti IV:<commands name="airodump-ng -c $chan -w capturefile --ivs ath1"/>
+Sniffa i pacchetti contenti IV:<command name="airodump-ng -c $chan -w capturefile --ivs ath1"/>
 </item>
 
 <item name="aircrack-ng opts file_dump">

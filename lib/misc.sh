@@ -878,39 +878,22 @@ function tmux(){
         return 1
     fi
 
-    if [ "$OPT_GO" != "" ] || [ "$OPT_KILL" != "" ]
-    then
-
-        [ "$OPT_GO" != "" ] && local OPT="$OPT_GO"
-        [ "$OPT_KILL" != "" ] && local OPT="$OPT_KILL"
-
-        local dir=$(cd -p $OPT)
-        if [ "$dir" == "" ]
-        then
-            local dir="."
-            local hashdir=""
-            local folder=""
-        else
-            # Create an hash of the dir to get an id of the directory
-            local hashdir=$(echo $dir  | sum - | awk '{print $1}')
-            local folder=$(basename $(readlink -f "$dir" ))
-        fi
-    fi
-
     if [ "$OPT_GO" != "" ]
     then
+        local dir=$(cd -p $OPT_GO)
+        [ "$dir" == "" ] && local dir="$PWD"
         builtin cd $dir
         # Set always the same $dir directory for the session
-        if ! $tmux_command has-session -t "${OPT_GO}-$folder-$hashdir"  &> /dev/null
+        if ! $tmux_command has-session -t "${OPT_GO}" &> /dev/null
         then
-            $tmux_command new-session -d -s "${OPT_GO}-$folder-$hashdir" &> /dev/null
-            $tmux_command set-option -t "${OPT_GO}-$folder-$hashdir" default-path $dir &> /dev/null
+            $tmux_command new-session -d -s "${OPT_GO}" &> /dev/null
+            $tmux_command set-option -t "${OPT_GO}" default-path $dir &> /dev/null
         fi
-        $tmux_command new-session -AD -s "${OPT_GO}-$folder-$hashdir"
+        $tmux_command new-session -AD -s "${OPT_GO}"
         builtin cd $OLDPWD
     elif [ "$OPT_KILL" != "" ]
     then
-        $tmux_command kill-session -t "${OPT_KILL}-$folder-$hashdir"
+        $tmux_command kill-session -t "${OPT_KILL}"
     else
         $tmux_command ${args[@]}
     fi
@@ -957,34 +940,17 @@ function screen(){
         return 1
     fi
 
-    if [ "$OPT_GO" != "" ] || [ "$OPT_KILL" != "" ]
-    then
-
-        [ "$OPT_GO" != "" ] && local OPT="$OPT_GO"
-        [ "$OPT_KILL" != "" ] && local OPT="$OPT_KILL"
-
-        local dir=$(cd -p $OPT)
-        if [ "$dir" == "" ]
-        then
-            local dir="."
-            local hashdir=""
-            local folder=""
-        else
-            # Create an hash of the dir to get an id of the directory
-            local hashdir=$(echo $dir  | sum - | awk '{print $1}')
-            local folder=$(basename $(readlink -f "$dir" ))
-        fi
-    fi
-
     if [ "$OPT_GO" != "" ]
     then
+        local dir=$(cd -p $OPT_GO)
+        [ "$dir" == "" ] && local dir="$PWD"
         builtin cd $dir
-        $screen_command -S "${OPT_GO}-$folder-$hashdir" -aARd
+        $screen_command -S "${OPT_GO}" -aARd
         clear
-        builtin cd -
+        builtin cd $OLDPWD
     elif [ "$OPT_KILL" != "" ]
     then
-        $screen_command -S "${OPT_KILL}-$folder-$hashdir" -X quit
+        $screen_command -S "${OPT_KILL}" -X quit
 
     else
         $screen_command ${args[@]}
