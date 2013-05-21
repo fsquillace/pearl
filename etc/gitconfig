@@ -17,7 +17,9 @@
         s = status -sb
         standup = log --since=yesterday
         ready = rebase -i
-        lol = log --graph --decorate --pretty=oneline --abbrev-commit --all
+        lol = log --color --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --color --graph --decorate --pretty=oneline --abbrev-commit --all
+        lolaa = log --color --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
 [color]
   branch = auto
   diff = auto

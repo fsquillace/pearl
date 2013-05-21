@@ -17,13 +17,13 @@ URxvt.jumpScroll: false
 URxvt.internalBorder: 0
 !Xcursor.theme: CG
 !## teh transparency stuff
-URxvt.inheritPixmap: true
+#URxvt.inheritPixmap: true
 urxvt.scrollbar: False
 urxvt.scrollstyle: plain
-urxvt.transparent: true
+#urxvt.transparent: true
 URxvt.depth: 32
-urxvt.shading: 20
-urxvt.fading: 70
+#urxvt.shading: 20
+#urxvt.fading: 70
 URxvt.cursorBlink: true
 
 
