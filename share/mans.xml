@@ -62,6 +62,14 @@ Spazio 	        %20
 </item>
 </dict>
 
+<!--- ********************************** MYSQL ***************************************** -->
+<dict name="mysql">
+    <item name="common commands">
+        Access to mysql:<command name="mysql -u username --protocol=tcp -h hostname -p"/>
+        To use a table:<command name="use TABLE \g"/>
+        To query:<command name="select * from TABLE where FIELD like '%something%' \g"/>
+    </item>
+</dict>
 
 <!--- ********************************** DNS LOOKUP ***************************************** -->
 <dict name="dns lookup">
@@ -4344,6 +4352,8 @@ It is possible to show previous dates. Examples:
 <command name="$ date --date='1 days ago'"/>
 <command name="$ date --date='yesterday'"/>
 
+Date epoch:<command name="date +%s"/>
+Date format using the epoch:<command name="date --date='@number'"/>
 </item>
 
 <item name="hwclock --show">
