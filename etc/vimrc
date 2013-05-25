@@ -357,3 +357,10 @@ map <Leader>h :BufExplorerHorizontalSplit<CR>
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabContextDefaultCompletionType = "<c-n>" " for spell correction <c-x>s or for thesaurus <c-x><c-t>
 
+""""""""""""""""
+" Fugitive
+""""""""""""""""
+" Allow to delete blob files in buffer when browsing into past commits
+if has("autocmd")
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+endif
