@@ -95,23 +95,6 @@ else
     fi
 fi
 
-# Config gvimrc
-grep "source $PEARL_ROOT/etc/gvimrc" $HOME/.gvimrc &> /dev/null
-if [ "$?" != "0" ]
-then
-    local res=$(confirm_question "Do you want to START the pearl config gvim? (Y/n)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ] || [ "$res" == "" ]; then
-        apply "source $PEARL_ROOT/etc/gvimrc" $HOME/.gvimrc
-    fi
-else
-    local res=$(confirm_question "Do you want to DELETE the pearl config gvim? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
-        unapply "source $PEARL_ROOT/etc/gvimrc" $HOME/.gvimrc
-    fi
-fi
-
 # Config inputrc
 grep "\$include $PEARL_ROOT/etc/inputrc" $HOME/.inputrc &> /dev/null
 if [ "$?" != "0" ]
@@ -273,8 +256,6 @@ function pearl_unistall(){
         unapply "source $PEARL_ROOT/pearl" $HOME/.bashrc
         # Vim
         unapply "source $PEARL_ROOT/etc/vimrc" $HOME/.vimrc
-        # Gvim
-        unapply "source $PEARL_ROOT/etc/gvimrc" $HOME/.gvimrc
         # Inputrc
         unapply "\$include $PEARL_ROOT/etc/inputrc" $HOME/.inputrc
         # Ranger

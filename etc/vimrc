@@ -108,7 +108,12 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-set background=dark     " define background
+if has('gui_running')
+    set background=light
+else
+    set background=dark
+endif
+
 set number              " show te line numbers
 "color the line number in a different color
 "highlight LineNr guibg=lightblue ctermbg=lightgray
