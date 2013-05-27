@@ -371,3 +371,11 @@ if has("autocmd")
 endif
 " Update the statusline for placing the current branch name
 set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+
+"""""""""""""""
+" Solarized
+"""""""""""""""
+let g:solarized_contrast = "low"
+let g:solarized_visibility= "normal"
+
+
