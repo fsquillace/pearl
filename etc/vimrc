@@ -147,9 +147,15 @@ set smarttab
 set lbr
 set wrap "Wrap lines
 
+""""""""""""""""
+" Sudo writing
+""""""""""""""""
+" Allow saving of files as sudo when you forgot to start vim using sudo.
+command Wsudo w !sudo tee > /dev/null %
 
+""""""""""
 " Visual
-""""""""
+""""""""""
 set showmatch " Show matching brackets.
 set mat=5  " Bracket blinking.
 set list

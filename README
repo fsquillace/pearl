@@ -112,6 +112,8 @@ feature enabled in VIM:
 *Smart Home*::
     The key 'Home' has the special power of moving the cursor to the
     first character of the line;
+*Write with sudo*::
+    Use :Wsudo command to write a file with sudo if you forgot it when opening the file;
 *Indent Folding*::
     Allows to use folding when the file is indented. Use 'za' to toggle 
     a fold it's the only command worth it;
