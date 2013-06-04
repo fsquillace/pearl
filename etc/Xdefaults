@@ -65,60 +65,60 @@ URxvt.pointerBlank: true
 !--[COLORS]--!
 
 !SOLARIZED (http://github.com/altercation/solarized)
-*background: #002b36
-*foreground: #657b83
-!!*fading: 40
-*fadeColor: #002b36
-*cursorColor: #93a1a1
-*pointerColorBackground: #586e75
-*pointerColorForeground: #93a1a1
-!! black dark/light
-*color0: #073642
-*color8: #002b36
-!! red dark/light
-*color1: #dc322f
-*color9: #cb4b16
-!! green dark/light
-*color2: #859900
-*color10: #586e75
-!! yellow dark/light
-*color3: #b58900
-*color11: #657b83
-!! blue dark/light
-*color4: #268bd2
-*color12: #839496
-!! magenta dark/light
-*color5: #d33682
-*color13: #6c71c4
-!! cyan dark/light
-*color6: #2aa198
-*color14: #93a1a1
-!! white dark/light
-*color7: #eee8d5
-*color15: #fdf6e3
+!*background: #002b36
+!*foreground: #657b83
+!!!*fading: 40
+!*fadeColor: #002b36
+!*cursorColor: #93a1a1
+!*pointerColorBackground: #586e75
+!*pointerColorForeground: #93a1a1
+!!! black dark/light
+!*color0: #073642
+!*color8: #002b36
+!!! red dark/light
+!*color1: #dc322f
+!*color9: #cb4b16
+!!! green dark/light
+!*color2: #859900
+!*color10: #586e75
+!!! yellow dark/light
+!*color3: #b58900
+!*color11: #657b83
+!!! blue dark/light
+!*color4: #268bd2
+!*color12: #839496
+!!! magenta dark/light
+!*color5: #d33682
+!*color13: #6c71c4
+!!! cyan dark/light
+!*color6: #2aa198
+!*color14: #93a1a1
+!!! white dark/light
+!*color7: #eee8d5
+!*color15: #fdf6e3
 
 !ZENBURN
-!URxvt.foreground: #696969
-!URxvt.background: #282626
-!URxvt.foreground: #6F6767
-!URxvt.foreground: #ccccc6
-!URxvt.background: #3A3636
-!URxvt.color0: #363636
-!URxvt.color8: #424242
-!URxvt.color1: #C37561
-!URxvt.color9: #D19485
-!URxvt.color2: #A0A57E
-!URxvt.color10: #B6B99D
-!URxvt.color3: #D1A375
-!URxvt.color11: #DEBC9C
-!URxvt.color4: #7985A3
-!URxvt.color12: #98A1B9
-!URxvt.color5: #AB716D
-!URxvt.color13: #BE918E
-!URxvt.color6: #98B9B1
-!URxvt.color14: #CBE6CB
-!URxvt.color7: #D0D0D0
-!URxvt.color15: #E6E6E6
+URxvt.foreground: #696969
+URxvt.background: #282626
+URxvt.foreground: #6F6767
+URxvt.foreground: #ccccc6
+URxvt.background: #3A3636
+URxvt.color0: #363636
+URxvt.color8: #424242
+URxvt.color1: #C37561
+URxvt.color9: #D19485
+URxvt.color2: #A0A57E
+URxvt.color10: #B6B99D
+URxvt.color3: #D1A375
+URxvt.color11: #DEBC9C
+URxvt.color4: #7985A3
+URxvt.color12: #98A1B9
+URxvt.color5: #AB716D
+URxvt.color13: #BE918E
+URxvt.color6: #98B9B1
+URxvt.color14: #CBE6CB
+URxvt.color7: #D0D0D0
+URxvt.color15: #E6E6E6
 
 
 

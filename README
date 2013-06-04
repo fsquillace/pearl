@@ -168,8 +168,6 @@ They are:
     Integrate all the VIM feature using only the TAB key;
 *Gnupg*::
     Plugin for transparent editing of gpg encrypted files
-*Solarized*::
-    Precision colorscheme for the vim text editor
 
 In particular *pathogen* is used to easily place plugins in the directory '$HOME/.vim/bundle' (Take a look in the project 'https://github.com/tpope/vim-pathogen').
 In order to install important VIM plugin *pearl* provides useful bash scripts with prefix *pearl_install*
