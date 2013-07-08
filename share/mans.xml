@@ -1944,7 +1944,7 @@ In caso di errori del tipo error: no such disk quando si intende avviare XP prov
         To install the gems in Gemfile:<command name="bundle install"/>
 
         To execute the server:<command name="rails server"/>
-        
+
         Deploying with heroku:
         *  Install heroku:<command name="gem install heroku"/>
         *  Create SSH Keys:<command name="ssh-keygen"/>
@@ -3073,18 +3073,8 @@ Consente di ricavare l'indirizzo MAC a partire dall'indirizzo IP:<command name="
     Awesome GUI interface is zenmap
 </item>
 
-<item name="sshd-generate">
-serve a generare la chiave pubb per una comunicazione con sshd
-
-</item>
-
 <item name="macof">
 consente di fare flooding su uno switch per facilitare lo sniffing!
-
-</item>
-
-<item name="/usr/sbin/sshd">
-attiva il servizio ssh con la chiave generata
 
 </item>
 
@@ -3129,7 +3119,10 @@ permette di attivare VNCServer è necessario specificare la password per l'acces
 </item>
 
 <item name="minicom">
-è una applicazione per la connessione telefonica ad un sistema, permettendo cosi di accedere ad un terminale del tipo ttyS0. Basta semplicemente inserire il numero di telefono dell'abitazione, username e password. Per accedere come root ricordare di abilitare l'accesso remoto sul terminale nel file /etc/securetty
+    è una applicazione per la connessione telefonica ad un sistema,
+    permettendo cosi di accedere ad un terminale del tipo ttyS0.
+    Basta semplicemente inserire il numero di telefono dell'abitazione, username e password.
+    Per accedere come root ricordare di abilitare l'accesso remoto sul terminale nel file /etc/securetty
 
 </item>
 
@@ -3138,14 +3131,23 @@ permette di attivare VNCServer è necessario specificare la password per l'acces
 
 </item>
 
-<item name="ssh -l utente host">
-versione sicura di telnet
-Per comprimere i dati trasmessi e abilitare l'inoltro X11:<command name="ssh -X -C user@host"/>
-It's possible to use the option -Y the X11 forward <command name="ssh -Y -C user@host"/>
-The X11 forward automatically set the DISPLAY variable environment in order to have the right forward.
-So, it's not necessary to set the DISPLAY variable.
-Se si vuole avviare un'applicazione specificando un dato terminale:<command name="export DISPLAY=localhost:0.0"/>
-Per mostrare i DISPLAY degli altri terminali attivi basta usare il comando who.
+<item name="ssh">
+    versione sicura di telnet
+    To access with enabling compression<command name="ssh -C user@host"/>
+
+    X11 Forwarding
+    Per comprimere i dati trasmessi e abilitare l'inoltro X11:<command name="ssh -X -C user@host"/>
+    It's possible to use the option -Y the X11 forward <command name="ssh -Y -C user@host"/>
+    The X11 forward automatically set the DISPLAY variable environment in order to have the right forward.
+    So, it's not necessary to set the DISPLAY variable.
+    Se si vuole avviare un'applicazione specificando un dato terminale:<command name="export DISPLAY=localhost:0.0"/>
+    Per mostrare i DISPLAY degli altri terminali attivi basta usare il comando who.
+
+    TCP Forwarding (SSH Tunnelling)
+    For define a ssh tunnel:<command name="ssh -f -N -L localhost:24800:server:24800 user@server"/>
+    With -N no remote command will be executed, -f set the ssh to background
+    and -L define the local and remote socket which set the tunnel
+
 </item>
 
 <item name="telnet [- l utente] [host [port]]">
