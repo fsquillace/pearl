@@ -129,6 +129,9 @@ alias scrssi="screen -S scrssi -aARd -c ${PEARL_ROOT}/etc/screenrc -t irssi irss
 # If the system has htop use it!
 [ -e /usr/bin/htop ] && alias top="/usr/bin/htop"
 
+# Call PDB when an exception is raised
+alias pypdb="$(which python) -m util.pdb_on_error"
+
 #@@@@@@@@@@@@@@@@@@@
 
 #>>>>>>>>>>>>>>>>>>>
