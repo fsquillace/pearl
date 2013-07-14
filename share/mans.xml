@@ -2991,8 +2991,18 @@ restituisce il percorso di &quot;comando&quot; utile per capire se il comando e'
         Pacchetti necessari:apt-get install portmap nfs-common. PASSI DA FARE: mount 192.168.210.1:/home/ /mnt/HomeDiUbuntu 2) Se si vuole avviare al boot si modifica /etc/fstab cosi: 192.168.210.1:/home/ /mnt/HomeDiUbuntu nfs rsize=8192,wsize=8192,timeo=14,intr
     </item>
 
+    <item name="mtr">
+        Combine ping and traceroute in one tool giving info about packet loss:<command name="mtr --no-dns 192.168.1.1"/>
+        To give a report:<command name="mtr --report 192.168.1.1"/>
+    </item>
+    <item name="traceroute">
+        To track the route for a TCP connection in a particular port to a host:<command name="traceroute -T -p 3306 192.168.1.1"/>
+        To check if a TCP connection is working you can also use telnet:<command name="telnet 192.168.1.1 3306"/>
+    </item>
+
     <item name="tcptraceroute">
         To track the route for a TCP connection in a particular port to a host:<command name="tcptraceroute -np 3306 192.168.1.1"/>
+        To check if a TCP connection is working you can also use telnet:<command name="telnet 192.168.1.1 3306"/>
     </item>
 
     <item name="hping">
