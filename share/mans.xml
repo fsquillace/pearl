@@ -449,7 +449,7 @@ Command     Alias     Info
         To remove file:<command name="git rm file"/>
         To remove from the tracker but not from disk:<command name="git rm --cached file"/>
 
-        To see what you’ve changed but not yet staged:<command name="git diff"/>
+        To see what you've changed but not yet staged:<command name="git diff"/>
         To compares your staged changes to your last commit:<command name="git diff --staged"/>
         To show the diff and log message of a commit/branch or whatever object:<command name="git show name_object"/>
 

@@ -235,8 +235,8 @@ fi
 
 function pearl_unistall(){
     if [ ${#@} -ne 0 ]; then
-        echo "pearl_update: unrecognized options '$@'"
-        echo "Usage: pearl_update"
+        echo "pearl_uninstall: unrecognized options '$@'"
+        echo "Usage: pearl_uninstall"
         return 128
     fi
 
@@ -280,7 +280,30 @@ function pearl_unistall(){
 
 }
 
+function pearl_update_modules(){
+    function up_help(){
+        echo "Usage: pearl_update_modules"
+        echo "Init/update git submodule: syntastic,fugitive, etc.."
+    }
 
+    if [ ${#@} -gt 0 ]; then
+        echo "pearl_update_modules: unrecognized options '$@'"
+        up_help
+        return 128
+    fi
+
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        up_help
+        return 0
+    fi
+
+    builtin cd $PEARL_ROOT
+    git submodule init
+    git submodule update
+    builtin cd $OLDPWD
+
+    return 0
+}
 
 function pearl_update(){
     function up_help(){
