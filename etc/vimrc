@@ -15,10 +15,6 @@
 " GLOBAL VIM SETTINGS
 """""""""""""""""""""""""""""""""""
 
-" Add the plugin contained in Pearl
-set runtimepath+=$PEARL_ROOT/etc/vim/
-set runtimepath+=$PEARL_ROOT/etc/vim/after/
-
 set encoding=utf8
 
 " When started as "evim", evim.vim will already have done these settings.
@@ -94,10 +90,6 @@ if has("autocmd")
 
   augroup END
 
-else
-
-  set autoindent		" always set autoindenting on
-
 endif " has("autocmd")
 
 " Convenient command to see the difference between the current buffer and the
@@ -122,30 +114,40 @@ set number              " show te line numbers
 
 set thesaurus+=~/.vim/thesaurus/mthesaur.txt
 " When vimrc is edited, reload it!
-autocmd bufwritepost vimrc source ~/.vimrc
+" autocmd bufwritepost vimrc source ~/.vimrc
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "  Text, tab and indent related
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Formatting
 """"""""""""
+set expandtab       "Use softtabstop spaces instead of tab characters for indentation
+set shiftwidth=4    "Indent by 4 spaces when using >>, <<, == etc.
+set softtabstop=4   "Indent by 4 spaces when pressing <TAB>
+set autoindent      "Keep indentation from previous line
+set smartindent     "Automatically inserts indentation in some cases
+set cindent         "Like smartindent, but stricter and more customisable
+
 set ts=4  " Tabs are 4 spaces
-set bs=2  " Backspace over everything in insert mode
-set shiftwidth=4 " Tabs under smart indent
+set backspace=2           " allow backspacing over everything in insert mode
+set diffopt=filler,iwhite " keep files synced and ignore whitespace
+set virtualedit=block     " let blocks be in virutal edit mode
+set wildmenu              " This is used with wildmode(full) to cycle options
 set cinoptions=:0,p0,t0
 set cinwords=if,else,while,do,for,switch,case
 set formatoptions=tcqr
-set cindent
-set autoindent
-set smartindent
 set smarttab
-set expandtab
-set textwidth=500
+set textwidth=0           " Don't wrap words by default
+set textwidth=80          " This wraps a line with a break when you reach 80 chars
 set tabstop=8
-set softtabstop=4
 set smarttab
 set lbr
 set wrap "Wrap lines
+set linebreak             " This displays long lines as wrapped at word boundries
+
+" Suffixes that get lower priority when doing tab completion for filenames.
+" These are files I am not likely to want to edit or read.
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc,.class
 
 """"""""""""""""
 " Sudo writing
@@ -156,11 +158,11 @@ command Wsudo w !sudo tee > /dev/null %
 """"""""""
 " Visual
 """"""""""
-set showmatch " Show matching brackets.
+set showmatch             " Show matching brackets.
 set mat=5  " Bracket blinking.
 set list
 " Show $ at end of line and trailing space as ~
-set lcs=tab:\ \ ,eol:\ \,trail:~,extends:>,precedes:<
+set listchars=tab:\ \ ,eol:\ \,trail:~,extends:>,precedes:<
 set novisualbell  " No blinking .
 set noerrorbells  " No noise.
 set laststatus=2  " Always show status line.
@@ -178,7 +180,7 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl,python normal zR
 set ignorecase
 set smartcase
 "show the `best match so far' as search strings are typed:
-set incsearch
+set incsearch             " Incremental search
 set hlsearch
 
 " Set the dictionaries
@@ -211,23 +213,24 @@ inoremap <silent> <Home> <C-O>:call SmartHome()<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " General mappings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" To switch between windows
-map <silent> <C-h> <C-w>h
-map <silent> <C-j> <C-W>j
-map <silent> <C-k> <C-W>k
-map <silent> <C-l> <C-w>l
+" To switch between windows (Warn: it may conflicts)
+"map <silent> <C-h> <C-w>h
+"map <silent> <C-j> <C-W>j
+"map <silent> <C-k> <C-W>k
+"map <silent> <C-l> <C-w>l
 
 
-" Maps to resizing a window split
+" Maps to resizing a window split (Warn: conflict with indentation)
 if bufwinnr(1)
-  map <silent> < <C-w><
+  "map <silent> < <C-w><
   map <silent> - <C-W>-
   map <silent> + <C-W>+
-  map <silent> > <C-w>>
+  "map <silent> > <C-w>>
 endif
 
 " Maximize a window
 map <silent> _ <C-w>_<C-w><Bar>
+
 " Spell keybindings
 map <silent> <Leader>os i<C-x>s
 map <Leader>of :set spellfile=~/.vim/spell/
@@ -253,6 +256,10 @@ map <C-q> :tabclose<cr>
 " Search, replace
 map <Leader>r :%s/old/new/gc
 
+" Block indentation
+" Allow to let indent the selection as many time as you want
+vnoremap < <gv
+vnoremap > >gv
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
 " Explore
@@ -340,7 +347,11 @@ nmap <Leader>sr :!rm ~/.vim/sessions/
 " Easy install plugin in private directory
 " Can be used to install syntastic (https://github.com/scrooloose/syntastic)
 " and many other useful plugins
-call pathogen#infect()
+source $PEARL_ROOT/etc/vim/bundle/pathogen/autoload/pathogen.vim
+" Call pathogen with the pearl bundles
+set runtimepath+=$PEARL_ROOT/etc/vim/
+set runtimepath+=$PEARL_ROOT/etc/vim/after/
+call pathogen#infect('bundle/{}')
 
 """""""""""""""""""
 " Nerd Commenter
@@ -384,4 +395,19 @@ set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 let g:solarized_contrast = "low"
 let g:solarized_visibility= "normal"
 
-
+"""""""""""""""
+" Airline
+"""""""""""""""
+" Fake airline as loaded if not running gui
+if has('gui_running')
+    let g:airline_enable_fugitive=1
+    let g:airline_enable_syntastic=1
+    let g:airline_theme='dark'
+    let g:airline_powerline_fonts=1
+    " link the inconsolata font
+    silent execute '!mkdir -p ~/.fonts'
+    silent execute '![ -f ~/.fonts/inconsolata_powerline.otf ] || ln -s $PEARL_ROOT/etc/fonts/inconsolata_powerline.otf ~/.fonts/'
+    set guifont=Inconsolata\ for\ Powerline
+else
+    let g:loaded_airline=1
+endif

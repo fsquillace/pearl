@@ -129,7 +129,7 @@ feature enabled in VIM:
     - *Decrease vertically* -> '<'
     - *Maximize* -> '_'
 *Spelling*::
-    - *Select Language* -> '\ol'
+    - *Select Language* -> '\ol' (i.e. it,en,es. The dict will be downloaded if it doesn't exist.)
     - *Select spell file* -> '\of'
     - *Correct word* -> '\os' or 'Cntrl+x s' (in insert mode)
     - *Remove spelling* -> '\or'
@@ -168,6 +168,14 @@ They are:
     Integrate all the VIM feature using only the TAB key;
 *Gnupg*::
     Plugin for transparent editing of gpg encrypted files
+*Spellfile*::
+    Download spell file when searching for the given language
+*Airline*::
+    Lean & mean statusline for vim that's light as air
+*Syntastic*::
+    Syntax checking hacks for vim
+*Fugitive*::
+    A Git wrapper so awesome, it should be illegal
 
 In particular *pathogen* is used to easily place plugins in the directory '$HOME/.vim/bundle' (Take a look in the project 'https://github.com/tpope/vim-pathogen').
 In order to install important VIM plugin *pearl* provides useful bash scripts with prefix *pearl_install*
