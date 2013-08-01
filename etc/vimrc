@@ -59,6 +59,8 @@ endif
 if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
+  " disable the background color erase
+  set t_ut=
 endif
 
 " Only do this part when compiled with support for autocommands.
