@@ -874,7 +874,7 @@ function tmux(){
 
     if [ "$OPT_GO" != "" ] && [ "$OPT_KILL" != "" ]
     then
-        echo "The options --go and --kill cannot be togheter."
+        echo "The options --go and --kill cannot stay togheter."
         return 1
     fi
 
@@ -936,7 +936,7 @@ function screen(){
 
     if [ "$OPT_GO" != "" ] && [ "$OPT_KILL" != "" ]
     then
-        echo "The options --go and --kill cannot be togheter."
+        echo "The options --go and --kill cannot stay togheter."
         return 1
     fi
 

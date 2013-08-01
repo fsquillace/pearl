@@ -510,7 +510,7 @@ Command     Alias     Info
     <item name="tagging and archive">
         List available tags:<command name="git tag"/>
         To look for some tags:<command name="git tag -l 'v1.4.2.*'"/>
-        
+
         To create an annotated tag:<command name="git tag -a v1.2.0 -m 'my version'"/>
         To create a Lightweight Tags:<command name="git tag v1.4.2-lw"/>
         To create and sign a tag with you private key:<command name="git tag -s "/>
@@ -596,7 +596,7 @@ Command     Alias     Info
         To check what commits are needed to merge use:<command name="git log --no-merges"/>
 
         To request pull from a remote public repo:<command name="git request-pull origin/master myfork"/>
-        
+
         MANAGE PATCHES:
         Create a Patch:
         From your commits it is possible to create a patch:<command name="git format-patch -M origin/master"/>
