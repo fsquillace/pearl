@@ -140,7 +140,7 @@ set cinwords=if,else,while,do,for,switch,case
 set formatoptions=tcqr
 set smarttab
 set textwidth=0           " Don't wrap words by default
-set textwidth=80          " This wraps a line with a break when you reach 80 chars
+"set textwidth=80          " This wraps a line with a break when you reach 80 chars
 set tabstop=8
 set smarttab
 set lbr

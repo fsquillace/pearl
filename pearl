@@ -136,7 +136,7 @@ alias pypdb="$(which python) -m util.pdb_on_error"
 alias sshx="TERM=xterm-256color LANG=en_US.UTF-8 ssh -Y"
 
 # Enhanced mosh for 256 colors
-alias moshx="TERM=xterm-256color LANG=en_US.UTF-8 mosh"
+alias moshx="LANG=en_US.UTF-8 mosh"
 
 #@@@@@@@@@@@@@@@@@@@
 
