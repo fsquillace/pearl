@@ -293,6 +293,9 @@ function ranger(){
     # The following command add tags for the files synced. The problem is that is takes time
     #check_sync
 
+    local ranger_command=${PEARL_ROOT}/opt/ranger/ranger.py
+    [ -f $ranger_command ] || ranger_command="/usr/bin/ranger"
+
     # Checks out into the jobs if the user pressed the C-z key
     local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
     if [ "$id" != "" ]
@@ -309,7 +312,7 @@ function ranger(){
     fi
 
     local tempfile='/tmp/chosendir'
-    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    $ranger_command --choosedir="$tempfile" "${@:-$(pwd)}"
     test -f "$tempfile" &&
     if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
         echo $(cat "$tempfile")

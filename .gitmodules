@@ -7,3 +7,6 @@
 [submodule "etc/vim/bundle/fugitive"]
 	path = etc/vim/bundle/fugitive
 	url = https://github.com/tpope/vim-fugitive.git
+[submodule "opt/ranger"]
+	path = opt/ranger
+	url = git://git.savannah.nongnu.org/ranger.git
