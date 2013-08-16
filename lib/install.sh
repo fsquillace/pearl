@@ -34,6 +34,7 @@ else
 
     echo "Creating ~/.config/pearl directory ..."
     mkdir -p $PEARL_HOME/bkp
+    mkdir -p $PEARL_HOME/mans
     mkdir -p $PEARL_HOME/etc/context
     mkdir -p $PEARL_HOME/opt
 

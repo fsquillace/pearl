@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><!DOCTYPE dicts [
+        <!ELEMENT dicts (dict)*>
+        <!ELEMENT dict (item)*>
+        <!ELEMENT item (#PCDATA | command | code)*>
+        <!ELEMENT command EMPTY>
+        <!ELEMENT code (#PCDATA)>
+        <!ATTLIST dict name CDATA #REQUIRED>
+        <!ATTLIST item name CDATA #REQUIRED>
+        <!ATTLIST command name CDATA #REQUIRED>
+]>
+
+<dicts><!--- ********************************** DICTIONARY NAME ***************************************** -->
+    <dict name="Dictionary name">
+        <item name="item name">
+        Example of item content.
+        </item>
+
+        <item name="item2 name">
+        Example of item content.
+        </item>
+    </dict>
+</dicts>

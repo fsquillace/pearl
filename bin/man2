@@ -16,7 +16,10 @@
 # You should have received a copy of the GNU General Public License along
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-'''Script to read the manual in resource directory
+'''
+Script to read the manual in resource directory.
+The manuals need to be placed either in PEARL_ROOT/share/mans/ or
+PEARL_HOME/mans
 '''
 __author__ = 'Filippo Squillace'
 __date__ = '05/12/2009'
@@ -26,57 +29,61 @@ __docformat__ = 'restructuredtext en'
 __version__ = "1.1.3"
 
 
-import string
 import os
+import os.path
+import string
 import sys
-
-from argparse import ArgumentParser
-from util.io import Property
-from util.logger import warn, debug
-
-#from lxml import etree
-#from xml.sax.handler import ContentHandler
-#from xml.sax import make_parser
 import xml.dom.minidom
 
+from argparse import ArgumentParser
 
 import util.painter as painter
 
-if os.path.exists(os.environ["PEARL_HOME"]+'/etc/man2.conf'):
-    conf_path = os.environ["PEARL_HOME"]+'/etc/man2.conf'
+_MANS_ROOT = os.environ["PEARL_ROOT"]+'/share/mans'
+_MANS_HOME = os.environ["PEARL_HOME"]+'/mans'
 
-elif os.path.exists(os.environ["PEARL_ROOT"]+'/etc/man2.conf'):
-    conf_path = os.environ["PEARL_ROOT"]+'/etc/man2.conf'
+def scan_directory(directory):
+    """
+    Given the directory the function start to scan all files.
+    It returns the list of scanned files.
+    """
+    mans = []
+    if os.path.exists(directory):
+        for element in os.listdir(directory):
+            abs_element = os.path.join(directory, element)
+            if os.path.isfile(abs_element):
+                mans.append(abs_element)
+    return mans
 
-else:
-    warn('The config file doesn\'t exist. Put it into '+\
-         os.environ["PEARL_HOME"]+'/etc/man2.conf')
+def retrieve_all_mans():
+    return scan_directory(_MANS_HOME) + scan_directory(_MANS_ROOT)
 
+def read_documents():
+    mans = retrieve_all_mans()
+    return [read_document(man) for man in mans]
 
-conf = Property(conf_path, False)
-
-# To default it corresponds to os.environ["PEARL_ROOT"]+"/share/mans.xml"'
-url_xml = conf.get('url_xml')
-
-def read_document():
+def read_document(man_file):
     """
     Return: the XML document from RESOURCE path
     """
-    print(url_xml)
-    xml_doc = xml.dom.minidom.parse(url_xml)
+    print(man_file)
+    xml_doc = xml.dom.minidom.parse(man_file)
     return xml_doc
 
 def view_dictionaries():
+    docs = read_documents()
+    for doc in docs:
+        view_dictionaries_on(doc)
+
+def view_dictionaries_on(doc):
     """
     List all dictionaries of the XML Document
     """
-    doc = read_document()
     i = 1
     for node in doc.getElementsByTagName("dict"):
         name = node.getAttribute("name")
         print(str(i)+"\t"+name)
-        i+=1
-    pass
+        i += 1
 
 def print_item(item, keyword):
     name = item.getAttribute("name")
@@ -92,22 +99,20 @@ def print_item(item, keyword):
         elif child.nodeType == child.CDATA_SECTION_NODE:
             desc = child.nodeValue
             highlighted(desc, keyword)
-        elif child.tagName=="command":
+        elif child.tagName == "command":
             cmd = child.getAttribute("name")
             painter.bgblue()
             painter.bold()
             sys.stdout.write(cmd)
             painter.undo()
             painter.undo()
-        elif child.tagName=="code":
+        elif child.tagName == "code":
             cod = ""
             for little_child in child.childNodes:
                 if little_child.nodeType == child.TEXT_NODE:
                     cod = cod + little_child.data
-                    pass
                 elif little_child.nodeType == child.CDATA_SECTION_NODE:
                     cod = cod + little_child.nodeValue
-                    pass
             painter.bgcyan()
             painter.bold()
             highlighted(cod, keyword)
@@ -122,10 +127,10 @@ def highlighted(name, keyword):
     Return: A new string that contains keyword highlighted
     """
     tmp_str = name
-    size=len(keyword)
-    while tmp_str!="":
+    size = len(keyword)
+    while tmp_str != "":
         ind = tmp_str.upper().find( keyword.upper())
-        if ind!=-1:
+        if ind != -1:
             sys.stdout.write(tmp_str[0:ind])
             painter.red()
             painter.bold()
@@ -145,16 +150,15 @@ def contains(string1, string2, whole_word, case_sensitive):
     if whole_word:
         pos = string1.find(string2)
         fin_pos = pos + len(string2)-1
-        if pos==-1:
-            return False;
-        if pos!=0 and string.ascii_letters.find(string1[pos-1:pos])!=-1:
+        if pos == -1:
             return False
-        if fin_pos!=len(string1)-1 and string.ascii_letters.find(string1[fin_pos+1:fin_pos+2])!=-1:
+        if pos != 0 and string.ascii_letters.find(string1[pos-1:pos])!=-1:
+            return False
+        if fin_pos != len(string1)-1 and string.ascii_letters.find(string1[fin_pos+1:fin_pos+2])!=-1:
             return False
         return True
     else:
         return string1.find(string2)!=-1
-    pass
 
 def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_word, case_sensitive):
     """
@@ -163,14 +167,15 @@ def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_
     Return: A data structure that is the answer of the query
     """
     ans = []
-    
+
     for dict in doc.getElementsByTagName("dict"):
         if in_dict_name:
             dict_name = dict.getAttribute("name")
         else:
             dict_name = ""
 
-        if contains(dict_name, keyword, whole_word, case_sensitive): #Stampa tutto il dizionario
+        if contains(dict_name, keyword, whole_word, case_sensitive):
+            # Print all the dictionary
             print()
             painter.orange()
             painter.bold()
@@ -196,9 +201,9 @@ def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_
                             item_description = item_description + child.data
                         elif child.nodeType == child.CDATA_SECTION_NODE:
                             item_description = item_description + child.nodeValue
-                        elif child.tagName=="command":
+                        elif child.tagName == "command":
                             item_description = item_description + child.getAttribute("name")
-                        elif child.tagName=="code":
+                        elif child.tagName == "code":
                             item_description = item_description + child.firstChild.data
 
                 if contains(item_name, keyword, whole_word, case_sensitive) or contains(item_description, keyword, whole_word, case_sensitive):
@@ -218,39 +223,40 @@ def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_
     return ans
 
 def search_by_dict_name(keyword, whole_word, case_sensitive):
+    docs = read_documents()
+    for doc in docs:
+        search_by_dict_name_on(doc, keyword, whole_word, case_sensitive)
+
+def search_by_dict_name_on(doc, keyword, whole_word, case_sensitive):
     """
     Search in dictionaries the dictionary with name contains the keyword
     Arguments: keyword
     """
-    doc = read_document()
-    l = search(doc, keyword, True, False, False, whole_word, case_sensitive)
-    if len(l)==0:
-        return
-
-    #copy_command(l)
-    pass
+    search(doc, keyword, True, False, False, whole_word, case_sensitive)
 
 def search_by_item_name(keyword, whole_word, case_sensitive):
+    docs = read_documents()
+    for doc in docs:
+        search_by_item_name_on(doc, keyword, whole_word, case_sensitive)
+
+def search_by_item_name_on(doc, keyword, whole_word, case_sensitive):
     """
     Search in all of dictionaries the keyword in the name and print in the standard output
     Arguments: keyword 
     """
-    doc = read_document()
-    l = search(doc, keyword, False, True, False, whole_word, case_sensitive)
-    if len(l)==0:
-        return
-    #copy_command(l)
+    search(doc, keyword, False, True, False, whole_word, case_sensitive)
 
 def search_all(keyword, whole_word, case_sensitive):
+    docs = read_documents()
+    for doc in docs:
+        search_all_on(doc, keyword, whole_word, case_sensitive)
+
+def search_all_on(doc, keyword, whole_word, case_sensitive):
     """
     Search in all of dictionaries the keyword and print in the standard output
     Arguments: keyword 
     """
-    doc = read_document()
-    l = search(doc, keyword, True, True, True, whole_word, case_sensitive)
-    if len(l)==0:
-        return
-    #copy_command(l)
+    search(doc, keyword, True, True, True, whole_word, case_sensitive)
 
 def parse():
     """

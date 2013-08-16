@@ -362,8 +362,11 @@ Example of using:
 MAN2
 ~~~~
 MAN2 is a minimal manual to get essentials snippet information about all the
-important commands. In man2.conf you can specify the path or url where is
-located the source manual.
+important commands. *man2* is able to scan manuals in a xml format that are stored in both
+'$PEARL_ROOT/share/mans/' and '$PEARL_HOME/mans/'.
+You can create your own manual xml file for storing all the information
+you need. Just copy the manual xml template file from '$PEARL_ROOT/share/mans/mans_example.xml'
+to '$PEARL_HOME/mans/your_man.xml'.
 Type *man2 --help* to see all the available options.
 
 Example of using:
