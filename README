@@ -591,6 +591,17 @@ MAIN ALIASES
 
 TIPS & TRICKS
 -------------
+
+DETECT DANGEROUS COMMANDS
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pearl is able to detect dangerous commands such as 'rm', 'mv', 'service <name> stop' and so on
+according to several regular expression stored in '$PEARL_ROOT/etc/regex'.
+If you want to disable this feature, type or put the command in your pearlrc file:
+
+    pearl_analyzer_switch "off"
+
+
 DEFAULT PERMISSIONS
 ~~~~~~~~~~~~~~~~~~~
 When you create a new file or directory it will get some default permissions.

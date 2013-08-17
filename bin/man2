@@ -45,13 +45,13 @@ _MANS_HOME = os.environ["PEARL_HOME"]+'/mans'
 def scan_directory(directory):
     """
     Given the directory the function start to scan all files.
-    It returns the list of scanned files.
+    It returns the list of scanned xml files.
     """
     mans = []
     if os.path.exists(directory):
         for element in os.listdir(directory):
             abs_element = os.path.join(directory, element)
-            if os.path.isfile(abs_element):
+            if os.path.isfile(abs_element) and abs_element.endswith('.xml'):
                 mans.append(abs_element)
     return mans
 

@@ -2686,19 +2686,28 @@ rimuove un modulo in memoria. -a rimuove tutti i moduli
 </item>
 
 <item name="ps">
-    Lists of the process in execution:<command name="ps -e"/>
+    Lists of the processes in execution:<command name="ps -e"/>
     Shows with more details:<command name="ps aux"/>
-    Shows the process tree:<command name="ps fax"/>
-    Shows all processes for the getty command with customied fields:<command name="ps -C getty -o user,pid,tty,time,comm"/>
+
+    TREE STRUCTURE:
+    Shows the process tree:<command name="ps faxj"/>
+    OR <command name="pstree"/>
+
+    Shows all processes for the getty command with customized fields:<command name="ps -C getty -o user,pid,tty,time,comm"/>
     Shows the first 10 processes sorted by CPU usage:<command name="ps aux | sort -n -k 3 | tail -10"/>
     Shows the first 10 processes sorted by Memory usage:<command name="ps aux | sort -n -k 4 | tail -10"/>
+
+    Shows the processes running as a user:<command name="ps -U feel -u feel u"/>
+
 visualizza ulteriori info sui processi attivi. si utilizzano le opzioni -afx, -a mostra i processi utilizzati da altri utenti, -f definisce una struttura ad albero, -x mostra  processi senza terminali di controllo, u rende l'output human-readble
+
+    See the pearl functions: touser, cpumost, memmost, topid, frompid
 
 </item>
 
 <item name="pstree">
-fornisce i processi con una struttura ad albero
-
+Provide the list of process with a tree structure.
+See also ps command.
 </item>
 
 <item name="kill">

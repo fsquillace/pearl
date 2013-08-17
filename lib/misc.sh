@@ -1,5 +1,43 @@
 #!/bin/sh
 
+function memmost(){
+# $1: number of process to view (default 10).
+
+local num=$1
+[ "$num" == "" ] && num="10"
+
+local ps_out=$(ps -auxf)
+echo "$ps_out" | head -n 1
+echo "$ps_out" | sort -nr -k 4 | head -n $num
+}
+
+function cpumost(){
+# $1: number of process to view (default 10).
+
+local num=$1
+[ "$num" == "" ] && num="10"
+
+local ps_out=$(ps -auxf)
+echo "$ps_out" | head -n 1
+echo "$ps_out" | sort -nr -k 3 | head -n $num
+}
+
+function touser(){
+# $1: name of the user
+#
+ps -U $1 -u $1 u
+}
+
+function frompid(){
+# $1: PID of the process
+ps -p $1 -o comm=
+}
+
+function topid(){
+# $1: name of the process
+ps -C $1 -o pid=
+}
+
 function is_file_open() {
     lsof | grep $(readlink -f "$1")
 }
