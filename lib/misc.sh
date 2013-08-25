@@ -70,17 +70,19 @@ function kill_cmd(){
 function s(){
 
 command='
+[ -x $HOME ] || ( sudo mkdir $HOME && sudo chown $HOME; cd $HOME )
 if [ -d $HOME/.pearl ];
 then
-    cd $HOME/.pearl;
-    git pull;
-    cd - &> /dev/null;
     bash -i;
 else
-    git clone git://github.com/fsquillace/pearl $HOME/.pearl;
+    mkdir -p /tmp/pearl-install && cd /tmp/pearl-install
+    wget https://github.com/fsquillace/pearl/archive/current.tar.gz
+    tar xzvf current.tar.gz
+    mv pearl-current $HOME/.pearl
+    rm -rf /tmp/pearl-install
+    cd $HOME
     bash --rcfile $HOME/.pearl/pearl -i;
 fi
-[ -x $HOME ] || ( sudo mkdir $HOME && sudo chown $HOME; cd $HOME )
 '
 ssh -t $@ "/bin/bash -c \"$command\""
 
