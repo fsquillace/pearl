@@ -46,7 +46,6 @@ export PEARL_DEBUG=0
 source $PEARL_ROOT/lib/misc.sh
 source $PEARL_ROOT/lib/install.sh
 source $PEARL_ROOT/lib/apps.sh
-source $PEARL_ROOT/lib/analyzer.sh
 
 # Install pearl if it is not installed yet
 pearl_install

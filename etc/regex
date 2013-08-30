@@ -1,8 +1,0 @@
-kill
-restart
-stop
-ifconfig.*down
-rm 
-reboot
-poweroff
-mv
