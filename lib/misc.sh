@@ -312,6 +312,9 @@ function trash(){
     if [ -z "$1" ] || [ "$1" = -s ] || [ "$1" = --show ]
     then
         ls --color -lh -a $PEARL_TEMPORARY
+    elif [ "$1" = -r ] || [ "$1" = --recovery ]
+    then
+        mv $PEARL_TEMPORARY/$2 .
     elif [ "$1" = -e ] || [ "$1" = --empty ]
     then
         rm -rf $PEARL_TEMPORARY/*
@@ -320,9 +323,10 @@ function trash(){
         echo "Usage: trash file1 file2 ...."
         echo -e "Moves to trash the files"
         echo -e "Options:"
-        echo -e "\t-s, --show       Shows the trash"
-        echo -e "\t-e, --empty      Empties the trash"
-        echo -e "\t-h, --help       Show this help message"
+        echo -e "\t-s, --show                Shows the trash"
+        echo -e "\t-e, --empty               Empties the trash"
+        echo -e "\t-r, --recovery <file>     Recovery a trashed file"
+        echo -e "\t-h, --help                Show this help message"
     else
         mv --backup=numbered -f -t $PEARL_TEMPORARY "$@"
     fi
