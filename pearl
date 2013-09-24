@@ -126,6 +126,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 # Open screen+irssi
 alias scrssi="screen -S scrssi -aARd -c ${PEARL_ROOT}/etc/screenrc -t irssi irssi; clear"
 
+# less case insensitive
+alias less="less -i"
+
 # If the system has htop use it!
 [ -e /usr/bin/htop ] && alias top="/usr/bin/htop"
 
