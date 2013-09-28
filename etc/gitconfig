@@ -9,17 +9,17 @@
 	st = status
 	ci = commit
 	a = add
-        # Log using color, pager, and a graphical representation of branches/merges
-        l = !git log --pretty=format:'%Cred---------------------------------------------------------------%n%C(red)%h %C(yellow)%d %Cgreen(%ci) %C(red)<%ae>%Creset%n%s%n%n%b%n' --abbrev-commit --date=relative --graph --date-order --stat --color | less -cR
         # show info about the last commit
         last = log -1 HEAD
         purr = pull --rebase
         s = status -sb
         standup = log --since=yesterday
         ready = rebase -i
-        lol = log --color --graph --decorate --pretty=oneline --abbrev-commit
-        lola = log --color --graph --decorate --pretty=oneline --abbrev-commit --all
-        lolaa = log --color --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+        lol = log --color --graph --decorate --pretty=oneline --abbrev-commit --all
+        lol2 = log --color --graph --decorate --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+        lol3 = !git log --pretty=format:'%Cred---------------------------------------------------------------%n%C(red)%h %C(auto)%d %Cgreen(%ci) %C(red)<%ae>%Creset%n%s%n%n%b%n' --abbrev-commit --date=relative --graph --date-order --stat --color | less -cR
+        lol4 = log --color --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -p
+
 [color]
   branch = auto
   diff = auto
