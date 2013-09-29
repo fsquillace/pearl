@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function tailf(){
-    tail -f $1 | perl -pe 's/(ERROR)/\e[1;31m$1\e[0m/g;s/(INFO)/\e[1;32m$1\e[0m/g;s/(DEBUG)/\e[1;32m$1\e[0m/g;s/(WARN)/\e[1;33m$1\e[0m/g'
+    tail -f $1 | perl -pe 's/(ERROR)/\e[1;31m$1\e[0m/gi;s/(INFO)/\e[1;32m$1\e[0m/gi;s/(DEBUG)/\e[1;32m$1\e[0m/gi;s/(WARN)/\e[1;33m$1\e[0m/gi'
 }
 
 function memmost(){
