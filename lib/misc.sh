@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function tailf(){
-    tail -f $1 | perl -pe 's/(ERROR)/\e[1;31m$1\e[0m/gi;s/(INFO)/\e[1;32m$1\e[0m/gi;s/(DEBUG)/\e[1;32m$1\e[0m/gi;s/(WARN)/\e[1;33m$1\e[0m/gi'
+    tail -f $@ | perl -pe 's/(ERROR)/\e[1;31m$1\e[0m/gi;s/(INFO)/\e[1;32m$1\e[0m/gi;s/(DEBUG)/\e[1;32m$1\e[0m/gi;s/(WARN)/\e[1;33m$1\e[0m/gi'
 }
 
 function memmost(){
@@ -531,9 +531,9 @@ function sync() {
 
             # We must change directory to the base directory
             # to the the right implied directories with --relative option
-            builtin cd $sync_src
+            builtin cd "$sync_src"
             rsync --relative -C --exclude=.svn -uhzravE --delete ${rel_paths} "$sync_dest"
-            builtin cd - &> /dev/null
+            builtin cd "$OLDPWD" &> /dev/null
 
             # The following solution doesn't manage deletion of files in the destination
             #cp -v -a --parents -u -r --target-directory $SYNC_HOME/ $(readlink -f $var)
@@ -797,7 +797,7 @@ function cd() {
     else
         if [ "$args" != "" ]
         then
-            builtin cd $args
+            builtin cd "$args"
         else
             awk -F ":" '{print $1") "$2}' $bookmarks_file
         fi
@@ -946,7 +946,7 @@ function tmux(){
     then
         local dir=$(cd -p $OPT_GO)
         [ "$dir" == "" ] && local dir="$PWD"
-        builtin cd $dir
+        builtin cd "$dir"
         # Set always the same $dir directory for the session
         if ! $tmux_command has-session -t "${OPT_GO}" &> /dev/null
         then
@@ -954,7 +954,7 @@ function tmux(){
             $tmux_command set-option -t "${OPT_GO}" default-path $dir &> /dev/null
         fi
         $tmux_command new-session -AD -s "${OPT_GO}"
-        builtin cd $OLDPWD
+        builtin cd "$OLDPWD"
     elif [ "$OPT_KILL" != "" ]
     then
         $tmux_command kill-session -t "${OPT_KILL}"
@@ -1008,10 +1008,10 @@ function screen(){
     then
         local dir=$(cd -p $OPT_GO)
         [ "$dir" == "" ] && local dir="$PWD"
-        builtin cd $dir
+        builtin cd "$dir"
         $screen_command -S "${OPT_GO}" -aARd
         clear
-        builtin cd $OLDPWD
+        builtin cd "$OLDPWD"
     elif [ "$OPT_KILL" != "" ]
     then
         $screen_command -S "${OPT_KILL}" -X quit
