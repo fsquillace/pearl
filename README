@@ -510,6 +510,11 @@ You can install the famous *liquidprompt*, that works for both bash and zsh, jus
 *pearl_install_liquidprompt*. For further info go here: 'https://github.com/nojhan/liquidprompt'
 You can create your own context just creating a file in '$PEARL_HOME/etc/context'.
 
+TAILF
+~~~~~
+The command is similar to tail -f but it also highlights log keywords such as DEBUG, INFO, WARN, ERROR.
+tailf requires perl.
+
 BACKUP
 ~~~~~~
 BACKUP command makes sessions of backup including files and directories.
@@ -588,6 +593,7 @@ MAIN ALIASES
     - *scrssi* - Open irssi (a powerful irc client) within screen
     - *pypdb* - Execute python script and call PDB when exception is raised
     - *sshx* - Enhanced ssh for X11 forwarding and 256 colors
+    - *less* - less command with case insensitive
 
 TIPS & TRICKS
 -------------
