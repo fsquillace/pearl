@@ -409,13 +409,90 @@ Command     Alias     Info
         To remove:<command name="remove r2d2"/>
         To rename:<command name="rename r2d3 r2d2"/>
         To chat in separate window:<command name="/msg or /query"/>
-        
+
         More features:
         To join in a new separate channel:<command name="/join &amp;msn"/>
     </item>
 </dict>
 
 
+<!--- ********************************** FUGITIVE ***************************************** -->
+<dict name="fugitive">
+    <item name=":Git">
+        To type any git command: <command name=":Git &lt;command&gt;"/>
+        To remove current file:<command name=":Git rm %"/> or <command name=":Gremove"/>
+        To move current file:<command name=":Git mv % target"/> or <command name=":Gmove"/>
+
+        To add for the new commit (overwrite the index copy):<command name=":Git add %"/> or <command name=":Gwrite"/>
+        To revert on the last commit (also called index copy):<command name=":Git checkout %"/> or <command name=":Gread"/>
+
+        To commit the changes:<command name=":Gitcommit"/>
+        To view blame:<command name=":Gitblame"/>
+    </item>
+
+    <item name=":Gstatus">
+        Show the status:<command name=":Git status"/>
+        Chars to type:
+        -       -> to a file (or multi selected files) to be added or reset
+        p       -> to a file to see the diff (same as git add --patch)
+        C       -> to make a commit
+        Enter   -> to view the selected file
+        cntrl-p -> to go to the previous file
+        cntrl-n -> to go to the next file
+    </item>
+
+    <item name=":Gdiff">
+        See the diff between the index file and the working copy of the same file:<command name=":Gdiff"/>
+        You can use :Gread and :Gwrite to read or write the index copy or you can use a finer grained diff with
+        :diffget and :diffput
+        Use :diffupdate to update the diff buffers.
+
+        If you merge with conflict and type :Gdiff you will get three buffers representing respectively:
+        targert branch (namely the master), working copy, merge branch.
+
+        Use <command name=":diffget //2 or //3 | diffupdate"/> to choose what change accept to the working copy.
+        Also, you can use dp that is a diffput and diffupdate.
+
+        If you want to pick one of the file in target or merge branch go to the corresponding buffer and type <command name=":Gwrite!"/>
+
+    </item>
+
+    <item name=":Gedit and :Gbrowse">
+        To view a file from whatever branch:<command name=":Gedit master:path/to/file"/>
+
+        There are four kind of object it is possible to inspect:
+
+        COMMIT and TAG - <command name=":Gedit sha_commit"/>
+        Contains blob and tree
+        Navigate between the object of the commit pressing 'Enter'.
+        Press 'Enter' to the diff line to see the diff of the file.
+
+        TREE (directory)
+        When inspect a tree object type 'a' to see the SHA for each object.
+        Type 'C' to return to the current commit.
+
+        BLOB (file)
+        Type 'C' to return to the current commit.
+
+        Typing <command name=":Gedit"/> allow you to return to the tree working version of the active file.
+
+        For every git object type <command name=":Gbrowse"/> and it will redirect to the github page. You can even select lines and you will see the lines highlighted in github page.
+
+        To view the index version of the current file:<command name=":Gedit :0"/>
+    </item>
+
+    <item name=":Glog and :Ggrep">
+        To inspect only the last 10 commits:<command name=":Glog -10"/>
+        Type <command name=":cnext"/> or <command name=":cprev"/> to navigate among the commits
+        To open the quickfix list of commits:<command name=":copen"/>
+
+        To search a particular string on branch demo:<command name=":Ggrep 'word he' demo"/>
+        Use <command name=":cnext"/>, <command name=":cprev"/> or <command name=":copen"/> to navigate.
+
+        To search inside commit messages:<command name=":Glog --grep=word --"/>
+        To search text even for added/removed files:<command name=":Glog -Sword --"/>
+    </item>
+</dict>
 
 
 <!--- ********************************** GIT ***************************************** -->
