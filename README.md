@@ -470,13 +470,11 @@ Example of using:
 
 ### PROMPT CONTEXT ###
 There is a command called 'pearl\_switch' that allow to change the appearance of the terminal.
-Each context is stored in '$PEARL\_ROOT/etc/context' and it is a script that simply change the
-environment variable 'PS1' and 'PROMPT\_COMMAND'. There are three main contexts available:
+Each context is stored in '$PEARL\_ROOT/etc/context'. The script simply change the
+variables environment 'PS1' and 'PROMPT\_COMMAND'. There are two main contexts available:
 
-* def - It is the default context. It will show the basic information.
-    [22:00:09 0 feel@myarch pearl $]>
-* dev - It is used for development purpose. It shows information of the current git branch.
-    [22:00:09 0 {master} feel@myarch pearl $]>
+* def - It is the default context. It is able to dinamically show background jobs, error codes and the current git branch.
+    [22:24:17 130 4 feel@myarch {master} pearl $]>
 * ops - It is used for system administration. Useful for checking memory, load avg, etc.
 The first three columns measure CPU and IO utilization of the last one, five, and 15 minute periods.
 The fourth column shows the number of currently running processes and the total number of processes.
