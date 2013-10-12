@@ -74,29 +74,29 @@ function kill_cmd(){
 function s(){
 
 command='
-[ -x $HOME ] || ( sudo mkdir $HOME && sudo chown $HOME; cd $HOME )
-git_command=$(which git)
+[ -x $HOME ] || ( sudo mkdir $HOME && sudo chown $HOME; cd $HOME );
+git_command=$(which git);
 
 if [ -d $HOME/.pearl ];
 then
-    if [ "$git_command" != "" ] && [ -d "$HOME/.pearl/.git" ]
+    if [ "$git_command" != "" ] && [ -d "$HOME/.pearl/.git" ];
     then
         cd $HOME/.pearl;
         git pull;
         cd - &> /dev/null;
-    fi
+    fi;
     bash -i;
 else
-    if [ "$git_command" != "" ]
+    if [ "$git_command" != "" ];
     then
         git clone git://github.com/fsquillace/pearl $HOME/.pearl;
     else
-        mkdir -p /tmp/pearl-install && cd /tmp/pearl-install
-        wget https://github.com/fsquillace/pearl/archive/current.tar.gz
-        tar xzvf current.tar.gz
-        mv pearl-current $HOME/.pearl
-        rm -rf /tmp/pearl-install
-        cd $HOME
+        mkdir -p /tmp/pearl-install && cd /tmp/pearl-install;
+        wget https://github.com/fsquillace/pearl/archive/current.tar.gz;
+        tar xzvf current.tar.gz;
+        mv pearl-current $HOME/.pearl;
+        rm -rf /tmp/pearl-install;
+        cd $HOME;
     fi
     bash --rcfile $HOME/.pearl/pearl -i;
 fi

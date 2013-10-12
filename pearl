@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # pearl by Filippo Squillace
 # (great update 16-12-2009 date of my last exam in UNICAL :)
 # (update 21-07-2010 one of my last days in Valencia §:(  )
@@ -109,7 +109,7 @@ alias sudo="sudo "
 #alias sudo="sudo -E"    # Useful to keep variables environment when you are root
 
 alias go="ping 8.8.8.8"
-alias goo="ping www.google.it"
+alias goo="ping www.google.com"
 alias isconnect="python -c \"import util.net;print(util.net.is_connect())\""
 
 # Grep-based aliases

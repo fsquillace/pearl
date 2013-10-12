@@ -1,29 +1,86 @@
 #!/bin/bash
+
+# Choose the kind of style (bold:1, normal:0, underline:4)
+STYLE='0'
+
 # Colorize the hostname
-hstcol=$(hostname | sum - | awk '{print 31 + $0 % 6}')
+HOST_COLOR="38;5;$(hostname | sum - | awk '{print $0 % 256}')"
 
-prompt="\[\033[01;31m\][\$(if [[ \$? == 0 ]]; then echo \"\[\033[01;32m\]v\"; else echo \"\[\033[01;31m\]x\"; fi) \[\033[1;32m\]\t \[\033[1;33m\]\j \[\033[01;31m\]\u@\[\033[01;${hstcol}m\]\h \[\033[01;34m\]\W \[\033[01;35m\]\$\[\033[01;31m\]]> \[\033[00m\]"
-if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # We have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-    PS1=$prompt
-fi
+#if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    ## We have color support; assume it's compliant with Ecma-48
+    ## (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    ## a case would tend to support setf rather than setaf.)
+    #PS1=$prompt
+#fi
 
-PROMPT_COMMAND="history -a;" # immediately insert history into history file
-case ${TERM} in
-  xterm*|rxvt*|Eterm|aterm|kterm|gnome*|vt100)
-    PS1=$prompt
-    #PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-    ;;
+export T_normal=0
+export T_bold=1
+export T_underline=4
+export C_red='31'
+export C_green='32'
+export C_yellow='33'
+export C_blue='34'
+export C_magenta='35'
+export C_cyan='36'
 
-  screen)
-    PS1=$prompt
-    ;;
+export DIR_COLOR=
+export EXIT_CODE=
+export CODE_STRING=
+export JOB_STRING=
+export USER_COLOR=
 
-  *)
-    ;;
-esac
+prompt_command()
+{
+   EXIT_CODE=$CODE
+   USER_COLOR="38;5;$(whoami | sum - | awk '{print $0 % 256}')"
+   DIR_COLOR=$C_blue
+   if [ -O "$PWD" ]
+   then
+      DIR_COLOR=$C_blue
+   elif [ -w "$PWD" ]
+   then
+      DIR_COLOR=$C_green
+   else
+      DIR_COLOR=$C_red
+   fi
+   if [ $EXIT_CODE -ne 0 ]
+   then
+      CODE_STRING="$EXIT_CODE "
+   else
+      CODE_STRING=
+   fi
 
-unset prompt hstcol
+   local jobs_list=$(jobs | wc -l)
+   if [ "$jobs_list" != "0" ]
+   then
+       JOB_STRING="$jobs_list "
+   else
+       JOB_STRING=
+   fi
+}
+
+#immediately insert history into history file
+export PROMPT_COMMAND="CODE=\$?; type prompt_command &> /dev/null && prompt_command \$CODE; history -a"
+
+#case ${TERM} in
+    #xterm)
+        #PS1='\[\e]0;\u@\h:\W\007\]'
+    #;;
+    #xterm*|rxvt*|Eterm|aterm|kterm|gnome*|vt100)
+        #PS1=$prompt
+        ##PROMPT_COMMAND=${PROMPT_COMMAND:+$PROMPT_COMMAND; }'printf "\033_%s@%s:%s\033\\" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
+    #;;
+
+    #screen)
+        #PS1=$prompt
+    #;;
+
+    #*)
+    #;;
+#esac
+
+
+PS1='\[\033[${STYLE}m\]\[\033[${C_red}m\][\[\[\033[${C_green}m\]\t \[\033[${C_yellow}m\]${JOB_STRING}\[\033[${STYLE}m\]\[\033[${USER_COLOR}m\]\u\[\033[${C_red}m\]@\[\033[${STYLE}m\]\[\033[${HOST_COLOR}m\]\h \[\033[${DIR_COLOR}m\]\W \e[${C_red}m\]${CODE_STRING}\[\033[${C_magenta}m\]\$\[\033[${C_red}m\]]>\[\033[${T_normal}m\] '
+
+export PS1
 
