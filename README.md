@@ -473,12 +473,15 @@ There is a command called 'pearl\_switch' that allow to change the appearance of
 Each context is stored in '$PEARL\_ROOT/etc/context'. The script simply change the
 variables environment 'PS1' and 'PROMPT\_COMMAND'. There are two main contexts available:
 
-* def - It is the default context. It is able to dinamically show background jobs, error codes and the current git branch.
-    [22:24:17 130 4 feel@myarch {master} pearl $]>
+* def - It is the default context. It is able to dinamically show the error code of the last command, the background jobs, the number of trashed files (see TRASH command for details) and the current git branch.
+
+    [22:24:17 130 4 2 feel@myarch {master} pearl $]>
+
 * ops - It is used for system administration. Useful for checking memory, load avg, etc.
 The first three columns measure CPU and IO utilization of the last one, five, and 15 minute periods.
 The fourth column shows the number of currently running processes and the total number of processes.
 The last column displays the last process ID used.
+
     678/3844MB      0.47 0.51 0.52 2/273 30568
     [22:03:56 0  feel@myarch pearl $]>
 

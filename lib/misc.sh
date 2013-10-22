@@ -322,6 +322,9 @@ function trash(){
     elif [ "$1" = -e ] || [ "$1" = --empty ]
     then
         rm -rf $PEARL_TEMPORARY/*
+    elif [ "$1" = -c ] || [ "$1" = --count ]
+    then
+        echo $(ls $PEARL_TEMPORARY | wc -l)
     elif [ "$1" = -h ] || [ "$1" = --help ]
     then
         echo "Usage: trash file1 file2 ...."
@@ -330,6 +333,7 @@ function trash(){
         echo -e "\t-s, --show                Shows the trash"
         echo -e "\t-e, --empty               Empties the trash"
         echo -e "\t-r, --recovery <file>     Recovery a trashed file"
+        echo -e "\t-c, --count               Count the trashed files"
         echo -e "\t-h, --help                Show this help message"
     else
         mv --backup=numbered -f -t $PEARL_TEMPORARY "$@"
