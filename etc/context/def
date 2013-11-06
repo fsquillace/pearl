@@ -428,10 +428,10 @@ _HostColor="\[\033[38;5;$(hostname | sum - | awk '{print $0 % 256}')m\]"
 
 export PS1=$_Style$_Red[$_Green\\t\ $_Red'$(
   CODE=$?
-  [ $CODE -ne 0 ] && echo "$CODE "
+  [ $CODE -ne 0 ] && echo "$CODE"
   )'$_Yellow'$(
   JOBS_COUNT=$(jobs | wc -l)
-  [ $JOBS_COUNT -ne 0 ] && echo "$JOBS_COUNT "
+  [ $JOBS_COUNT -ne 0 ] && echo "$JOBS_COUNT"
   )'$_Blue'$(
   TRASH_COUNT=$(trash -c)
   [ $TRASH_COUNT -ne 0 ] && echo "$TRASH_COUNT "
