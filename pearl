@@ -117,7 +117,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 # Looks up to the history
-alias hgrep='history | /usr/bin/grep -i'
+alias hgrep='history | grep -i'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -133,7 +133,7 @@ alias less="less -i"
 [ -e /usr/bin/htop ] && alias top="/usr/bin/htop"
 
 # Call PDB when an exception is raised
-alias pypdb="$(which python) -m util.pdb_on_error"
+alias pypdb="python -m util.pdb_on_error"
 
 # Enhanced ssh for X11 forwarding and 256 colors
 alias sshx="TERM=xterm-256color LANG=en_US.UTF-8 ssh -Y"
