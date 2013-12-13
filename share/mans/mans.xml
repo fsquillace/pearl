@@ -2714,6 +2714,13 @@ In generale ogni codice ha un suo significato:
     *      130: script terminated by Ctrl-C 
 </item>
 
+
+<item name="strace">
+    To check only some system call (i.e. open,..) for a given process:
+    <command name="strace -f -p pid -e open,access,poll,select,connect,recvfrom,sendto [-c]"/>
+</item>
+
+
 <item name="exec comando">
 anziche generare un processo figlio per eseguire &quot;comando&quot;, con exec la shell e' sostituita dal comando. Se exec viene utilizzato in uno script qst termina all'esecuzione di exec
 
