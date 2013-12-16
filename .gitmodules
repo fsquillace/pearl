@@ -10,3 +10,9 @@
 [submodule "opt/ranger"]
 	path = opt/ranger
 	url = git://git.savannah.nongnu.org/ranger.git
+[submodule "etc/vim/bundle/python-mode"]
+	path = etc/vim/bundle/python-mode
+	url = git://github.com/klen/python-mode.git
+[submodule "etc/vim/bundle/jedi-vim"]
+	path = etc/vim/bundle/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git

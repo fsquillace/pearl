@@ -163,7 +163,7 @@ def contains(string1, string2, whole_word, case_sensitive):
 def search(doc, keyword, in_dict_name, in_item_name, in_item_description, whole_word, case_sensitive):
     """
     Search in all of dictionaries the keyword in the name and print in the standard output
-    Arguments: keyword 
+    Arguments: keyword
     Return: A data structure that is the answer of the query
     """
     ans = []
@@ -242,7 +242,7 @@ def search_by_item_name(keyword, whole_word, case_sensitive):
 def search_by_item_name_on(doc, keyword, whole_word, case_sensitive):
     """
     Search in all of dictionaries the keyword in the name and print in the standard output
-    Arguments: keyword 
+    Arguments: keyword
     """
     search(doc, keyword, False, True, False, whole_word, case_sensitive)
 
@@ -254,7 +254,7 @@ def search_all(keyword, whole_word, case_sensitive):
 def search_all_on(doc, keyword, whole_word, case_sensitive):
     """
     Search in all of dictionaries the keyword and print in the standard output
-    Arguments: keyword 
+    Arguments: keyword
     """
     search(doc, keyword, True, True, True, whole_word, case_sensitive)
 
