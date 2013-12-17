@@ -16,6 +16,8 @@
 """""""""""""""""""""""""""""""""""
 
 set encoding=utf8
+" automatically change window's cwd to file's dir
+set autochdir
 
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
@@ -244,9 +246,9 @@ map <silent> <Leader>op [s
 
 
 "" to disable the indentation when paste codes
-"nnoremap D :set invpaste paste?<CR>
-"set pastetoggle=D
-"set showmode
+nnoremap <leader>d :set invpaste paste?<CR>
+set pastetoggle=<leader>d
+set showmode
 
 
 " Use tabs like Firefox
@@ -353,7 +355,12 @@ source $PEARL_ROOT/etc/vim/bundle/pathogen/autoload/pathogen.vim
 " Call pathogen with the pearl bundles
 set runtimepath+=$PEARL_ROOT/etc/vim/
 set runtimepath+=$PEARL_ROOT/etc/vim/after/
+" Pathogen load
+filetype off
 call pathogen#infect('bundle/{}')
+call pathogen#helptags()
+filetype plugin indent on
+syntax on
 
 """""""""""""""""""
 " Nerd Commenter
@@ -421,3 +428,71 @@ if filereadable($PEARL_ROOT."/etc/vim/bundle/airline/.git")
         let g:loaded_airline=1
     endif
 endif
+
+
+"""""""""""""""
+" Python-mode
+"""""""""""""""
+" Activate rope
+" Keys:
+" K             Show python docs
+"   Rope autocomplete
+" g     Rope goto definition
+" d     Rope show documentation
+" f     Rope find occurrences
+" b     Set, unset breakpoint (g:pymode_breakpoint enabled)
+" [[            Jump on previous class or function (normal, visual, operator modes)
+" ]]            Jump on next class or function (normal, visual, operator modes)
+" [M            Jump on previous class or method (normal, visual, operator modes)
+" ]M            Jump on next class or method (normal, visual, operator modes)
+" Disable rope and use jedi-vim by default
+let g:pymode_rope = 0
+
+" Documentation
+let g:pymode_doc = 1
+let g:pymode_doc_key = '<leader><leader>k'
+
+"Linting
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pylint,pyflakes,pep8"
+" Auto check on save
+let g:pymode_lint_write = 1
+
+" Support virtualenv
+let g:pymode_virtualenv = 1
+
+" Enable breakpoints plugin
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_bind = '<leader><leader>b'
+
+" Run code
+let g:pymode_run_bind = '<leader><leader>R'
+
+" syntax highlighting
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+" Don't autofold code
+let g:pymode_folding = 0
+
+" Set default python options (i.e. textwrap=79)
+let g:pymode_options = 1
+
+
+
+""""""""""""""""""
+" Jedi-vim
+""""""""""""""""""
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#use_splits_not_buffers = "right"
+
+let g:jedi#goto_assignments_command = "<leader><leader>a"
+let g:jedi#goto_definitions_command = "<leader><leader>d"
+let g:jedi#documentation_command = "<leader><leader>k"
+let g:jedi#usages_command = "<leader><leader>u"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader><leader>r"
+let g:jedi#show_call_signatures = "1"
+

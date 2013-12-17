@@ -182,11 +182,13 @@ They are:
     Syntax checking hacks for vim
 *Fugitive*
     A Git wrapper so awesome, it should be illegal
+*Jedi*
+    Using the jedi autocompletion library
+*Python-mode*
+    Vim python-mode. PyLint, Rope, Pydoc, breakpoints from box.
 
 In particular *pathogen* is used to easily place plugins in the directory '$HOME/.vim/bundle' (Take a look in the project 'https://github.com/tpope/vim-pathogen').
-In order to install important VIM plugin *pearl* provides useful bash scripts with prefix *pearl\_install*
-Currently, you can install/upgrade the fantastic syntax checker plugin called *syntastic*
-through *pathogen* simply typing: *pearl\_install\_syntastic*.
+In order to install important VIM plugin *pearl* provides useful bash script *pearl\_update\u_modules*
 
 ### Bashrc ###
 *pearl* introduces a sourcing into your own .bashrc file configuration at the

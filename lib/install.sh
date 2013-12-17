@@ -302,6 +302,9 @@ function pearl_update_modules(){
     git submodule init
     git submodule update
     builtin cd $OLDPWD
+    builtin cd $PEARL_ROOT/etc/vim/bundle/jedi-vim/
+    git submodule update --init
+    builtin cd $OLDPWD
 
     return 0
 }
