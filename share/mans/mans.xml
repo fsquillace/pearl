@@ -1118,6 +1118,7 @@ $(EXECUTABLE): $(OBJECTS)
 <!--- ********************************* Emacs ***************************************** -->
 <dict name="emacs">
     <item name="Help">
+        Genear help:<command name="Cntrl-h Cntrl-h"/>
         Tutorial:<command name="Cntrl-h t"/>
         Manual:<command name="Cntrl-h r"/>
         Documentation with any key:<command name="Cntrl-h k"/>
@@ -1130,10 +1131,12 @@ $(EXECUTABLE): $(OBJECTS)
             <command name="M-x dired"/> or 
             <command name="C-x C-f"/>
         Save file:<command name="C-x C-s"/>
+        Save file as:<command name="C-x C-w"/>
     </item>
 
     <item name="Misc">
         To apply Cntrl-c to the shell:<command name="C-q C-c RET"/>
+        To wrap line:<command name="M-q"/>
     </item>
 
     <item name="Movement">
@@ -1142,6 +1145,9 @@ $(EXECUTABLE): $(OBJECTS)
         Next line:<command name="C-n"/>
         Previous line:<command name="C-p"/>
 
+        Move one word:<command name="C-left or C-right"/>
+        Move one paragraph:<command name="C-up or C-down"/>
+
         Beginning of line:<command name="C-a"/>
         End of line:<command name="C-e"/>
 
@@ -1149,7 +1155,12 @@ $(EXECUTABLE): $(OBJECTS)
         End of buffer:<command name="M-&gt;"/>
 
         Go to line:<command name="C-g g"/>
-        
+
+        Switch buffers:<command name="C-x b"/>
+        List buffers:<command name="C-x C-b"/>
+        Move between buffers:<command name="C-x right or C-x left"/>
+        Kill buffer:<command name="C-x k"/>
+
         To recovery from a crash or to erase a 
         keybindings sequence:<command name="C-g"/>
     </item>
@@ -1159,7 +1170,7 @@ $(EXECUTABLE): $(OBJECTS)
         Go to next:<command name="C-s"/>
         Return the cursor back:<command name="C-r"/>
         Incermental search backward:<command name="C-r"/>
-        
+
         Search and Replace:<command name="M-%"/>
 
         REGULAR EXPRESSION:
