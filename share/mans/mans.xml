@@ -139,9 +139,25 @@ Spazio 	        %20
         Plot a graph of init time:<command name="systemd-analyze plot"/>
     </item>
     <item name="system-log">
-        System log:<command name="journalctl"/>
+        BEST COMMAND:
+        Show log from this boot for a specific unit:
+        <command name="journatlctl -xn -b -u UNITNAME"/>
+
+        Follow new messages:
+        <command name="journalctl -f"/>
+
+        BOOT:
+        Shows messages from the current boot:
+        <command name="journalctl -b -0"/>
+        From the previous boot:
+        <command name="journalctl -b -1"/>
+
+        Show all messages by a specific process:
+        <command name="journalctl _PID=1"/>
+
         Create a text file for the log:<command name="journalctl -a > read_log.txt"/>
         Get log a specific unit:<command name="journalctl _SYSTEMD_UNIT=systemd-logind.service"/>
+
     </item>
     <item name="services">
         List of services:<command name="systemctl"/>
@@ -1229,6 +1245,7 @@ $(EXECUTABLE): $(OBJECTS)
             <command name="M-x python-mode"/>
             <command name="M-x text-mode"/>
             <command name="M-x fundamental-mode"/>
+            <command name="M-x org-mode"/>
 
         List of minor modes:
             <command name="M-x auto-fill-mode"/>
@@ -1259,7 +1276,7 @@ $(EXECUTABLE): $(OBJECTS)
         Rename file:<command name="R"/>
         Copy file:<command name="C"/>
         Delete file:<command name="D"/>
-        Chage mode file:<command name="M"/>
+        Change mode file:<command name="M"/>
         Change owner file:<command name="O"/>
         Change group file:<command name="G"/>
         Touch file:<command name="T"/>
@@ -1267,6 +1284,30 @@ $(EXECUTABLE): $(OBJECTS)
         Apply a shell command on a file:<command name="!"/>
         Diff files:<command name="="/>
         Update Dired buffer:<command name="g"/>
+    </item>
+    <item name="org-mode">
+        Change priority:<command name="S-up or S-down"/>
+        Change state:<command name="S-left or S-right"/>
+
+        Move task:<command name="M-up or M-down"/>
+        Change outline level:<command name="M-left or M-right"/>
+        Add new line:<command name="M-RET"/>
+
+        Cycle subtree:<command name="Tab"/>
+        Global cycle:<command name="S-Tab"/>
+
+        Markups are:
+            *bold*
+            /italic/
+            _underline_
+            +strike+
+            =code=
+            ~verbatim~
+
+        To set the TODO types (place it at the beginning of the file):
+        <command name="#+TODO: TODO IN-PROGRESS WAITING DONE"/>
+
+
     </item>
 </dict>
 
@@ -3271,6 +3312,7 @@ telnet. -e [char] specifichi il carattere di escape per uscire dalla connessione
 
 <item name="mail">
 permette di spedire e ricevere posta da un utente ad un altro del sistema. mail -s &quot;oggetto&quot; -u &quot;utente&quot; invia un msg all utente, -f permette di visualizzare la casella di posta
+Send the output of a command:<command name="echo test | mail -s ASubject $USER@mail.com"/>
 
 </item>
 
