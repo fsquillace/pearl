@@ -15,6 +15,7 @@
         s = status -sb
         standup = log --since=yesterday
         ready = rebase -i
+        diff2 = diff --word-diff
         lol = log --color --graph --decorate --pretty=oneline --abbrev-commit --all
         lol2 = log --color --graph --decorate --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
         lol3 = !git log --pretty=format:'%Cred---------------------------------------------------------------%n%C(red)%h %C(auto)%d %Cgreen(%ci) %C(red)<%ae>%Creset%n%s%n%n%b%n' --abbrev-commit --date=relative --graph --date-order --stat --color | less -cR
