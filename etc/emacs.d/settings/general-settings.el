@@ -75,6 +75,8 @@
 
 ;; =====  Don't show the startup screen =====
 (setq inhibit-startup-screen 1)
+(setq inhibit-splash-screen 1)
+
 
 
 ;; ===== Don't show stuffs =====
@@ -97,8 +99,8 @@
 (setq auto-fill-mode 1)
 
 
-;; ===== Make Text mode the default mode for new buffers =====
-(setq default-major-mode 'text-mode)
+;; ===== Make Org mode the default mode for new buffers =====
+(setq default-major-mode 'org-mode)
 
 
 ;; ===== Key bindings =====

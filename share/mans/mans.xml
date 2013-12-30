@@ -1134,7 +1134,8 @@ $(EXECUTABLE): $(OBJECTS)
 <!--- ********************************* Emacs ***************************************** -->
 <dict name="emacs">
     <item name="Help">
-        Genear help:<command name="Cntrl-h Cntrl-h"/>
+        Info-browser:<command name="C-h i"/>
+        General help:<command name="Cntrl-h Cntrl-h"/>
         Tutorial:<command name="Cntrl-h t"/>
         Manual:<command name="Cntrl-h r"/>
         Documentation with any key:<command name="Cntrl-h k"/>
@@ -1304,9 +1305,52 @@ $(EXECUTABLE): $(OBJECTS)
             =code=
             ~verbatim~
 
-        To set the TODO types (place it at the beginning of the file):
+        To set the TODO types
+        (place it at the beginning of the file and reload in the same line
+        with C-c C-c):
         <command name="#+TODO: TODO IN-PROGRESS WAITING DONE"/>
 
+        CHECKBOXES:
+        To add a checkobox to a list:<command name="- [ ]"/>
+        To check the box:<command name="C-c C-c"/>
+        Add new checkbox:<command name="M-S-RET"/>
+        To get mandatory the check of the box in sequence:
+        <command name="C-c C-x o"/>
+
+        TABLE:
+        Just use the sequence:<command name="|WORD"/>
+        To set a separator:<command name="|- or C-c -"/>
+        Convert a selection of CSV in table:<command name="C-c |"/>
+        Move column/row around:<command name="M-(up/down/left/right)"/>
+        Add/remove column/row:<command name="M-S-(up/down/left/right)"/>
+        New line:<command name="C-c RET"/>
+
+
+        AGENDA:
+        To open agenda command:<command name="C-c a"/>
+        To set a time to an item:<command name="C-c ."/>
+        and then S-left or S-right to choose the day.
+        To add/remove a org file as agenda file:<command name="C-c [ or C-c ]"/>
+
+        CLOCKING:
+        Clock in:<command name="C-c C-x C-i"/>
+        Clock out:<command name="C-c C-x C-o"/>
+        Reload a clock:<command name="C-c C-c"/>
+        Cancel clock:<command name="C-c C-x C-q"/>
+        Displat a summary:<command name="C-c C-x C-d"/>
+        Report table:<command name="C-c C-x C-r"/>
+
+        DEADLINE and SCHEDULE:
+        Create deadline:<command name="C-c C-d"/>
+        Create schedule:<command name="C-c C-s"/>
+
+        GTD (Get Things Done):
+        To add a task to an item:<command name="C-c C-q"/>
+        To predefine some set of tags (at the beginning of the file):
+        <command name="#+TAGS: { @OFFICE(o) @HOME(h) } COMPUTER(c) PHONE(p) READING(r)"/>
+
+        EXPORT:
+        <command name="C-x C-e"/>
 
     </item>
 </dict>

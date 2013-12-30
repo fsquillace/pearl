@@ -1,4 +1,6 @@
 
+;; -*- mode: elisp -*-
+
 ;;(setq pearl-path-settings (concat (getenv "PEARL_ROOT") "/etc/emacs.d/settings"))
 ;;(setq pearl-path-plugins (concat (getenv "PEARL_ROOT") "/etc/emacs.d/plugins"))
 
@@ -36,3 +38,5 @@
 ;; fill column
 (require 'fill-column-indicator-settings)
 
+;; org-mode
+(require 'org-mode-settings)
