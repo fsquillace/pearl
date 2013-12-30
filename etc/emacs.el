@@ -14,7 +14,10 @@
 (add-to-list 'load-path pearl-path-settings)
 
 ;; global config variables
+;; load the folder plugin
 (setq plugin-path pearl-path-plugins)
+;; load the single file plugin
+(add-to-list 'load-path pearl-path-plugins)
 
 
 ;; General settings
@@ -40,3 +43,6 @@
 
 ;; org-mode
 (require 'org-mode-settings)
+
+;; undo-tree
+(require 'undo-tree-settings)

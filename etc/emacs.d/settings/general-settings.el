@@ -53,8 +53,15 @@
 (setq version-control t)
 ;; Save all backup file in this directory.
 (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
-                                                 "backups"))))
+                                                 "backups/"))))
 
+;; ========== Place Auto-Save Files in Specific Directory ==========
+(setq auto-save-file-name-transforms
+           `((".*" ,(concat user-emacs-directory
+                                                 "auto-save/") t)))
+(setq auto-save-list-file-prefix
+         (concat user-emacs-directory
+                                                 "auto-save/"))
 
 ;; ========== Enable Line and Column Numbering ==========
 ;; Show line-number in the mode line
