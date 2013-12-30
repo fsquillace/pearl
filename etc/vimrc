@@ -115,6 +115,11 @@ set number              " show te line numbers
 "highlight LineNr guibg=lightblue ctermbg=lightgray
 "highlight LineNr ctermfg=darkcyan ctermbg=black
 
+" Highlight the lines that exceed the lenght 80 chars
+" match ErrorMsg '\%>80v.\+'
+
+set colorcolumn=79
+:hi ColorColumn ctermbg=lightblue guibg=lightblue
 
 set thesaurus+=~/.vim/thesaurus/mthesaur.txt
 " When vimrc is edited, reload it!
