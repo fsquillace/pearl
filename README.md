@@ -83,6 +83,7 @@ variables or pearl's script.
 
 ## HELP ##
 Just type one of the manuals you need in:
+
     man pearl.<TAB>
 
 ## FILES ##
@@ -96,27 +97,27 @@ The commands are stored in '~/.config/pearl/commands'.
 
 ## COPYRIGHT ##
 
-       Copyright  (C) 2008-2014 Free  Software Foundation, Inc.
+    Copyright  (C) 2008-2014 Free  Software Foundation, Inc.
 
-       Permission  is  granted to make and distribute verbatim copies
-       of this document provided the copyright notice and  this  per‐
-       mission notice are preserved on all copies.
+    Permission  is  granted to make and distribute verbatim copies
+    of this document provided the copyright notice and  this  per‐
+    mission notice are preserved on all copies.
 
-       Permission is granted to copy and distribute modified versions
-       of this document under the conditions  for  verbatim  copying,
-       provided that the entire resulting derived work is distributed
-       under the terms of a permission notice identical to this one.
+    Permission is granted to copy and distribute modified versions
+    of this document under the conditions  for  verbatim  copying,
+    provided that the entire resulting derived work is distributed
+    under the terms of a permission notice identical to this one.
 
-       Permission is granted to copy and distribute  translations  of
-       this  document  into  another language, under the above condi‐
-       tions for  modified  versions,  except  that  this  permission
-       notice  may  be  stated  in a translation approved by the Free
-       Software Foundation.
+    Permission is granted to copy and distribute  translations  of
+    this  document  into  another language, under the above condi‐
+    tions for  modified  versions,  except  that  this  permission
+    notice  may  be  stated  in a translation approved by the Free
+    Software Foundation.
 
 ## BUGS ##
-	Of course there is no bug in pearl. But there may be unexpected behaviors.
-	Go to 'https://github.com/fsquillace/pearl/issues' you can report directly
-	this unexpected behaviors.
+Of course there is no bug in pearl. But there may be unexpected behaviors.
+Go to 'https://github.com/fsquillace/pearl/issues' you can report directly
+this unexpected behaviors.
 
 ## AUTHORS ##
 Filippo Squillace <feel.squally@gmail.com>.
@@ -125,7 +126,8 @@ Filippo Squillace <feel.squally@gmail.com>.
 'https://github.com/fsquillace/pearl'
 
 ## Last words ##
-[verse, Dante Alighieri, from Divine Comedy]
+
+    [verse, Dante Alighieri, from Divine Comedy]
     Consider your origins:
     You were not born to live like brutes
     but to follow virtue and knowledge.
