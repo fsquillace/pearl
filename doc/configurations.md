@@ -165,3 +165,14 @@ A note worth to be noticed is that the gitconfig creates a file in
 ~/.gitignore in order to have a general gitignore file. You can put all
 the extension files that do not need to be pushed into any git repositories.
 
+## CONFIG FILES ##
+The config files touched by *pearl* are:
+
+* '~/.config/ranger/commands.py'
+* '~/.bashrc'
+* '~/.vimrc'
+* '~/.inputrc'
+* '~/.XDefaults'
+* '~/.gitconfig'
+* '~/.screenrc'
+* '~/.zshrc'
