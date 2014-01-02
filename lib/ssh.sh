@@ -2,39 +2,30 @@
 # $PEARL_ROOT/lib/util.sh
 
 
-function _init_ssh_command(){
-local initCommand
-read -d '' initCommand <<- EOF
-if [ ! -x \$HOME ];
-then
-    echo "Home folder doesn't exist. Creating it!";
-    sudo mkdir \$HOME;
-    sudo chown \$HOME;
-fi;
-[ -d \$HOME/.config/pearl/tmp ] || mkdir -p \$HOME/.config/pearl/tmp;
-
-EOF
-echo $initCommand
-}
-
-
 # Open a ssh session and transfer a minimal
 # version of pearl
 function ssh_mini_pearl(){
+[ -z $PEARL_HOME ] && PEARL_HOME=${HOME}/.config/pearl
 local homeScript=""
 [ -f $PEARL_HOME/pearlrc ] && homeScript=$(cat $PEARL_HOME/pearlrc)
-local aliasesScript=$(cat $PEARL_ROOT/lib/aliases.sh)
-local opsScript="$(cat $PEARL_ROOT/lib/ops.sh)"
-local initCommand=$(_init_ssh_command)
 
-local commandScript=$(echo "$initCommand\n$aliasesScript\n$opsScript\n$homeScript")
+local aliasesScript=""
+local opsScript=""
+if [ -d "$PEARL_ROOT" ];
+then
+    aliasesScript=$(cat $PEARL_ROOT/lib/aliases.sh)
+    opsScript="$(cat $PEARL_ROOT/lib/ops.sh)"
+fi
+
+local commandScript=$(echo "$aliasesScript\n$opsScript\n$homeScript")
 commandScript=$(hexencode "$commandScript")
-
 
 read -d '' CMD <<- EOF
 commandScript="${commandScript}"
-echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > /tmp/.minipearl.sh;
-exec /bin/bash --rcfile /tmp/.minipearl.sh -i
+PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
+echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/minipearl.sh;
+bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i
+rm -rf \${PEARL_INSTALL}
 EOF
 
 ssh -2 -t $@ -- "$CMD"
@@ -44,41 +35,23 @@ ssh -2 -t $@ -- "$CMD"
 # Open a ssh session and create a complete pearl
 # from either git or wget
 function ssh_pearl(){
-local installScript='
-git_command=$(which git);
-
-if [ -d $HOME/.pearl ];
+local installScript=""
+if [ -d "$PEARL_ROOT" ];
 then
-    if [ "$git_command" != "" ] && [ -d "$HOME/.pearl/.git" ];
-    then
-        cd $HOME/.pearl;
-        git pull;
-        cd - &> /dev/null;
-    fi;
+    installScript=$(cat ${PEARL_ROOT}/lib/install.sh)
 else
-    if [ "$git_command" != "" ];
-    then
-        git clone git://github.com/fsquillace/pearl $HOME/.pearl;
-    else
-        mkdir -p /tmp/pearl-install && cd /tmp/pearl-install;
-        wget https://github.com/fsquillace/pearl/archive/current.tar.gz;
-        md5sum current.tar.gz > $HOME/.pearl/pearl.sum
-        tar xzvf current.tar.gz;
-        mv pearl-current $HOME/.pearl;
-        rm -rf /tmp/pearl-install;
-        cd $HOME;
-    fi
+    installScript=$(wget -q -O - https://raw.github.com/fsquillace/pearl/master/lib/install.sh)
 fi
-source $HOME/.pearl/pearl;
-'
-local initCommand=$(_init_ssh_command)
-local commandScript=$(echo "$initCommand\n$installScript")
-commandScript=$(hexencode "$commandScript")
+
+local commandScript=$(hexencode "$installScript")
 
 read -d '' CMD <<- EOF
 commandScript="${commandScript}"
-echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \$HOME/.config/pearl/tmp/minipearl.sh;
-exec /bin/bash --rcfile \$HOME/.config/pearl/tmp/minipearl.sh -i
+PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
+echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/install.sh;
+bash \${PEARL_INSTALL}/install.sh
+bash --rcfile \$HOME/.pearl/pearl -i
+rm -rf \${PEARL_INSTALL}
 EOF
 
 ssh -2 -t $@ -- "$CMD"

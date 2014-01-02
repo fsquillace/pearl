@@ -324,24 +324,22 @@ function _pearl_git_update(){
 }
 
 function _pearl_wget_install(){
-    if [ ! -f "$PEARL_INSTALL/current.tar.gz" ]
-    then
-        wget https://github.com/fsquillace/pearl/archive/current.tar.gz
-    fi
-
-    builtin cd $PEARL_INSTALL
+    local pearl_install=$(mktemp -d pearl-XXXXX -p /tmp)
+    builtin cd $pearl_install
+    wget -q https://github.com/fsquillace/pearl/archive/current.tar.gz
     tar xzvf current.tar.gz;
-    mv pearl-current $HOME/.pearl;
-    md5sum current.tar.gz > $HOME/.pearl/pearl.sum
-    cd $HOME;
+
+    mv pearl-current $PEARL_ROOT
+    md5sum current.tar.gz > $PEARL_ROOT/pearl.sum
+    cd $PEARL_ROOT;
+    rm -rf $pearl_install
 }
 
 function _pearl_wget_update(){
-    builtin cd $PEARL_INSTALL
-    wget https://github.com/fsquillace/pearl/archive/current.tar.gz
+    newSum=$(wget -q -O - https://github.com/fsquillace/pearl/archive/current.tar.gz | md5sum)
     oldSum=$(cat $PEARL_ROOT/pearl.sum)
         
-    if [ "$(md5sum current.tar.gz)" != "$oldSum" ]
+    if [ "$newSum" != "$oldSum" ]
     then
         _pearl_wget_install
     fi
@@ -398,10 +396,19 @@ fi
 
 
 if [ "${BASH_ARGV}" == "" ]; then
-    PEARL_INSTALL=$(mktemp -d pearl-XXXXX -p /tmp)
-    [ -z $PEARL_ROOT ] && PEARL_ROOT=$HOME/.pearl
+    # If pearl is not installed, install it to HOME
+    # and ensure the user has the right permissions
+    if [ -z $PEARL_ROOT ]
+    then
+        PEARL_ROOT=$HOME/.pearl
+        if [ ! -x $HOME ];
+        then
+            echo "Home folder doesn't exist. Creating it!";
+            sudo mkdir $HOME;
+            sudo chown $HOME;
+        fi;
+    fi
     [ -z $PEARL_HOME ] && PEARL_HOME=$HOME/.config/pearl
     pearl_install_update
-    rm -rf $PEARL_INSTALL
 fi
 
