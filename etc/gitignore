@@ -1,0 +1,12 @@
+build
+eclipse-bin/
+.project
+.classpath
+.coverage
+nohup.out
+*.pyc
+*.pyo
+__pycache__/
+.project
+.pydevproject
+*.swp

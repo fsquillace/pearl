@@ -3,11 +3,6 @@
 ## NAME ##
 pearl - An enhanced shell bash framework
 
-## SYNOPSIS ##
-*source* *<path/to/pearl>/pearl*
-
-*bash --rcfile <path/to/pearl>/pearl*
-
 ## DESCRIPTION ##
 *pearl* is an enhanced and lightweight shell framework that allows
 to improve the way of using the shell Bash GNU/Linux and automate many daily
@@ -30,7 +25,7 @@ Only in the best shell you will find a pearl!
 ## INSTALLATION ##
 *pearl* should work with many recent release of bash.
 
-### USING GIT... ###
+### Using Git... ###
 
 For sure the best way of installing *pearl* is to place it
 in a hidden subdirectory of HOME (by default ~/.pearl).
@@ -39,7 +34,7 @@ Type the following commands:
     $ git clone 'git://github.com/fsquillace/pearl.git' $HOME/.pearl
     $ source $HOME/.pearl/pearl
 
-### ...OR EVEN SMARTER... ###
+### ...Or even smarter... ###
 
 Using the *make.sh* script, pearl can be installed even on a
 machine that doesn't have git installed!
@@ -49,7 +44,7 @@ if git has been installed into the machine.
     $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh | bash
     $ source $HOME/.pearl/pearl
 
-### ...OR EVEN SUPER SMARTER! ###
+### ...Or even super smarter! ###
 
 Supposing that the local machine has already installed pearl,
 you can install/update pearl and access through a ssh session
@@ -58,20 +53,28 @@ on a remote machine with:
     $ ssh_pearl user@server.com
 
 ## USAGE ##
-- To define all the settings (enable/disable configurations files):
-  ``pearl_settings``
 - To update pearl:
   ``pearl_update``
 - To uninstall completely and safely pearl:
   ``pearl_uninstall``
-- To list the modules
-  ``pearl_list_modules``
-- To install *ranger* module
-  ``pearl_install_update_module ranger``
-- To uninstall a *ranger* module
-  ``pearl_uninstall_module ranger``
 
-The file '$HOME/.config/pearl/pearlrc' is the user-defined config
+### Modules ###
+- To list the modules
+  ``pearl_module_list``
+- To install *ranger* (an awesome file manager!) module
+  ``pearl_module_install_update ranger``
+- To uninstall the *ranger* module
+  ``pearl_module_uninstall ranger``
+
+### Configs ###
+- To list all the configurations
+  ``pearl_config_list``
+- To enable the vim configuration
+  ``pearl_config_enable vimrc``
+- To disable the vim configuration
+  ``pearl_config_disable vimrc``
+
+The file ``$HOME/.config/pearl/pearlrc`` is the user-defined config
 that contains all the settings done from the user.
 This can be useful when you want to override some aliases,
 variables or pearl's script.
@@ -93,13 +96,13 @@ Just type one of the manuals you need in:
     man pearl.<TAB>
 
 ## FILES ##
-*pearl* creates a config directory in '~/.config/pearl' which include
+*pearl* creates a config directory in ``~/.config/pearl`` which include
 several config files. All the temporary directories
-of the associated shell are stored in '~/.config/pearl/tmp'.
+of the associated shell are stored in ``~/.config/pearl/tmp``.
 
-The bookmark paths are stored into '~/.config/pearl/bookmarks'.
-The TODOs are stored into '~/.config/pearl/todos'.
-The commands are stored in '~/.config/pearl/commands'.
+The bookmark paths are stored into ``~/.config/pearl/bookmarks``.
+The TODOs are stored into ``~/.config/pearl/todos``.
+The commands are stored in ``~/.config/pearl/commands``.
 
 ## COPYRIGHT ##
 
@@ -129,12 +132,12 @@ this unexpected behaviors.
 Filippo Squillace <feel.squally@gmail.com>.
 
 ## WWW ##
-'https://github.com/fsquillace/pearl'
+https://github.com/fsquillace/pearl
 
 ## Last words ##
 
-    [verse, Dante Alighieri, from Divine Comedy]
     Consider your origins:
     You were not born to live like brutes
     but to follow virtue and knowledge.
+    [verse, Dante Alighieri, from Divine Comedy]
 

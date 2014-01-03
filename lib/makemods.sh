@@ -1,6 +1,6 @@
 # This module handles the pearl modules
 
-function pearl_install_update_module(){
+function pearl_module_install_update(){
     function up_help(){
         echo "Usage: pearl_install_update_module <modulename>"
         echo "Install/update git submodules"
@@ -28,7 +28,7 @@ function pearl_install_update_module(){
     return 0
 }
 
-function pearl_uninstall_module(){
+function pearl_module_uninstall(){
     function up_help(){
         echo "Usage: pearl_uninstall_module <modulename>"
         echo "Remove git submodule"
@@ -56,7 +56,7 @@ function pearl_uninstall_module(){
 
 }
 
-function pearl_list_modules(){
+function pearl_module_list(){
     function up_help(){
         echo "Usage: pearl_list_modules <modulename>"
         echo "List git submodules"

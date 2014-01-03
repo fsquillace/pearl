@@ -55,27 +55,25 @@ function apply(){
     # If the file doesn't exist create it and append the line
     if [ ! -e "$2" ]
     then
-        #dirp=$(readlink -f `dirname $2`)
         local dirp=$(dirname $2)
         mkdir -p $dirp
         touch "$2"
     fi
     # Check if already exists the
     # line into the file
-    grep -x "$1" "$2" &> /dev/null
-    if [ "$?" = "1" ]
-    then
-        echo "" >> $2
-        echo "$1" >> $2
-    fi
+    is_applied "$1" "$2" || echo "$1" >> $2
 }
 
 function unapply(){
-    grep -v -x "$1" "$2" &> /tmp/tmp_file
+    grep -F -v -x "$1" "$2" &> /tmp/tmp_file
     cat /tmp/tmp_file > "$2"
     rm -fr /tmp/tmp_file
 }
 
+function is_applied(){
+    grep -F -x "$1" "$2" &> /dev/null
+    return $?
+}
 
 function pearl_logo(){
 cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
