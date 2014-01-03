@@ -251,29 +251,3 @@ You can create your own context just creating a file in '$PEARL\_HOME/etc/contex
 The command is similar to tail -f but it also highlights log keywords such as DEBUG, INFO, WARN, ERROR.
 tailf requires perl.
 
-### BACKUP ###
-BACKUP command makes sessions of backup including files and directories.
-Each backup can be sent to a mailbox by specifying the account credentials
-into your config file. The config file is located in
-'~/.config/pearl/etc/backup.conf'. If it doesn't exist the program BACKUP will
-find backup.conf in the etc directory of pearl root (to default is
-'/opt/pearl/etc/backup.conf').
-It's possible to create several sessions instead of using only one config
-file. Moreover, you can create files directly in a directory called 'backup.d'
-and recall them by the BACKUP program to apply backups of the corresponding
-file and directories reported into the session.
-The backup will be stored according to the variable 'bkp\_dir' specified into
-backup.conf file (to default the directory is '~/.config/pearl/backups').
-See backup --help to know all the details of how using this command.
-
-Example of using:
-    *$ backup -s*
-    Lists all the sessions created by the user in 'etc/backup.d' directory.
-
-    *$ backup*
-    Applies a backup for the main session in 'backup.conf' file. The backup
-    will be stored in 'bkp\_dir'.
-
-    *$ backup -m mysession1*
-    Applies a backup of the session contained in 'backup.d/mysession1' and
-    send an email attaching it.

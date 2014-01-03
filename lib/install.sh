@@ -343,7 +343,7 @@ function pearl_uninstall_module(){
     local modulename=$1
 
     builtin cd $PEARL_ROOT
-    git submodule deinit "mods/${modulename}"
+    git submodule deinit -f "mods/${modulename}"
     source ${PEARL_ROOT}/pearl
     #[ -d "mods/${modulename}/" ] && rm -rf "mods/${modulename}/*"
     #[ -d ".git/modules/mods/$modulename" ] && rm -rf ".git/modules/mods/$modulename"
