@@ -1,9 +1,9 @@
 # pearl(1) #
 
-## NAME ##
+## Name ##
 pearl - An enhanced shell bash framework
 
-## DESCRIPTION ##
+## Description ##
 *pearl* is an enhanced and lightweight shell framework that allows
 to improve the way of using the shell Bash GNU/Linux and automate many daily
 activities of the system administrator.
@@ -22,7 +22,7 @@ them as much as you want.
 
 Only in the best shell you will find a pearl!
 
-## INSTALLATION ##
+## Installation ##
 *pearl* should work with many recent release of bash.
 
 ### Using Git... ###
@@ -52,7 +52,7 @@ on a remote machine with:
 
     $ ssh_pearl user@server.com
 
-## USAGE ##
+## Usage ##
 - To update pearl:
   ``pearl_update``
 - To uninstall completely and safely pearl:
@@ -79,7 +79,7 @@ that contains all the settings done from the user.
 This can be useful when you want to override some aliases,
 variables or pearl's script.
 
-## QUICKSTART ##
+## Quickstart ##
 - Trash safely a file/directory instead of deleting it through rm:
   ``trash myfile``
 - Add a directory to a bookmark:
@@ -90,12 +90,12 @@ variables or pearl's script.
   ``tmux -g mytag``
 - much much more… take a look at lib/ for what 'pearl' offers…
 
-## HELP ##
+## Help ##
 Just type one of the manuals you need in:
 
     man pearl.<TAB>
 
-## FILES ##
+## Files ##
 *pearl* creates a config directory in ``~/.config/pearl`` which include
 several config files. All the temporary directories
 of the associated shell are stored in ``~/.config/pearl/tmp``.
@@ -104,7 +104,7 @@ The bookmark paths are stored into ``~/.config/pearl/bookmarks``.
 The TODOs are stored into ``~/.config/pearl/todos``.
 The commands are stored in ``~/.config/pearl/commands``.
 
-## COPYRIGHT ##
+## Copyright ##
 
     Copyright  (C) 2008-2014 Free  Software Foundation, Inc.
 
@@ -123,12 +123,12 @@ The commands are stored in ``~/.config/pearl/commands``.
     notice  may  be  stated  in a translation approved by the Free
     Software Foundation.
 
-## BUGS ##
+## Bugs ##
 Of course there is no bug in pearl. But there may be unexpected behaviors.
 Go to 'https://github.com/fsquillace/pearl/issues' you can report directly
 this unexpected behaviors.
 
-## AUTHORS ##
+## Authors ##
 Filippo Squillace <feel.squally@gmail.com>.
 
 ## WWW ##
