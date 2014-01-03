@@ -38,9 +38,9 @@ function ssh_pearl(){
 local installScript=""
 if [ -d "$PEARL_ROOT" ];
 then
-    installScript=$(cat ${PEARL_ROOT}/lib/install.sh)
+    installScript=$(cat ${PEARL_ROOT}/lib/make.sh)
 else
-    installScript=$(wget -q -O - https://raw.github.com/fsquillace/pearl/master/lib/install.sh)
+    installScript=$(wget -q -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh)
 fi
 
 local commandScript=$(hexencode "$installScript")
@@ -48,8 +48,8 @@ local commandScript=$(hexencode "$installScript")
 read -d '' CMD <<- EOF
 commandScript="${commandScript}"
 PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
-echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/install.sh;
-bash \${PEARL_INSTALL}/install.sh
+echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/make.sh;
+bash \${PEARL_INSTALL}/make.sh
 bash --rcfile \$HOME/.pearl/pearl -i
 rm -rf \${PEARL_INSTALL}
 EOF

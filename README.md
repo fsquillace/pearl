@@ -41,12 +41,12 @@ Type the following commands:
 
 ### ...OR EVEN SMARTER... ###
 
-Using the *install.sh* script, pearl can be installed even on a
+Using the *make.sh* script, pearl can be installed even on a
 machine that doesn't have git installed!
-*install.sh* installs or updates pearl with either git or wget depending
+*make.sh* installs or updates pearl with either git or wget depending
 if git has been installed into the machine.
 
-    $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/install.sh | bash
+    $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh | bash
     $ source $HOME/.pearl/pearl
 
 ### ...OR EVEN SUPER SMARTER! ###
@@ -64,6 +64,12 @@ on a remote machine with:
   ``pearl_update``
 - To uninstall completely and safely pearl:
   ``pearl_uninstall``
+- To list the modules
+  ``pearl_list_modules``
+- To install *ranger* module
+  ``pearl_install_update_module ranger``
+- To uninstall a *ranger* module
+  ``pearl_uninstall_module ranger``
 
 The file '$HOME/.config/pearl/pearlrc' is the user-defined config
 that contains all the settings done from the user.

@@ -45,7 +45,9 @@ export PEARL_DEBUG=0
 
 # Import the functions from the modules in lib/
 source $PEARL_ROOT/lib/util.sh
-source $PEARL_ROOT/lib/install.sh
+source $PEARL_ROOT/lib/make.sh
+source $PEARL_ROOT/lib/makemods.sh
+source $PEARL_ROOT/lib/settings.sh
 
 # Install pearl if it is not installed yet
 pearl_create_home
