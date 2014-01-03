@@ -291,7 +291,8 @@ function ranger(){
     # The following command add tags for the files synced. The problem is that is takes time
     #check_sync
 
-    local ranger_command=${PEARL_ROOT}/opt/ranger/ranger.py
+    local ranger_command=${PEARL_ROOT}/mods/ranger/ranger.py
+    [ -f $ranger_command ] || ranger_command="$(which ranger)"
     [ -f $ranger_command ] || ranger_command="/usr/bin/ranger"
 
     # Checks out into the jobs if the user pressed the C-z key

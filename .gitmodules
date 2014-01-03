@@ -1,18 +1,21 @@
-[submodule "etc/vim/bundle/airline"]
-	path = etc/vim/bundle/airline
-	url = https://github.com/bling/vim-airline.git
-[submodule "etc/vim/bundle/syntastic"]
-	path = etc/vim/bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
-[submodule "etc/vim/bundle/fugitive"]
-	path = etc/vim/bundle/fugitive
-	url = https://github.com/tpope/vim-fugitive.git
-[submodule "opt/ranger"]
-	path = opt/ranger
+[submodule "etc/vim/bundle/vim-jedi"]
+	path = etc/vim/bundle/vim-jedi
+	url = https://github.com/davidhalter/jedi-vim.git
+[submodule "mods/ranger"]
+	path = mods/ranger
 	url = git://git.savannah.nongnu.org/ranger.git
-[submodule "etc/vim/bundle/python-mode"]
-	path = etc/vim/bundle/python-mode
+[submodule "mods/vim-airline"]
+	path = mods/vim-airline
+	url = https://github.com/bling/vim-airline.git
+[submodule "mods/vim-syntastic"]
+	path = mods/vim-syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule "mods/vim-fugitive"]
+	path = mods/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "mods/vim-python-mode"]
+	path = mods/vim-python-mode
 	url = git://github.com/klen/python-mode.git
-[submodule "etc/vim/bundle/jedi-vim"]
-	path = etc/vim/bundle/jedi-vim
+[submodule "mods/vim-jedi"]
+	path = mods/vim-jedi
 	url = https://github.com/davidhalter/jedi-vim.git
