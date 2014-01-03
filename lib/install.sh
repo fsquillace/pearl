@@ -317,6 +317,7 @@ function pearl_install_update_module(){
     builtin cd $PEARL_ROOT
     git submodule init "mods/$modulename"
     git submodule update --init "mods/$modulename"
+    source ${PEARL_ROOT}/pearl
     builtin cd $OLDPWD
 
     return 0
@@ -343,6 +344,7 @@ function pearl_uninstall_module(){
 
     builtin cd $PEARL_ROOT
     git submodule deinit "mods/${modulename}"
+    source ${PEARL_ROOT}/pearl
     #[ -d "mods/${modulename}/" ] && rm -rf "mods/${modulename}/*"
     #[ -d ".git/modules/mods/$modulename" ] && rm -rf ".git/modules/mods/$modulename"
     builtin cd $OLDPWD
