@@ -19,3 +19,6 @@
 [submodule "mods/vim-jedi"]
 	path = mods/vim-jedi
 	url = https://github.com/davidhalter/jedi-vim.git
+[submodule "mods/vim-gnupg"]
+	path = mods/vim-gnupg
+	url = https://github.com/jamessan/vim-gnupg.git

@@ -23,7 +23,12 @@ them as much as you want.
 Only in the best shell you will find a pearl!
 
 ## Installation ##
-*pearl* should work with many recent release of bash.
+*pearl* should work with many recent release of bash. The minimum recommended
+version is 4.3.9.
+
+Usually all git releases are ok,
+but for uninstalling modules the minimum recommended version is >=1.8 since
+the previous git releases don't support the "submodule deinit" command.
 
 ### Using Git... ###
 
@@ -94,6 +99,10 @@ variables or pearl's script.
 Just type one of the manuals you need in:
 
     man pearl.<TAB>
+
+## FAQ ##
+Q: I cannot uninstall modules: error: pathspec 'deinit' did not match any file(s) known to git.
+A: deinit command is available only for newer git releases >=1.8.
 
 ## Files ##
 *pearl* creates a config directory in ``~/.config/pearl`` which include
