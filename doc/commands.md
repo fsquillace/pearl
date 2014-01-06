@@ -110,20 +110,6 @@ Example of using:
     Stores the corresponding command specified by the entry. Then, you just
     need to type Cntrl-g to put it in the command line. 
 
-### MAN2 ###
-MAN2 is a minimal manual to get essentials snippet information about all the
-important commands. *man2* is able to scan manuals in a xml format that are stored in both
-'$PEARL\_ROOT/share/mans/' and '$PEARL\_HOME/mans/'.
-You can create your own manual xml file for storing all the information
-you need. Just copy the manual xml template file from '$PEARL\_ROOT/share/mans/mans\_example.xml'
-to '$PEARL\_HOME/mans/your\_man.xml'.
-Type *man2 --help* to see all the available options.
-
-Example of using:
-
-    *$ man2* 'keyword'
-    Search "keyword" into the db.
-
 ### EYE ###
 EYE searches (also recursively) if substrings match with the specified pattern, 
 into each text or pdf file.

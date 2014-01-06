@@ -22,3 +22,6 @@
 [submodule "mods/vim-gnupg"]
 	path = mods/vim-gnupg
 	url = https://github.com/jamessan/vim-gnupg.git
+[submodule "mods/pearl-man"]
+	path = mods/pearl-man
+	url = https://github.com/fsquillace/pearl-man.git

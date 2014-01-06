@@ -1,11 +1,12 @@
 
 
-function ranger_config(){
-    # Here you can put the settings for ranger module
+function pearl_man_config(){
+    PATH=$PATH:$PEARL_ROOT/mods/pearl-man/bin
+    MANPATH=$MANPATH:$PEARL_ROOT/mods/pearl-man/man
     return 0
 }
 
-[ "$(ls -A "$PEARL_ROOT/mods/ranger")" ] && ranger_config
+[ "$(ls -A "$PEARL_ROOT/mods/pearl-man")" ] && pearl_man_config
 
 
-unset ranger_config
+unset pearl_man_config
