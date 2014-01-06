@@ -73,6 +73,7 @@ function pearl_module_list(){
         return 0
     fi
 
+    builtin cd $PEARL_ROOT
     local modlist=$(git submodule status | awk '{print $2}'  | grep -E ^mods | sed 's/mods\///')
     for module in $modlist
     do
@@ -80,6 +81,7 @@ function pearl_module_list(){
         [ "$(ls -A mods/${module})" ] && installed="[installed]"
         echo "$module $installed"
     done
+    builtin cd $OLDPWD
 
 #    git config --list| grep -E ^submodule
 }
