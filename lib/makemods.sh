@@ -20,8 +20,7 @@ function pearl_module_install_update(){
     local modulename=$1
 
     builtin cd $PEARL_ROOT
-    git submodule init "mods/$modulename"
-    git submodule update --init "mods/$modulename"
+    git submodule update --init --remote --merge --force --rebase "mods/$modulename"
     source ${PEARL_ROOT}/pearl
     builtin cd $OLDPWD
 
