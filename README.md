@@ -102,7 +102,15 @@ Just type one of the manuals you need in:
 
 ## FAQ ##
 Q: I cannot uninstall modules: error: pathspec 'deinit' did not match any file(s) known to git.
+
 A: deinit command is available only for newer git releases >=1.8.
+
+
+Q: What if I want to override some configuration properties?
+
+A: The override configuration can be done directly to the traditional
+config file of the tool since it will have the highest priority.
+For example, to override some properties of vim, just edit the '~/.vimrc' file.
 
 ## Files ##
 *pearl* creates a config directory in ``~/.config/pearl`` which include

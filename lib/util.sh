@@ -59,20 +59,14 @@ function apply(){
         mkdir -p $dirp
         touch "$2"
     fi
-    # Check if already exists the
-    # line into the file
-    is_applied "$1" "$2" || echo "$1" >> $2
+
+    local original=$(grep -F -x -v "$1" "$2")
+    echo -e "$1\n$original" > $2
 }
 
 function unapply(){
-    grep -F -v -x "$1" "$2" &> /tmp/tmp_file
-    cat /tmp/tmp_file > "$2"
-    rm -fr /tmp/tmp_file
-}
-
-function is_applied(){
-    grep -F -x "$1" "$2" &> /dev/null
-    return $?
+    local original=$(grep -F -x -v "$1" "$2")
+    echo -e "$original" > $2
 }
 
 function pearl_logo(){
