@@ -8,6 +8,8 @@
 ;;(read-abbrev-file "~/.abbrev_defs")
 ;;(setq save-abbrevs t)
 
+;; Set font
+(global-font-lock-mode t)
 
 ;; ===== Set the highlight current line minor mode =====
 ;; In every buffer, the line which contains the cursor will be fully
@@ -35,12 +37,15 @@
 ;; disabled for all buffers.
 ;; Use (setq ...) to set value locally to a buffer
 ;; Use (setq-default ...) to set value globally
+(setq tab-width 4)
 (setq-default indent-tabs-mode nil) 
 
 
 ;; ========== Support Wheel Mouse Scrolling ==========
 (mouse-wheel-mode t) 
 
+;; ========== Show the trailing whitespace =========
+(setq show-trailing-whitespace 1)
 
 ;; ========== Prevent Emacs from making backup files ==========
 ;;(setq make-backup-files nil) 

@@ -14,7 +14,7 @@
 
 ;; Remeber settings
 (setq org-directory "~/orgfiles/")
-(setq org-default-notes-file "~/orgfiles/notes.org")
+(setq org-default-notes-file "~/notes.org")
 (setq remember-annotation-functions '(org-remember-annotation))
 (setq remember-handler-functions '(org-remember-handler))
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
@@ -28,5 +28,8 @@
      ("Private" ?p "\n* %^{topic} %T \n%i%?\n" "~/orgfiles/privnotes.org")
      ("Contact" ?c "\n* %^{Name} :CONTACT:\n" "~/orgfiles/privnotes.org" "Contacts")
      ))
+
+;; Set agenda key binding
+(define-key global-map "\C-ca" 'org-agenda)
 
 (provide 'org-mode-settings)
