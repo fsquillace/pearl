@@ -15,9 +15,8 @@ function pearl_uninstall(){
         return 1
     fi
 
-    local res=$(confirm_question "Are you sure to DELETE completely Pearl? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if ask "Are you sure to DELETE completely Pearl?" "N"
+    then
         echo "Resetting all the configuration files..."
         # Bash
         unapply "source $PEARL_ROOT/pearl" $HOME/.bashrc
@@ -39,9 +38,8 @@ function pearl_uninstall(){
         rm -rf $PEARL_ROOT
     fi
 
-    local res=$(confirm_question "Are you sure to DELETE the Pearl config folder too ($PEARL_HOME folder)? (y/N)> ")
-
-    if [ "$res" == "y" ] || [ "$res" == "Y" ]; then
+    if ask "Are you sure to DELETE the Pearl config folder too ($PEARL_HOME folder)?" "N"
+    then
        rm -rf $PEARL_HOME
    fi
 

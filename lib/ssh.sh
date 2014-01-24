@@ -25,10 +25,10 @@ commandScript="${commandScript}"
 PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
 echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/minipearl.sh;
 bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i
-rm -rf \${PEARL_INSTALL}
+[ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}
 EOF
 
-ssh -2 -t $@ -- "$CMD"
+ssh -2 -t $@ -- /bin/bash -c "$CMD"
 }
 
 

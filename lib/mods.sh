@@ -6,7 +6,13 @@ function pearl_man_config(){
     return 0
 }
 
-[ "$(ls -A "$PEARL_ROOT/mods/pearl-man")" ] && pearl_man_config
+function powerline_config(){
+    return 0
+}
+
+[ "$(ls -A "${PEARL_ROOT}/mods/pearl-man")" ] && pearl_man_config
+[ "$(ls -A "${PEARL_ROOT}/mods/powerline")" ] && powerline_config
 
 
 unset pearl_man_config
+unset powerline_config

@@ -38,21 +38,44 @@ printf '%b' "${1//%/\x}"
 }
 
 
-function confirm_question(){
-    # $1: prompt;
+function ask(){
+    # $1: question string
+    # $2: default value - can be either Y, y, N, n (by default Y)
+
+    local default="Y"
+    [ -z $2 ] || default=$(echo "$2" | tr '[:lower:]' '[:upper:]')
+
+    local other="n"
+    [ "$default" == "N" ] && other="y"
+
+    local prompt="$1 (${default}/${other})> "
 
     local res="none"
-    while [ "$res" != "Y" ] && [ "$res" != "n" ] && [ "$res" != "N"  ] && [ "$res" != "y"  ] && [ "$res" != "" ];
+    while [ "$res" != "Y" ] && [ "$res" != "N"  ] && [ "$res" != "" ];
     do
-        read -p "$1" res
+        read -p "$prompt" res
+        res=$(echo "$res" | tr '[:lower:]' '[:upper:]')
     done
 
-    echo "$res"
+    [ "$res" == "" ] && res="$default"
+
+    if [ "$res" == "Y" ]
+    then
+        return 0
+    else
+        return 1
+    fi
+
 }
 
 
 function apply(){
+    # $1: String to apply
+    # $2: File path which the string must be applied
+    # $3: bool - put string at the beginning (default true)
+    #
     # If the file doesn't exist create it and append the line
+
     if [ ! -e "$2" ]
     then
         local dirp=$(dirname $2)
@@ -60,8 +83,16 @@ function apply(){
         touch "$2"
     fi
 
+    local putfirst=true
+    [ -z $3 ] || putfirst=$3
+
     local original=$(grep -F -x -v "$1" "$2")
-    echo -e "$1\n$original" > $2
+    if $putfirst
+    then
+        echo -e "$1\n$original" > $2
+    else
+        echo -e "$original\n$1" > $2
+    fi
 }
 
 function unapply(){

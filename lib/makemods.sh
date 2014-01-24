@@ -18,12 +18,19 @@ function pearl_module_install_update(){
     fi
 
     local modulename=$1
+    source ${PEARL_ROOT}/lib/hooks/${modulename}.sh
 
+    OLD_PWD=$(pwd)
     builtin cd $PEARL_ROOT
-    git submodule update --init --remote --merge --force --rebase "mods/$modulename"
-    source ${PEARL_ROOT}/pearl
-    builtin cd $OLDPWD
+    type -t pre_install &> /dev/null && pre_install
+    git submodule update --init --force --rebase "mods/$modulename"
+    type -t post_install &> /dev/null && post_install
 
+    source ${PEARL_ROOT}/pearl
+    builtin cd $OLD_PWD
+
+    unset pre_install post_install
+    unset pre_uninstall post_uninstall
     return 0
 }
 
@@ -46,13 +53,21 @@ function pearl_module_uninstall(){
 
     local modulename=$1
 
+    source ${PEARL_ROOT}/lib/hooks/${modulename}.sh
+
+    OLD_PWD=$(pwd)
     builtin cd $PEARL_ROOT
+    type -t pre_uninstall &> /dev/null && pre_uninstall
     git submodule deinit -f "mods/${modulename}"
+    type -t post_uninstall &> /dev/null && post_uninstall
+
     source ${PEARL_ROOT}/pearl
     #[ -d "mods/${modulename}/" ] && rm -rf "mods/${modulename}/*"
     #[ -d ".git/modules/mods/$modulename" ] && rm -rf ".git/modules/mods/$modulename"
-    builtin cd $OLDPWD
+    builtin cd $OLD_PWD
 
+    unset pre_uninstall post_uninstall
+    unset pre_install post_install
 }
 
 function pearl_module_list(){

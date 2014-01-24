@@ -4,7 +4,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 source $PEARL_ROOT/etc/vim.d/plugins/pathogen/autoload/pathogen.vim
 filetype off
-call pathogen#infect($PEARL_ROOT.'/etc/vim.d/plugins/{}', $PEARL_ROOT.'/mods/{}')
+call pathogen#infect($PEARL_ROOT.'/etc/vim.d/plugins/{}', $PEARL_ROOT.'/mods/{}', $PEARL_ROOT.'/mods/powerline/bindings/vim/{}')
 call pathogen#helptags()
 filetype plugin indent on
 syntax on
@@ -70,3 +70,9 @@ if filereadable($PEARL_ROOT."/mods/vim-jedi/.git")
     source $PEARL_ROOT/etc/vim.d/settings/jedi.vim
 endif
 
+""""""""""""""""""
+" Powerline
+""""""""""""""""""
+if filereadable($PEARL_ROOT."/mods/powerline/.git")
+    source $PEARL_ROOT/etc/vim.d/settings/powerline.vim
+endif

@@ -25,3 +25,9 @@
 [submodule "mods/pearl-man"]
 	path = mods/pearl-man
 	url = https://github.com/fsquillace/pearl-man.git
+[submodule "mods/powerline"]
+	path = mods/powerline
+	url = https://github.com/Lokaltog/powerline.git
+[submodule "mods/powerline-fonts"]
+	path = mods/powerline-fonts
+	url = https://github.com/Lokaltog/powerline-fonts.git
