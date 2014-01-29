@@ -95,6 +95,11 @@ function apply(){
     fi
 }
 
+function is_applied(){
+    grep -F -x "$1" "$2" &> /dev/null
+    return $?
+}
+
 function unapply(){
     local original=$(grep -F -x -v "$1" "$2")
     echo -e "$original" > $2
