@@ -73,6 +73,7 @@ on a remote machine with:
   ``pearl_module_uninstall ranger``
 
 List of main modules are:
+
 - [powerline](https://github.com/Lokaltog/powerline) - statusline plugin for vim and more
 - [ranger](http://ranger.nongnu.org/) - A ncurses file manager
 - [vim-syntastic](https://github.com/scrooloose/syntastic) - Syntax checking hacks for vim
