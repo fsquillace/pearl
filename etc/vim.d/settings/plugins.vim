@@ -76,3 +76,10 @@ endif
 if filereadable($PEARL_ROOT."/mods/powerline/.git")
     source $PEARL_ROOT/etc/vim.d/settings/powerline.vim
 endif
+
+""""""""""""""""""
+" Powerline
+""""""""""""""""""
+if filereadable($PEARL_ROOT."/mods/vim-solarized/.git")
+    source $PEARL_ROOT/etc/vim.d/settings/solarized.vim
+endif

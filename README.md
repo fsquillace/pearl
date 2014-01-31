@@ -16,6 +16,7 @@ The main goal of pearl is to provide for both expert and beginner users a
 starting point, respectively, for using quickly the shell terminal
 and learning how to create customized functions, aliases and
 managing configuration files of the main open source programs.
+
 *pearl* is not meant to give static configurations
 for the users but it provides the freedom to customize
 them as much as you want.
@@ -66,10 +67,17 @@ on a remote machine with:
 ### Modules ###
 - To list the modules
   ``pearl_module_list``
-- To install *ranger* (an awesome file manager!) module
+- To install *ranger* module
   ``pearl_module_install_update ranger``
 - To uninstall the *ranger* module
   ``pearl_module_uninstall ranger``
+
+List of main modules are:
+- [powerline](https://github.com/Lokaltog/powerline) - statusline plugin for vim and more
+- [ranger](http://ranger.nongnu.org/) - A ncurses file manager
+- [vim-syntastic](https://github.com/scrooloose/syntastic) - Syntax checking hacks for vim
+- [vim-python-mode](https://github.com/klen/python-mode)
+- and much more...
 
 ### Configs ###
 - To list all the configurations

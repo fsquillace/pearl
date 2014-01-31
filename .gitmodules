@@ -31,3 +31,12 @@
 [submodule "mods/powerline-fonts"]
 	path = mods/powerline-fonts
 	url = https://github.com/Lokaltog/powerline-fonts.git
+[submodule "mods/vim-gitgutter"]
+	path = mods/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter.git
+[submodule "mods/vim-solarized"]
+	path = mods/vim-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "mods/vim-signify"]
+	path = mods/vim-signify
+	url = https://github.com/mhinz/vim-signify.git
