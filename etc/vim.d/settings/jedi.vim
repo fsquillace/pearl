@@ -9,3 +9,6 @@ let g:jedi#usages_command = "<leader><leader>u"
 let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader><leader>r"
 let g:jedi#show_call_signatures = "1"
+
+" Disable rope and if you want to use jedi-vim instead
+let g:pymode_rope = 0
