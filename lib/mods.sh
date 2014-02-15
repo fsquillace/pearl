@@ -3,6 +3,7 @@
 function pearl_man_config(){
     PATH=$PATH:$PEARL_ROOT/mods/pearl-man/bin
     MANPATH=$MANPATH:$PEARL_ROOT/mods/pearl-man/man
+    alias man3="man -M $PEARL_ROOT/mods/pearl-man/mans/man -i --regex "
     return 0
 }
 
