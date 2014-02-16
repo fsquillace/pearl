@@ -49,9 +49,6 @@ source $PEARL_ROOT/lib/make.sh
 source $PEARL_ROOT/lib/makemods.sh
 source $PEARL_ROOT/lib/configs.sh
 
-# Install pearl if it is not installed yet
-pearl_init
-
 source $PEARL_ROOT/lib/variables.sh
 source $PEARL_ROOT/lib/aliases.sh
 source $PEARL_ROOT/lib/history.sh
@@ -68,4 +65,7 @@ source $PEARL_ROOT/lib/misc.sh
 
 # Set the modules
 source $PEARL_ROOT/lib/mods.sh
+
+# Install pearl if it is not installed yet
+pearl_init
 
