@@ -45,3 +45,6 @@ let g:pymode_folding = 0
 
 " Set default python options (i.e. textwrap=79)
 let g:pymode_options = 1
+
+" Disable quickfix window (I see it a little annoying)
+let g:pymode_quickfix_maxheight = 0
