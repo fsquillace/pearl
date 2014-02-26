@@ -2,7 +2,12 @@
 #@@ Aliases
 #@@@@@@@@@@@@@@@@@@
 
-# Mini-aliases :)
+alias ..="cd ../../"
+alias ...="cd ../../../"
+alias "cd.."="cd .."
+alias "cd-"="cd -"
+
+# Mini-aliases :)`
 alias j="jobs"
 alias f="fg"
 alias b="bg"
