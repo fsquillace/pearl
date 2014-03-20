@@ -163,31 +163,6 @@ notifier(){
 }
 
 
-
-
-bootapp(){
-# Permette di decidere se voler mostrare stout o stderr
-local show_stdout=$3
-local show_stderr=$4
-local a=`ps aux | grep  -v "grep" | grep "$1"`  #`pidof $1`
-if [ "$a" = "" ]; then
-    #echo "L'applicazione " $1 "verrà eseguita tra" $2
-    # Opzione di default
-    if [ "$show_stdout" = "" ]; then
-        sleep $2 && nohup $1 &> /dev/null &
-    elif [ "$show_stdout" = "false" -a "$show_stderr" = "false" ]; then
-    	sleep $2 && nohup $1 &> /dev/null &
-    elif [ "$show_stdout" = "true" -a "$show_stderr" = "false" ]; then
-        sleep $2 && nohup $1 1>> $TEMPORARY/pearl.out 2>> /dev/null &
-    elif [ "$show_stdout" = "false" -a "$show_stderr" = "true" ]; then
-        sleep $2 && nohup $1 2>> $TEMPORARY/pearl.err 1>> /dev/null &
-    elif [ "$show_stdout" = "true" -a "$show_stderr" = "true" ]; then
-        sleep $2 && nohup $1 1>> $TEMPORARY/pearl.out 2>> $TEMPORARY/pearl.err &
-    fi
-
-fi
-}
-
 function eye(){
     local TEMP=`getopt -o crwph --long case-sensitive,recursive,whole-words,pdf,help -n 'eye' -- "$@"`
 

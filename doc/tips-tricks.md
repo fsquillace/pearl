@@ -62,16 +62,6 @@ for Vim in the Vim configuration section.
 ### INSTALLING AND UPGRADING RANGER ###
 Simply type *pearl\_update\_modules* and it will place the program in '$PEARL\_HOME/opt/ranger'.
 
-### BOOT GRAPHICAL APPLICATION AT STARTUP OF X SEVER ###
-You can specify in your ~/.xinitrc your applications you want to startup
-with some delay with the following bash function:
-
-    source /path/to/pearl/lib/util.sh
-    bootapp pidgin 23
-
-It will boot pidgin after 23 seconds. This function allow to reduce the
-overhead of booting the X Server with a lot of application at startup.
-
 ### COLORIZE THE HOSTNAME IN PROMPT ###
 In order to recognize easily which machine you are currently using,
 the hostname information present in the prompt is colorized in function of its value.
