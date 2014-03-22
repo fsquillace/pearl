@@ -7,7 +7,7 @@
 function ssh_mini_pearl(){
 [ -z $PEARL_HOME ] && PEARL_HOME=${HOME}/.config/pearl
 local homeScript=""
-[ -f $PEARL_HOME/pearlrc ] && homeScript=$(cat $PEARL_HOME/pearlrc)
+[ -f $PEARL_HOME/pearlsshrc ] && homeScript=$(cat $PEARL_HOME/pearlsshrc)
 
 local aliasesScript=""
 local opsScript=""
@@ -20,15 +20,9 @@ fi
 local commandScript=$(echo "$aliasesScript\n$opsScript\n$homeScript")
 commandScript=$(hexencode "$commandScript")
 
-read -d '' CMD <<- EOF
-commandScript="${commandScript}"
-PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
-echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/minipearl.sh;
-bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i
-[ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}
-EOF
+CMD="commandScript=\"${commandScript}\"; PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"\$(printf '%b' \"\${commandScript}\")\" > \${PEARL_INSTALL}/minipearl.sh; bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
 
-ssh -2 -t $@ -- /bin/bash -c "$CMD"
+ssh -2 -t $@ -- "$CMD"
 }
 
 
@@ -45,14 +39,7 @@ fi
 
 local commandScript=$(hexencode "$installScript")
 
-read -d '' CMD <<- EOF
-commandScript="${commandScript}"
-PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp)
-echo "\$(printf '%b' "\${commandScript//x/\\\x}")" > \${PEARL_INSTALL}/make.sh;
-bash \${PEARL_INSTALL}/make.sh
-bash --rcfile \$HOME/.pearl/pearl -i
-rm -rf \${PEARL_INSTALL}
-EOF
+CMD="commandScript=\"${commandScript}\"; PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"\$(printf '%b' \"\${commandScript}\")\" > \${PEARL_INSTALL}/make.sh; bash \${PEARL_INSTALL}/make.sh; bash --rcfile \$HOME/.pearl/pearl -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
 
 ssh -2 -t $@ -- "$CMD"
 }
