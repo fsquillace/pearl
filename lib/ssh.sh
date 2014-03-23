@@ -9,7 +9,7 @@ function ssh_mini_pearl(){
 local homeScript=""
 [ -f $PEARL_HOME/pearlsshrc ] && homeScript=$(cat $PEARL_HOME/pearlsshrc)
 
-local promptScript="export PS1=\"\[\033[0m\]\[\033[31m\][\[\033[32m\]\T\[\033[0m\] \[\033[33m\]\u\[\033[31m\]@\[\033[0m\]\[\033[34m\]\h \[\033[36m\]\W \[\033[35m\]\$\[\033[31m\]]>\[\033[0m\] \""
+local promptScript="export PS1='\[\033[0m\]\[\033[31m\][\[\033[32m\]\\\t\[\033[0m\] \[\033[33m\]\\\u\[\033[31m\]@\[\033[0m\]\[\033[36m\]\h \[\033[34m\]\W \[\033[35m\]\$\[\033[31m\]]>\[\033[0m\] '"
 
 local aliasesScript=""
 local opsScript=""
