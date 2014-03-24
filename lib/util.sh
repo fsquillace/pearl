@@ -4,7 +4,7 @@
 hexencode(){
     local length=${#1}
     [ ${length} -eq 0 ] && length=1
-    echo -e "$1" | od -w$length -t x1 | head -n1 | sed -e 's/^[0]* / /' -e 's/ /\\x/g'
+    echo "$1" | od -w$length -t x1 | head -n1 | sed -e 's/^[0]* / /' -e 's/ /\\x/g'
 }
 
 hexdecode() {
