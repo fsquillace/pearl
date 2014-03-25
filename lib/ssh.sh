@@ -11,22 +11,18 @@ local homeScript=""
 
 local promptScript="export PS1='\[\033[31m\][\[\033[36m\]\h \[\033[34m\]\W \[\033[35m\]\$\[\033[31m\]]>\[\033[0m\] '"
 
-local aliasesScript=""
-local opsScript=""
-local optionsScript=""
-local historyScript=""
+local fromPearlScript=""
 if [ -d "$PEARL_ROOT" ];
 then
-    aliasesScript=$(cat $PEARL_ROOT/lib/aliases.sh)
-    opsScript="$(cat $PEARL_ROOT/lib/ops.sh)"
-    optionsScript="$(cat $PEARL_ROOT/lib/options.sh)"
-    historyScript="$(cat $PEARL_ROOT/lib/history.sh)"
-fi
-
-local fromPearlScript="${aliasesScript}
+    local aliasesScript="$(cat $PEARL_ROOT/lib/aliases.sh)"
+    local opsScript="$(cat $PEARL_ROOT/lib/ops.sh)"
+    local optionsScript="$(cat $PEARL_ROOT/lib/options.sh)"
+    local historyScript="$(cat $PEARL_ROOT/lib/history.sh)"
+    fromPearlScript="${aliasesScript}
 ${optionsScript}
 ${opsScript}
 ${historyScript}"
+fi
 
 local commandScript="${fromPearlScript}
 ${promptScript}
