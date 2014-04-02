@@ -30,6 +30,36 @@ echo "$ps_out" | head -n 1
 echo "$ps_out" | sort -nr -k 3 | head -n $num
 }
 
+function cpugt(){
+# $1: percentage of cpu. Default 90%
+
+local perc=$1
+[ "$perc" == "" ] && perc="90"
+
+local ps_out=$(ps -auxf)
+echo "$ps_out" | head -n 1
+echo "$ps_out" | sort -nr -k 3 | awk -v "q=$perc" '($3>=q){print $0}'
+}
+
+function memgt(){
+# $1: percentage of memory. Default 90%
+
+local perc=$1
+[ "$perc" == "" ] && perc="90"
+
+local ps_out=$(ps -auxf)
+echo "$ps_out" | head -n 1
+echo "$ps_out" | sort -nr -k 4 | awk -v "q=$perc" '($4>=q){print $0}'
+}
+
+function repeat(){
+# $@ the command to be repeated
+   for((;;))
+   do
+       $@
+       sleep 1
+   done
+}
 
 function touser(){
 # $1: name of the user
