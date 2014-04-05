@@ -10,6 +10,7 @@ local homeScript=""
 local promptScript="export PS1='\[\033[31m\][\[\033[36m\]\h \[\033[34m\]\W \[\033[35m\]\$\[\033[31m\]]>\[\033[0m\] '"
 
 local fromPearlScript=""
+local inputrcScript=""
 if [ -d "$PEARL_ROOT" ];
 then
     local aliasesScript="$(cat $PEARL_ROOT/lib/aliases.sh)"
@@ -22,6 +23,8 @@ ${bindingsScript}
 ${optionsScript}
 ${opsScript}
 ${historyScript}"
+
+    inputrcScript="$(cat $PEARL_ROOT/etc/inputrc)"
 fi
 
 local commandScript="${fromPearlScript}
@@ -29,8 +32,9 @@ ${promptScript}
 ${homeScript}"
 
 commandScript=$(echo "$commandScript" | gzip | base64)
+inputrcScript=$(echo "$inputrcScript" | gzip | base64)
 
-CMD="PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"${commandScript}\" | base64 -di | gunzip > \${PEARL_INSTALL}/minipearl.sh; bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
+CMD="PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"${inputrcScript}\" | base64 -di | gunzip > \${PEARL_INSTALL}/inputrc; echo \"${commandScript}\" | base64 -di | gunzip > \${PEARL_INSTALL}/minipearl.sh; INPUTRC=\${PEARL_INSTALL}/inputrc bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
 
 ssh -2 -t $@ -- "$CMD"
 }
