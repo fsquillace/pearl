@@ -32,10 +32,11 @@
 - *b*=bg
 - *j*=jobs
 - *a*="ls -ha"
-- *c*="clear"
+- *c*="cal"
+- *d*="date"
 - *e*='$EDITOR'
 - *p*='pwd'
-- *h*='history'
+- *h*='hostname'
 - *t*='tree'
 - *l*="ls --group-directories-first --color=auto -h"
 - *ll*="l -l"

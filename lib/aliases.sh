@@ -23,10 +23,11 @@ else
 fi
 
 alias a="ls -ha"
-alias c="clear"
+alias c="cal"
+alias d="date"
 alias e='$EDITOR'
 alias p='pwd'
-alias h='history'
+alias h='hostname'
 alias t='tree'
 
 alias ll="l -l"

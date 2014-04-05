@@ -15,10 +15,12 @@ local fromPearlScript=""
 if [ -d "$PEARL_ROOT" ];
 then
     local aliasesScript="$(cat $PEARL_ROOT/lib/aliases.sh)"
+    local bindingsScript="$(cat $PEARL_ROOT/lib/bindings.sh)"
     local opsScript="$(cat $PEARL_ROOT/lib/ops.sh)"
     local optionsScript="$(cat $PEARL_ROOT/lib/options.sh)"
     local historyScript="$(cat $PEARL_ROOT/lib/history.sh)"
     fromPearlScript="${aliasesScript}
+${bindingsScript}
 ${optionsScript}
 ${opsScript}
 ${historyScript}"
