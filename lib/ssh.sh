@@ -1,5 +1,3 @@
-# This module depends on:
-# $PEARL_ROOT/lib/util.sh
 
 
 # Open a ssh session and transfer a minimal
@@ -30,9 +28,9 @@ local commandScript="${fromPearlScript}
 ${promptScript}
 ${homeScript}"
 
-commandScript=$(hexencode "$commandScript")
+commandScript=$(echo "$commandScript" | gzip | base64)
 
-CMD="commandScript=\"${commandScript}\"; PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"\$(printf '%b' \"\${commandScript}\")\" > \${PEARL_INSTALL}/minipearl.sh; bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
+CMD="PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"${commandScript}\" | base64 -d | gunzip > \${PEARL_INSTALL}/minipearl.sh; bash --rcfile \${PEARL_INSTALL}/minipearl.sh -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
 
 ssh -2 -t $@ -- "$CMD"
 }
@@ -49,9 +47,9 @@ else
     installScript=$(wget -q -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh)
 fi
 
-local commandScript=$(hexencode "$installScript")
+local commandScript=$(echo "$installScript" | gzip | base64)
 
-CMD="commandScript=\"${commandScript}\"; PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"\$(printf '%b' \"\${commandScript}\")\" > \${PEARL_INSTALL}/make.sh; bash \${PEARL_INSTALL}/make.sh; bash --rcfile \$HOME/.pearl/pearl -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
+CMD="PEARL_INSTALL=\$(mktemp -d pearl-XXXXX -p /tmp); echo \"${commandScript}\" | base64 -d | gunzip > \${PEARL_INSTALL}/make.sh; bash \${PEARL_INSTALL}/make.sh; bash --rcfile \$HOME/.pearl/pearl -i; [ -d \${PEARL_INSTALL} ] && rm -rf \${PEARL_INSTALL}"
 
 ssh -2 -t $@ -- "$CMD"
 }
