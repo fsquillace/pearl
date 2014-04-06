@@ -31,7 +31,7 @@ Usually all git releases are ok,
 but for uninstalling modules the minimum recommended version is >=1.8 since
 the previous git releases don't support the "submodule deinit" command.
 
-### Using Git... ###
+### Using Git (Recommended)... ###
 
 For sure the best way of installing *pearl* is to place it
 in a hidden subdirectory of HOME (by default ~/.pearl).
@@ -40,23 +40,15 @@ Type the following commands:
     $ git clone 'git://github.com/fsquillace/pearl.git' $HOME/.pearl
     $ source $HOME/.pearl/pearl
 
-### ...Or even smarter... ###
+### ...Or without Git ###
 
 Using the *make.sh* script, pearl can be installed even on a
 machine that doesn't have git installed!
-*make.sh* installs or updates pearl with either git or wget depending
-if git has been installed into the machine.
+*make.sh* installs or updates pearl with either `git` or `wget` depending
+if `git` has been installed into the machine.
 
     $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh | bash
     $ source $HOME/.pearl/pearl
-
-### ...Or even super smarter! ###
-
-Supposing that the local machine has already installed pearl,
-you can install/update pearl and access through a ssh session
-on a remote machine with:
-
-    $ ssh_pearl user@server.com
 
 ## Usage ##
 - To update pearl:
