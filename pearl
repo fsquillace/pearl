@@ -52,7 +52,6 @@ source $PEARL_ROOT/lib/configs.sh
 source $PEARL_ROOT/lib/variables.sh
 source $PEARL_ROOT/lib/aliases.sh
 source $PEARL_ROOT/lib/history.sh
-source $PEARL_ROOT/lib/ssh.sh
 source $PEARL_ROOT/lib/options.sh
 source $PEARL_ROOT/lib/prompt.sh
 source $PEARL_ROOT/lib/bindings.sh

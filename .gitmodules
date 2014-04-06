@@ -40,3 +40,6 @@
 [submodule "mods/vim-signify"]
 	path = mods/vim-signify
 	url = https://github.com/mhinz/vim-signify.git
+[submodule "mods/pearl-ssh"]
+	path = mods/pearl-ssh
+	url = https://github.com/fsquillace/pearl-ssh.git
