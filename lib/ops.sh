@@ -9,74 +9,73 @@ function tailf(){
 
 
 function memmost(){
-# $1: number of process to view (default 10).
-local num=$1
-[ "$num" == "" ] && num="10"
+    # $1: number of process to view (default 10).
+    local num=$1
+    [ "$num" == "" ] && num="10"
 
-local ps_out=$(ps -auxf)
-echo "$ps_out" | head -n 1
-echo "$ps_out" | sort -nr -k 4 | head -n $num
+    local ps_out=$(ps -auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | sort -nr -k 4 | head -n $num
 }
 
 
 function cpumost(){
-# $1: number of process to view (default 10).
+    # $1: number of process to view (default 10).
 
-local num=$1
-[ "$num" == "" ] && num="10"
+    local num=$1
+    [ "$num" == "" ] && num="10"
 
-local ps_out=$(ps -auxf)
-echo "$ps_out" | head -n 1
-echo "$ps_out" | sort -nr -k 3 | head -n $num
+    local ps_out=$(ps -auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | sort -nr -k 3 | head -n $num
 }
 
 function cpugt(){
-# $1: percentage of cpu. Default 90%
+    # $1: percentage of cpu. Default 90%
 
-local perc=$1
-[ "$perc" == "" ] && perc="90"
+    local perc=$1
+    [ "$perc" == "" ] && perc="90"
 
-local ps_out=$(ps -auxf)
-echo "$ps_out" | head -n 1
-echo "$ps_out" | sort -nr -k 3 | awk -v "q=$perc" '($3>=q){print $0}'
+    local ps_out=$(ps -auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | sort -nr -k 3 | awk -v "q=$perc" '($3>=q){print $0}'
 }
 
 function memgt(){
-# $1: percentage of memory. Default 90%
+    # $1: percentage of memory. Default 90%
 
-local perc=$1
-[ "$perc" == "" ] && perc="90"
+    local perc=$1
+    [ "$perc" == "" ] && perc="90"
 
-local ps_out=$(ps -auxf)
-echo "$ps_out" | head -n 1
-echo "$ps_out" | sort -nr -k 4 | awk -v "q=$perc" '($4>=q){print $0}'
+    local ps_out=$(ps -auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | sort -nr -k 4 | awk -v "q=$perc" '($4>=q){print $0}'
 }
 
 function repeat(){
-# $@ the command to be repeated
-   for((;;))
-   do
-       $@
-       sleep 1
-   done
+    # $@ the command to be repeated
+    while [ 1 ]
+    do
+        eval $@
+        sleep 1
+    done
 }
 
 function touser(){
-# $1: name of the user
-#
-ps -U $1 -u $1 u
+    # $1: name of the user
+    ps -U $1 -u $1 u
 }
 
 
 function frompid(){
-# $1: PID of the process
-ps -p $1 -o comm=
+    # $1: PID of the process
+    ps -p $1 -o comm=
 }
 
 
 function topid(){
-# $1: name of the process
-ps -C $1 -o pid=
+    # $1: name of the process
+    ps -C $1 -o pid=
 }
 
 
