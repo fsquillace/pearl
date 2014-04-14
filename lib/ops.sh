@@ -30,6 +30,27 @@ function cpumost(){
     echo "$ps_out" | sort -nr -k 3 | head -n $num
 }
 
+function allbusy(){
+
+    local ps_out=$(ps auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | awk '($8~/.*D.*/){print $0}'
+}
+
+function allzombies(){
+
+    local ps_out=$(ps auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | awk '($8~/.*Z.*/){print $0}'
+}
+
+function allrunning(){
+
+    local ps_out=$(ps auxf)
+    echo "$ps_out" | head -n 1
+    echo "$ps_out" | awk '($8~/.*R.*/){print $0}'
+}
+
 function cpugt(){
     # $1: percentage of cpu. Default 90%
 
