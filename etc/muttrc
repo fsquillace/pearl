@@ -1,0 +1,11 @@
+# vim: ft=muttrc
+
+
+source ${PEARL_ROOT}/etc/mutt.d/general
+source ${PEARL_ROOT}/etc/mutt.d/smtp
+source ${PEARL_ROOT}/etc/mutt.d/macros
+source ${PEARL_ROOT}/etc/mutt.d/bindings
+source ${PEARL_ROOT}/etc/mutt.d/colors
+source ${PEARL_ROOT}/etc/mutt.d/auto_views
+source ${PEARL_ROOT}/etc/mutt.d/headers
+source ${PEARL_ROOT}/etc/mutt.d/pgp

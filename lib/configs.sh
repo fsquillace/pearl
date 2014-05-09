@@ -9,6 +9,7 @@ inputrc:\$include $PEARL_ROOT/etc/inputrc:$HOME/.inputrc
 ranger:exec(open('$PEARL_ROOT/etc/ranger/commands.py').read()):$HOME/.config/ranger/commands.py
 screenrc:source $PEARL_ROOT/etc/screenrc:$HOME/.screenrc
 tmux:source $PEARL_ROOT/etc/tmux.conf:$HOME/.tmux.conf
+muttrc:source $PEARL_ROOT/etc/muttrc:$HOME/.muttrc
 xdefaults:# include \"$PEARL_ROOT/etc/Xdefaults\":$HOME/.Xdefaults
 gitconfig:[include] path = \"$PEARL_ROOT/etc/gitconfig\":$HOME/.gitconfig
 gitignore:[core] excludesfile = $PEARL_ROOT/etc/gitignore:$HOME/.gitconfig"

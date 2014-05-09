@@ -1,0 +1,8 @@
+# vim: ft=muttrc
+
+#####################
+# msmtp settings
+####################
+set sendmail="/usr/bin/msmtp"
+set use_from=yes
+set envelope_from=yes
