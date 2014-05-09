@@ -17,7 +17,7 @@
 
 set encoding=utf8
 " automatically change window's cwd to file's dir
-set autochdir
+"set autochdir
 
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
