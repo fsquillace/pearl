@@ -10,6 +10,7 @@ auto_view application/x-gzip
 auto_view application/x-gunzip
 auto_view application/pgp-signature
 auto_view application/pgp
+auto_view application/x-pgp-message
 auto_view application/octet-stream
 auto_view application/x-zip-compressed
 auto_view application/x-arj-compressed

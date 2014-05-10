@@ -1,7 +1,8 @@
 # vim: ft=muttrc
 
+##############
 ## Bindings ##
-
+##############
 
 #For important message
 bind pager i flag-message
@@ -9,6 +10,8 @@ bind index i flag-message
 
 # Unbind ctrl-d
 bind 	pager,index	\cd 	"noop"
+
+bind pager \\ previous-line # \ goes up in pager
 
 # Generic key bindings.
 bind generic "\e<"   first-entry
@@ -51,8 +54,6 @@ bind pager   "\Cxo"   change-folder
 bind pager   "\Cxb"   change-folder
 bind pager   "\Cx\Cf" change-folder
 
-
-
 # Toggle the new status (the slrn way)
 bind 	index	u	"toggle-new"
 bind 	pager	u	"mark-as-new"
@@ -80,8 +81,11 @@ bind 	index 	<tab>	"search-next"
 # Check all mailboxes
 bind 	browser	$	"check-new"
 
-bind 	index	G	"sync-mailbox"
-bind 	pager	G	"sync-mailbox"
+bind index G last-entry
+bind index g first-entry
+
+bind 	index	S	"sync-mailbox"
+bind 	pager	S	"sync-mailbox"
 
 # Go to next message instead of next-undeleted
 bind 	index,pager	<down>	"next-entry"
@@ -102,5 +106,3 @@ bind 	index,pager	<up>	"previous-entry"
 #ESC v   collapse-thread         toggle collapse for the current thread
 #ESC V   collapse-all            toggle collapse for all threads
 #P       parent-message          jump to parent message in thread
-
-# vim: syntax=muttrc

@@ -1,4 +1,5 @@
 # vim: ft=muttrc
+# Remember to create the folder ~/.mutt/cache first
 
   set askcc
   set auto_tag = yes
@@ -6,6 +7,7 @@
   set certificate_file=~/.mutt/certificates
   set config_charset=utf-8
 unset confirmappend
+  set copy   # Keep copies of outgoing mail
   set delete
   set editor="vim -c 'set nohlsearch noshowmatch filetype=mail modelines=0 tw=75 et noai spell spelllang=it,en,es'"
   set edit_headers=yes
@@ -13,13 +15,14 @@ unset confirmappend
   set folder = ~/Mail
   set forward_format = "Fwd: %s"
   set forward_quote
-  set imap_keepalive = 300
-  set include
+  set header       # Include headers in reply messages
+  set include=yes  # Default to including previous message in reply
   set ispell = "aspell -e -c"
   set mailcap_path = ${PEARL_ROOT}/etc/mutt.d/mailcap
   set mail_check=60
 unset markers
 unset mark_old
+  set mbox_type="maildir"
   set menu_scroll
   set move=no
   set nobeep
@@ -30,16 +33,18 @@ unset record
   set reply_regexp = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
   set reply_to
   set reverse_name
+  set send_charset=utf-8
   set signature = ~/.mutt/signature
   set sort = 'threads' #'reverse-date'
-  set sort_aux = 'reverse-last-date-received'
+  set sort_aux = 'reverse-last-date-received' #'date-sent'
 unset sort_re
   set thorough_search
   set thread_received
   set tilde
   set timeout=15
 unset wait_key
-  set wrap = 80
+# Disabled for backward compatibility
+  #set wrap = 80
 
 
 ###########
@@ -54,8 +59,9 @@ unset wait_key
 ## Cache ##
 ###########
   set header_cache=~/.mutt/cache/headers
-  set message_cachedir=~/.mutt/cache/bodies
-  set message_cache_clean
+# The following are disabled for backward compatibility
+  #set message_cachedir=~/.mutt/cache/bodies
+  #set message_cache_clean
 
 
 ##########################
@@ -79,4 +85,5 @@ unset wait_key
   # Attachment menu
   #set attach_format = "%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "
   #set attach_format = "%1.2n %t%D%I %f %> [%.7m/%.10M, %.6e%?C?, %C?, %s]"
+  #set index_format="%4C %Z %{%b %d} %-15.15F (%4l) %s" #Set index format
   set attach_format = "%u%D%I %t[%1.2n] %.40d %> [ %.10m/%.14M, %s ] "

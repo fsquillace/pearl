@@ -1,3 +1,4 @@
+# vim: syntax=muttrc
 ## Macros ##
 #
 
@@ -39,4 +40,3 @@ macro pager f ":set mime_forward=no\n<forward-message>"
 macro index F ":set mime_forward=yes\n:set mime_forward_decode=no\n<forward-message>"
 macro pager F ":set mime_forward=yes\n:set mime_forward_decode=no\n<forward-message>"
 
-# vim: syntax=muttrc
