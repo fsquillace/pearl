@@ -8,7 +8,8 @@
 
 set sidebar_width=24             # set width in pixels
 set sidebar_visible=yes          # by default, make it visible
-set sidebar_sort = yes
+# Disable for backward compatibility
+#set sidebar_sort = yes
 
 color sidebar_new yellow default # color of folders with new mail
 
