@@ -3,6 +3,8 @@
 # operational purposes
 
 
+alias pgrep2="ps -ef | grep"
+
 function tailf(){
     tail -f $@ | perl -pe 's/(ERROR)/\e[1;31m$1\e[0m/gi;s/(INFO)/\e[1;32m$1\e[0m/gi;s/(DEBUG)/\e[1;32m$1\e[0m/gi;s/(WARN)/\e[1;33m$1\e[0m/gi'
 }
