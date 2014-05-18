@@ -6,6 +6,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias "cd.."="cd .."
 alias "cd-"="cd -"
+alias "cd~"="cd ${HOME}"
 
 # Mini-aliases :)`
 alias j="jobs"
