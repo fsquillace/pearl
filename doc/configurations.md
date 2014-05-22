@@ -1,4 +1,4 @@
-# CONFIGURATIONS #
+# Configurations #
 *pearl* applies several new configuration for vim, bash and inputrc. This
 operation allows to get better experience of your shell. 
 
@@ -163,7 +163,7 @@ A note worth to be noticed is that the gitconfig creates a file in
 ~/.gitignore in order to have a general gitignore file. You can put all
 the extension files that do not need to be pushed into any git repositories.
 
-## CONFIG FILES ##
+## Config files ##
 The config files touched by *pearl* are:
 
 * '~/.config/ranger/commands.py'

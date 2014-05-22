@@ -1,6 +1,6 @@
-# TIPS & TRICKS #
+# tips & Tricks #
 
-### DEFAULT PERMISSIONS ###
+### Default permissions ###
 When you create a new file or directory it will get some default permissions.
 You will be the owner. Your default group will be used as the group. And the
 mode will normally be world readable or private depending on your umask. The
@@ -17,7 +17,7 @@ If you do not want '0022', you can specify the other in
 '~/.config/pearlrc' by typing: *umask* '0077'
 
 
-### REMOVING FILES WITH TRASH COMMAND ###
+### Removing files with trash command ###
 *pearl* provides an useful command that allows moving to a trash directory
 unneeded files instead of removing directly them using rm command. The
 interface used is the same of the command implemented in ranger by *pearl*.
@@ -37,30 +37,30 @@ Usage:
 
 The trash directory will be removed when exiting from the shell.
 
-### BIND FOR RANGER ###
+### Bind for ranger ###
 Cntrl-o starts ranger command
 
-### ONE INSTANCE OF RANGER ###
+### One instance of ranger ###
 When typing S key in ranger, it opens a new terminal but you can forget that you have
 already an instance of ranger in the same terminal. To avoid of opening nested 
 ranger instances, the built-in script ranger in *pearl* allows you to always 
 open the last ranger available.
 
-### CHANGING DIRECTORY EXITING FROM RANGER ###
+### Changing directory exiting from ranger ###
 There is a function that allows to change automatically the current directory you are
 in ranger as soon as the user quit from ranger programm.
 Note that you can return to the original directory by typing "cd -".
 
-### RANGER FILE CHOOSER IN VIM ###
+### Ranger file chooser in vim ###
 Instead of using the Explorer of Vim to select files in the filysystem, you can
 even use ranger. In particular, when you type '\o' you will see an instance of
 ranger that allow you to select files. See all the functionality of *pearl*
 for Vim in the Vim configuration section.
 
-### INSTALLING AND UPGRADING RANGER ###
+### Installing and upgrading ranger ###
 Simply type *pearl\_update\_modules* and it will place the program in '$PEARL\_HOME/opt/ranger'.
 
-### COLORIZE THE HOSTNAME IN PROMPT ###
+### Colorize the hostname in prompt ###
 In order to recognize easily which machine you are currently using,
 the hostname information present in the prompt is colorized in function of its value.
 In other words, there is a hash function that gives a int value that correspond
