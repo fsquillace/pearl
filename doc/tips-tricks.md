@@ -1,6 +1,4 @@
-# pearl(1) tips and tricks #
-
-## TIPS & TRICKS ##
+# TIPS & TRICKS #
 
 ### DEFAULT PERMISSIONS ###
 When you create a new file or directory it will get some default permissions.

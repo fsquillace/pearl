@@ -56,7 +56,7 @@ source $PEARL_ROOT/lib/options.sh
 source $PEARL_ROOT/lib/prompt.sh
 source $PEARL_ROOT/lib/bindings.sh
 source $PEARL_ROOT/lib/traps.sh
-source $PEARL_ROOT/lib/tmux.sh
+source $PEARL_ROOT/lib/terminals.sh
 source $PEARL_ROOT/lib/ops.sh
 
 # Set other not category related stuff

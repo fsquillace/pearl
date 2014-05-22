@@ -94,6 +94,7 @@ variables or pearl's script.
   ``cd -g mytag``
 - To open tmux session on a marked directory:
   ``tmux -g mytag``
+- How to use [pearl as an IDE](https://github.com/fsquillace/pearl/blob/master/doc/pearl-as-ide.md)
 - much much more… take a look at lib/ for what 'pearl' offers…
 
 ## Help ##

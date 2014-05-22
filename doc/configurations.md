@@ -1,6 +1,4 @@
-# pearl(1) configurations #
-
-## CONFIGURATIONS ##
+# CONFIGURATIONS #
 *pearl* applies several new configuration for vim, bash and inputrc. This
 operation allows to get better experience of your shell. 
 

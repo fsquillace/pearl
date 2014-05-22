@@ -1,25 +1,35 @@
-# pearl(1) options and aliases#
+# Options and Aliases#
 
 ## BASH OPTIONS ##
+
 *cdspell*
+
     Minor  errors  in  the  spelling  of  a
     directory  component  in  a  cd command will be
     corrected.
+
 *autocd*
+
     A command name that is the  name  of  a
     directory  is  executed as if it were the 
     argument to the cd command.
+
 *dirspell*
+
     Bash attempts  spelling  correction  on
     directory  names  during word completion if the
     directory  name  initially  supplied  does  not
     exist.
+
 *histappend*
+
     The history list  is  appended  to  the
     file  named  by the value of the 'HISTFILE' 
     variable when the shell exits,  rather  than
     overwriting the file.
+
 *checkwinsize*
+
     Check the window size after each command and,
     if necessary, update the values of LINES 
     and COLUMNS.

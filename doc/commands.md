@@ -1,6 +1,5 @@
-# pearl(1) commands #
+# Commands #
 
-## COMMANDS ##
 Here there is a list of the most important commands of *pearl*.
 
 Please, check out in the 'lib' directory of *pearl* root directory to see
