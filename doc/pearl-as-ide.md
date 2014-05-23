@@ -9,7 +9,8 @@ pearl as your personal IDE.
 Please *note* that this example will use tmux as terminal but the same feature
 are implemented for GNU screen as well.
 
-Moreover, this tutorial suppose that you already have installed pearl framework.
+Moreover, this tutorial suppose that you already have installed
+[pearl framework](https://github.com/fsquillace/pearl).
 
 
 ## Setup the workspace ##
@@ -45,7 +46,7 @@ several essentials keybindings and much more:
 Usually, when you have to reboot you machine, you need to reopen several programs
 in tmux located in different windows. With pearl you can set it once for all.
 
-In '~/.config/pearl/envs/tmux' it is possible
+In '~/.config/pearl/envs' it is possible
 to add environments that describe the window structure and the program to execute
 for each session.
 
@@ -55,23 +56,23 @@ each window you are creating. Moreover, let's suppose you want to have
 `vim` in the second window, the django shell to the third window
 and the dbshell in the fourth window, the only thing
 you have to do is to create a file *mydjango* in the directory
-*~/.config/pearl/envs/tmux* with the following content:
+*~/.config/pearl/envs* with the following content:
 
-    [ $TMUX\_WINDOW\_INDEX -eq 1 ] && ranger
-    [ $TMUX\_WINDOW\_INDEX -eq 2 ] && vim
-    [ $TMUX\_WINDOW\_INDEX -eq 3 ] && ./manage.py shell
-    [ $TMUX\_WINDOW\_INDEX -eq 4 ] && ./manage.py dhshell
     source venv/bin/activate
+    [ $PEARL_WINDOW_INDEX -eq 1 ] && ranger
+    [ $PEARL_WINDOW_INDEX -eq 2 ] && vim
+    [ $PEARL_WINDOW_INDEX -eq 3 ] && ./manage.py shell
+    [ $PEARL_WINDOW_INDEX -eq 4 ] && ./manage.py dbshell
 
 This file is a bash script that is executed every time you create a window in
 the *mydjango* tmux session.
 
 You can create even more complex window structures of your tmux session if you want,
-since pearl provides some variable environments like $TMUX\_SESSION\_NAME and
-$TMUX\_WINDOW\_INDEX.
+since pearl provides some variable environments like $PEARL\_SESSION\_NAME and
+$PEARL\_WINDOW\_INDEX.
 
 There is also a special file named *default* you can create in the same directory
-*~/.config/pearl/envs/tmux*, which allow to define the generic environment
+*~/.config/pearl/envs*, which allow to define the generic environment
 for any tmux session.
 
 

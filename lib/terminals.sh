@@ -10,19 +10,19 @@ if [ -n "$TMUX" ]; then
     bind '"\e[1~":"\eOH"'
     bind '"\e[4~":"\eOF"'
 
-    TMUX_SESSION_NAME=$(tmux display-message -p '#S')
-    TMUX_WINDOW_INDEX=$(tmux display-message -p '#I')
-    [ -f $PEARL_HOME/envs/tmux/default ] && source $PEARL_HOME/envs/tmux/default
-    [ -f $PEARL_HOME/envs/tmux/$TMUX_SESSION_NAME ] && source $PEARL_HOME/envs/tmux/$TMUX_SESSION_NAME
+    PEARL_SESSION_NAME=$(tmux display-message -p '#S')
+    PEARL_WINDOW_INDEX=$(tmux display-message -p '#I')
+    [ -f $PEARL_HOME/envs/default ] && source $PEARL_HOME/envs/default
+    [ -f $PEARL_HOME/envs/$PEARL_SESSION_NAME ] && source $PEARL_HOME/envs/$PEARL_SESSION_NAME
 fi
 
 
 if [ -n "$STY" ]; then
 
-    SCREEN_SESSION_NAME=$(echo $STY | cut -d . -f 2)
-    SCREEN_WINDOW_INDEX=${WINDOW}
-    [ -f $PEARL_HOME/envs/screen/default ] && source $PEARL_HOME/envs/screen/default
-    [ -f $PEARL_HOME/envs/screen/$SCREEN_SESSION_NAME ] && source $PEARL_HOME/envs/screen/$SCREEN_SESSION_NAME
+    PEARL_SESSION_NAME=$(echo $STY | cut -d . -f 2)
+    PEARL_WINDOW_INDEX=${WINDOW}
+    [ -f $PEARL_HOME/envs/default ] && source $PEARL_HOME/envs/default
+    [ -f $PEARL_HOME/envs/$PEARL_SESSION_NAME ] && source $PEARL_HOME/envs/$PEARL_SESSION_NAME
 fi
 
 
