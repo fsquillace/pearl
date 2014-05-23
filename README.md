@@ -50,6 +50,18 @@ if `git` has been installed into the machine.
     $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh | bash
     $ source $HOME/.pearl/pearl
 
+## Quickstart ##
+- Trash safely a file/directory instead of deleting it through rm:
+  ``trash myfile``
+- Add a directory to a bookmark:
+  ``cd -a mytag ~/documents``
+- To cd to a marked directory:
+  ``cd -g mytag``
+- To open tmux session on a marked directory:
+  ``tmux -g mytag``
+- How to use [pearl as an IDE](https://github.com/fsquillace/pearl/blob/master/doc/pearl-as-ide.md)
+- much much more… take a look at lib/ for what 'pearl' offers…
+
 ## Usage ##
 - To update pearl:
   ``pearl_update``
@@ -70,6 +82,8 @@ List of main modules are:
 - [ranger](http://ranger.nongnu.org/) - A ncurses file manager
 - [vim-syntastic](https://github.com/scrooloose/syntastic) - Syntax checking hacks for vim
 - [vim-python-mode](https://github.com/klen/python-mode)
+- [pearl-ssh](https://github.com/fsquillace/pearl-ssh)
+- [pearl-man](https://github.com/fsquillace/pearl-man)
 - and much more...
 
 ### Configs ###
@@ -84,18 +98,6 @@ The file ``$HOME/.config/pearl/pearlrc`` is the user-defined config
 that contains all the settings done from the user.
 This can be useful when you want to override some aliases,
 variables or pearl's script.
-
-## Quickstart ##
-- Trash safely a file/directory instead of deleting it through rm:
-  ``trash myfile``
-- Add a directory to a bookmark:
-  ``cd -a mytag ~/documents``
-- To cd to a marked directory:
-  ``cd -g mytag``
-- To open tmux session on a marked directory:
-  ``tmux -g mytag``
-- How to use [pearl as an IDE](https://github.com/fsquillace/pearl/blob/master/doc/pearl-as-ide.md)
-- much much more… take a look at lib/ for what 'pearl' offers…
 
 ## Help ##
 Just type one of the manuals you need in:
