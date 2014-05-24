@@ -12,6 +12,7 @@ if [ -n "$TMUX" ]; then
 
     PEARL_SESSION_NAME=$(tmux display-message -p '#S')
     PEARL_WINDOW_INDEX=$(tmux display-message -p '#I')
+    PEARL_PANE_INDEX=$(tmux display-message -p '#P')
     [ -f $PEARL_HOME/envs/default ] && source $PEARL_HOME/envs/default
     [ -f $PEARL_HOME/envs/$PEARL_SESSION_NAME ] && source $PEARL_HOME/envs/$PEARL_SESSION_NAME
 fi

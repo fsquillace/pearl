@@ -68,8 +68,8 @@ This file is a bash script that is executed every time you create a window in
 the *mydjango* tmux session.
 
 You can create even more complex window structures of your tmux session if you want,
-since pearl provides some variable environments like $PEARL\_SESSION\_NAME and
-$PEARL\_WINDOW\_INDEX.
+since pearl provides some variable environments like $PEARL\_SESSION\_NAME,
+$PEARL\_WINDOW\_INDEX and $PEARL\_PANE\_INDEX.
 
 There is also a special file named *default* you can create in the same directory
 *~/.config/pearl/envs*, which allow to define the generic environment
