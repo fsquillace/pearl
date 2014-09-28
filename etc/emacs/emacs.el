@@ -1,8 +1,8 @@
 
 ;; -*- mode: elisp -*-
 
-;;(setq pearl-path-settings (concat (getenv "PEARL_ROOT") "/etc/emacs.d/settings"))
-;;(setq pearl-path-plugins (concat (getenv "PEARL_ROOT") "/etc/emacs.d/plugins"))
+;;(setq pearl-path-settings (concat (getenv "PEARL_ROOT") "/etc/emacs/emacs.d/settings"))
+;;(setq pearl-path-plugins (concat (getenv "PEARL_ROOT") "/etc/emacs/emacs.d/plugins"))
 
 ;; Path where settings and plugins are kept
 (setq pearl-path-settings (expand-file-name "emacs.d/settings"

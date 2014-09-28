@@ -18,7 +18,7 @@ unset confirmappend
   set header       # Include headers in reply messages
   set include=yes  # Default to including previous message in reply
   set ispell = "aspell -e -c"
-  set mailcap_path = ${PEARL_ROOT}/etc/mutt.d/mailcap
+  set mailcap_path = ${PEARL_ROOT}/etc/mutt/mutt.d/mailcap
   set mail_check=60
 unset markers
 unset mark_old

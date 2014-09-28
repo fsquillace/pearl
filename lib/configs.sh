@@ -4,16 +4,16 @@
 
 PEARL_CONFIGS="bashrc:source $PEARL_ROOT/pearl:$HOME/.bashrc
 vimrc:source $PEARL_ROOT/etc/vimrc:$HOME/.vimrc
-emacs:(load-file \"$PEARL_ROOT/etc/emacs.el\"):$HOME/.emacs
+emacs:(load-file \"$PEARL_ROOT/etc/emacs/emacs.el\"):$HOME/.emacs
 inputrc:\$include $PEARL_ROOT/etc/inputrc:$HOME/.inputrc
 ranger:exec(open('$PEARL_ROOT/etc/ranger/commands.py').read()):$HOME/.config/ranger/commands.py
 screenrc:source $PEARL_ROOT/etc/screenrc:$HOME/.screenrc
 tmux:source $PEARL_ROOT/etc/tmux.conf:$HOME/.tmux.conf
-muttrc:source $PEARL_ROOT/etc/muttrc:$HOME/.muttrc
-muttrc-sidebar:source $PEARL_ROOT/etc/muttrc-sidebar:$HOME/.muttrc
+muttrc:source $PEARL_ROOT/etc/mutt/muttrc:$HOME/.muttrc
+muttrc-sidebar:source $PEARL_ROOT/etc/mutt/muttrc-sidebar:$HOME/.muttrc
 xdefaults:# include \"$PEARL_ROOT/etc/Xdefaults\":$HOME/.Xdefaults
-gitconfig:[include] path = \"$PEARL_ROOT/etc/gitconfig\":$HOME/.gitconfig
-gitignore:[core] excludesfile = $PEARL_ROOT/etc/gitignore:$HOME/.gitconfig"
+gitconfig:[include] path = \"$PEARL_ROOT/etc/git/gitconfig\":$HOME/.gitconfig
+gitignore:[core] excludesfile = $PEARL_ROOT/etc/git/gitignore:$HOME/.gitconfig"
 
 function pearl_config_enable(){
     function up_help(){

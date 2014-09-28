@@ -18,6 +18,7 @@ function pearl_uninstall(){
     if ask "Are you sure to DELETE completely Pearl?" "N"
     then
         echo "Resetting all the configuration files..."
+        # TODO refactor this:
         # Bash
         unapply "source $PEARL_ROOT/pearl" $HOME/.bashrc
         # Vim
@@ -31,7 +32,7 @@ function pearl_uninstall(){
         # XDefautls
         unapply "# include \"$PEARL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
         # Gitconfig
-        unapply "\[include\] path = \"$PEARL_ROOT/etc/gitconfig\"" $HOME/.gitconfig
+        unapply "\[include\] path = \"$PEARL_ROOT/etc/git/gitconfig\"" $HOME/.gitconfig
         [ -f $HOME/.gitignore ] && rm -f $HOME/.gitignore
 
         echo "Removing Pearl on the system..."
