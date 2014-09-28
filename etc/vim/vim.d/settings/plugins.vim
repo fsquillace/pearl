@@ -2,9 +2,9 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 " Pathogen (https://github.com/tpope/vim-pathogen)
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-source $PEARL_ROOT/etc/vim.d/plugins/pathogen/autoload/pathogen.vim
+source $PEARL_ROOT/etc/vim/vim.d/plugins/pathogen/autoload/pathogen.vim
 filetype off
-call pathogen#infect($PEARL_ROOT.'/etc/vim.d/plugins/{}', $PEARL_ROOT.'/mods/{}', $PEARL_ROOT.'/mods/powerline/bindings/vim/{}')
+call pathogen#infect($PEARL_ROOT.'/etc/vim/vim.d/plugins/{}', $PEARL_ROOT.'/mods/{}', $PEARL_ROOT.'/mods/powerline/bindings/vim/{}')
 call pathogen#helptags()
 filetype plugin indent on
 syntax on
@@ -46,40 +46,40 @@ let g:solarized_visibility= "normal"
 " Fugitive
 """"""""""""""""
 if filereadable($PEARL_ROOT."/mods/vim-fugitive/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/fugitive.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/fugitive.vim
 endif
 
 """""""""""""""
 " Airline
 """""""""""""""
 if filereadable($PEARL_ROOT."/mods/vim-airline/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/airline.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/airline.vim
 endif
 
 """""""""""""""
 " Python-mode
 """""""""""""""
 if filereadable($PEARL_ROOT."/mods/vim-python-mode/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/python-mode.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/python-mode.vim
 endif
 
 """"""""""""""""""
 " Jedi-vim
 """"""""""""""""""
 if filereadable($PEARL_ROOT."/mods/vim-jedi/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/jedi.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/jedi.vim
 endif
 
 """"""""""""""""""
 " Powerline
 """"""""""""""""""
 if filereadable($PEARL_ROOT."/mods/powerline/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/powerline.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/powerline.vim
 endif
 
 """"""""""""""""""
-" Powerline
+" Solarized
 """"""""""""""""""
 if filereadable($PEARL_ROOT."/mods/vim-solarized/.git")
-    source $PEARL_ROOT/etc/vim.d/settings/solarized.vim
+    source $PEARL_ROOT/etc/vim/vim.d/settings/solarized.vim
 endif

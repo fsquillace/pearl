@@ -1,6 +1,3 @@
-[submodule "etc/vim/bundle/vim-jedi"]
-	path = etc/vim/bundle/vim-jedi
-	url = https://github.com/davidhalter/jedi-vim.git
 [submodule "mods/ranger"]
 	path = mods/ranger
 	url = git://git.savannah.nongnu.org/ranger.git

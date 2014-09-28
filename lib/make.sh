@@ -22,7 +22,7 @@ function pearl_uninstall(){
         # Bash
         unapply "source $PEARL_ROOT/pearl" $HOME/.bashrc
         # Vim
-        unapply "source $PEARL_ROOT/etc/vimrc" $HOME/.vimrc
+        unapply "source $PEARL_ROOT/etc/vim/vimrc" $HOME/.vimrc
         # Inputrc
         unapply "\$include $PEARL_ROOT/etc/inputrc" $HOME/.inputrc
         # Ranger

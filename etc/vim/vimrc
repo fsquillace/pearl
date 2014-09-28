@@ -349,4 +349,4 @@ nmap <Leader>sr :!rm ~/.vim/sessions/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " PLUGINS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-source $PEARL_ROOT/etc/vim.d/settings/plugins.vim
+source $PEARL_ROOT/etc/vim/vim.d/settings/plugins.vim

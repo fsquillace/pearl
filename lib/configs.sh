@@ -3,7 +3,7 @@
 
 
 PEARL_CONFIGS="bashrc:source $PEARL_ROOT/pearl:$HOME/.bashrc
-vimrc:source $PEARL_ROOT/etc/vimrc:$HOME/.vimrc
+vimrc:source $PEARL_ROOT/etc/vim/vimrc:$HOME/.vimrc
 emacs:(load-file \"$PEARL_ROOT/etc/emacs/emacs.el\"):$HOME/.emacs
 inputrc:\$include $PEARL_ROOT/etc/inputrc:$HOME/.inputrc
 ranger:exec(open('$PEARL_ROOT/etc/ranger/commands.py').read()):$HOME/.config/ranger/commands.py

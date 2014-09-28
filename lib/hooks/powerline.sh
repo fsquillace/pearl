@@ -10,7 +10,7 @@ function post_install(){
 
     if ask "Do you want Powerline for Vim?"
     then
-        apply "source ${PEARL_ROOT}/etc/vim.d/settings/powerline.vim" "${HOME}/.vimrc" false
+        apply "source ${PEARL_ROOT}/etc/vim/vim.d/settings/powerline.vim" "${HOME}/.vimrc" false
     fi
     if ask "Do you want Powerline for Bash?"
 
@@ -31,7 +31,7 @@ function pre_uninstall(){
 
     rm ~/.fonts.conf.d/10-powerline-symbols.conf
 
-    unapply "source ${PEARL_ROOT}/etc/vim.d/settings/powerline.vim" "${HOME}/.vimrc"
+    unapply "source ${PEARL_ROOT}/etc/vim/vim.d/settings/powerline.vim" "${HOME}/.vimrc"
     unapply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/bash/powerline.sh" "${HOME}/.bashrc"
     unapply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/tmux/powerline.conf" "${HOME}/.tmux.conf"
 
