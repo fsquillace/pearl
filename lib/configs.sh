@@ -128,9 +128,7 @@ function pearl_init(){
         mkdir -p $PEARL_HOME/opt
 
         echo "#!/bin/bash" > $PEARL_HOME/pearlrc
-        echo "#This script is used to execute anything you want. " >> $PEARL_HOME/pearlrc
-        echo "# Uncomment and type your Dropbox/Ubuntu One home if it's different from ~/Dropbox/:" >> $PEARL_HOME/pearlrc
-        echo "#export SYNC_HOME=~/Dropbox/" >> $PEARL_HOME/pearlrc
+        echo "#This script is used to override the pearl settings. " >> $PEARL_HOME/pearlrc
         chmod +x $PEARL_HOME/pearlrc
 
         echo ""

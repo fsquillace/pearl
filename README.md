@@ -3,14 +3,22 @@
 ## Name ##
 pearl - An enhanced shell bash framework
 
+```
+       _/_/_/     _/_/_/_/    _/_/_/     _/_/_/         _/
+     _/     _/   _/        _/      _/  _/      _/      _/
+    _/     _/   _/        _/      _/  _/       _/     _/
+   _/_/_/_/    _/_/_/    _/_/_/_/_/  _/_/_/_/_/      _/
+  _/          _/        _/      _/  _/      _/      _/
+ _/          _/        _/      _/  _/        _/    _/
+_/          _/_/_/_/  _/      _/  _/          _/  _/_/_/_/_/
+```
+
 ## Description ##
 *pearl* is an enhanced and lightweight shell framework that allows
 to improve the way of using the shell Bash GNU/Linux and automate many daily
 activities of the system administrator.
 *pearl* comes bundled with a ton of helpful functions, helpers, plugins,
-aliases, configuration files and commands all out of the box.
-It also contains important configurations files
-vimrc, bashrc, inputrc and many others.
+aliases, configuration files and commands, all out of the box.
 
 The main goal of pearl is to provide for both expert and beginner users a
 starting point, respectively, for using quickly the shell terminal
