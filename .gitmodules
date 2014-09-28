@@ -43,3 +43,6 @@
 [submodule "mods/pearl-ssh"]
 	path = mods/pearl-ssh
 	url = https://github.com/fsquillace/pearl-ssh.git
+[submodule "mods/ls-colors"]
+	path = mods/ls-colors
+	url = https://github.com/trapd00r/LS_COLORS.git

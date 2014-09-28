@@ -15,7 +15,3 @@ function sigusr2()
 }
 
 trap "sigusr2" USR2       # catch -USR2 signal
-
-# Load the LS_COLORS configuration
-[ -f $PEARL_ROOT/etc/LS_COLORS ] && eval $(dircolors -b $PEARL_ROOT/etc/LS_COLORS)
-
