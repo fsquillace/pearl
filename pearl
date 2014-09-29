@@ -45,9 +45,9 @@ export PEARL_DEBUG=0
 
 # Import the functions from the modules in lib/
 source $PEARL_ROOT/lib/util.sh
-source $PEARL_ROOT/lib/make.sh
-source $PEARL_ROOT/lib/makemods.sh
-source $PEARL_ROOT/lib/configs.sh
+source $PEARL_ROOT/lib/core/make.sh
+source $PEARL_ROOT/lib/core/makemods.sh
+source $PEARL_ROOT/lib/core/configs.sh
 
 source $PEARL_ROOT/lib/variables.sh
 source $PEARL_ROOT/lib/aliases.sh
@@ -63,7 +63,14 @@ source $PEARL_ROOT/lib/ops.sh
 source $PEARL_ROOT/lib/misc.sh
 
 # Set the modules
-source $PEARL_ROOT/lib/mods.sh
+for mod in $(ls lib/core/mods/)
+do
+    if [ "$(ls -A "${PEARL_ROOT}/mods/${mod}")" ]; then
+        if [ -e $PEARL_ROOT/lib/core/mods/${mod}/config ]; then
+            source $PEARL_ROOT/lib/core/mods/${mod}/config
+        fi
+    fi
+done
 
 # Install pearl if it is not installed yet
 pearl_init

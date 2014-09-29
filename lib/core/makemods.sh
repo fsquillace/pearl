@@ -18,7 +18,7 @@ function pearl_module_install_update(){
     fi
 
     local modulename=$1
-    local hook_file=${PEARL_ROOT}/lib/hooks/${modulename}.sh
+    local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/${modulename}.sh
     [ -f "$hook_file" ] && source "$hook_file"
 
     OLD_PWD=$(pwd)
@@ -54,7 +54,7 @@ function pearl_module_uninstall(){
 
     local modulename=$1
 
-    local hook_file=${PEARL_ROOT}/lib/hooks/${modulename}.sh
+    local hook_file=${PEARL_ROOT}/lib/core/${modulename}/${modulename}.sh
     [ -f "$hook_file" ] && source "$hook_file"
 
     OLD_PWD=$(pwd)

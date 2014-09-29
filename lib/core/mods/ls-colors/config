@@ -1,0 +1,3 @@
+eval $(dircolors -b $PEARL_ROOT/mods/ls-colors/LS_COLORS)
+
+# vim: ft=sh

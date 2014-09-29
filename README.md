@@ -55,7 +55,7 @@ machine that doesn't have git installed!
 *make.sh* installs or updates pearl with either `git` or `wget` depending
 if `git` has been installed into the machine.
 
-    $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/make.sh | bash
+    $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/core/make.sh | bash
     $ source $HOME/.pearl/pearl
 
 ## Quickstart ##

@@ -88,7 +88,7 @@ function _pearl_wget_install(){
 function _pearl_wget_update(){
     newSum=$(wget -q -O - https://github.com/fsquillace/pearl/archive/current.tar.gz | md5sum)
     oldSum=$(cat $PEARL_ROOT/pearl.sum)
-        
+
     if [ "$newSum" != "$oldSum" ]
     then
         _pearl_wget_install
