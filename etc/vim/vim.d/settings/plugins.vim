@@ -36,50 +36,13 @@ let g:SuperTabDefaultCompletionType = "context"
 " for spell correction <c-x>s or for thesaurus <c-x><c-t>
 let g:SuperTabContextDefaultCompletionType = "<c-n>"
 
-"""""""""""""""
-" Solarized
-"""""""""""""""
-let g:solarized_contrast = "low"
-let g:solarized_visibility= "normal"
+for config_path in split(globpath($PEARL_ROOT."/lib/core/mods/*", '*.vim'), "\n")
+    let config = substitute(substitute(config_path, "^.*\/", "", ""), "\.vim", "", "")
+    if filereadable($PEARL_ROOT."/mods/".config."/.git")
+        if filereadable(config_path)
+            :exec ":source ".config_path
+        endif
+    endif
+endfor
 
-""""""""""""""""
-" Fugitive
-""""""""""""""""
-if filereadable($PEARL_ROOT."/mods/vim-fugitive/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/fugitive.vim
-endif
 
-"""""""""""""""
-" Airline
-"""""""""""""""
-if filereadable($PEARL_ROOT."/mods/vim-airline/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/airline.vim
-endif
-
-"""""""""""""""
-" Python-mode
-"""""""""""""""
-if filereadable($PEARL_ROOT."/mods/vim-python-mode/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/python-mode.vim
-endif
-
-""""""""""""""""""
-" Jedi-vim
-""""""""""""""""""
-if filereadable($PEARL_ROOT."/mods/vim-jedi/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/jedi.vim
-endif
-
-""""""""""""""""""
-" Powerline
-""""""""""""""""""
-if filereadable($PEARL_ROOT."/mods/powerline/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/powerline.vim
-endif
-
-""""""""""""""""""
-" Solarized
-""""""""""""""""""
-if filereadable($PEARL_ROOT."/mods/vim-solarized/.git")
-    source $PEARL_ROOT/etc/vim/vim.d/settings/solarized.vim
-endif
