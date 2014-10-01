@@ -346,7 +346,27 @@ nmap <Leader>sr :!rm ~/.vim/sessions/
 "inoremap <tab> <c-r>=Smart_TabComplete()<CR>
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" PLUGINS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-source $PEARL_ROOT/etc/vim/vim.d/settings/plugins.vim
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pathogen (https://github.com/tpope/vim-pathogen)
+""""""""""""""""""""""""""""""""""""""""""""""""""""
+source $PEARL_ROOT/etc/vim/vim.d/plugins/pathogen/autoload/pathogen.vim
+filetype off
+call pathogen#infect($PEARL_ROOT.'/etc/vim/vim.d/plugins/{}', $PEARL_ROOT.'/mods/{}', $PEARL_ROOT.'/mods/powerline/bindings/vim/{}')
+call pathogen#helptags()
+filetype plugin indent on
+syntax on
+
+
+""""""""""""""""""
+" Module loader
+""""""""""""""""""
+for config_path in split(globpath($PEARL_ROOT."/lib/core/mods/*", '*.vim'), "\n")
+    let config = substitute(substitute(config_path, "^.*\/", "", ""), "\.vim", "", "")
+    if filereadable($PEARL_ROOT."/mods/".config."/.git")
+        if filereadable(config_path)
+            :exec ":source ".config_path
+        endif
+    endif
+endfor
+
+

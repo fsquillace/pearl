@@ -49,3 +49,6 @@
 [submodule "mods/vim-supertab"]
 	path = mods/vim-supertab
 	url = https://github.com/ervandew/supertab.git
+[submodule "mods/vim-nerdcommenter"]
+	path = mods/vim-nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
