@@ -14,13 +14,6 @@ syntax on
 """""""""""""""""""
 map <C-,> <Leader>c<Space>
 
-""""""""""""""""""
-" BufExplorer
-""""""""""""""""""
-map <Leader>b :BufExplorer<CR>
-map <Leader>v :BufExplorerVerticalSplit<CR>
-map <Leader>h :BufExplorerHorizontalSplit<CR>
-
 
 " Mappings used for completions when type . char
 "imap <silent> <buffer> . .<C-X><C-O>
@@ -28,13 +21,7 @@ map <Leader>h :BufExplorerHorizontalSplit<CR>
       "\ col('.')-2) == col('.')-2)?\"\<lt>C-X>\<lt>C-O>\":\"\"<CR>"
       "\ : "<CR>"
 
-""""""""""""""""""""""""""""
-" SuperTab
-""""""""""""""""""""""""""""
-" Makes all types of completions!!
-let g:SuperTabDefaultCompletionType = "context"
-" for spell correction <c-x>s or for thesaurus <c-x><c-t>
-let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
 
 for config_path in split(globpath($PEARL_ROOT."/lib/core/mods/*", '*.vim'), "\n")
     let config = substitute(substitute(config_path, "^.*\/", "", ""), "\.vim", "", "")
