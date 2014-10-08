@@ -69,6 +69,12 @@ function _pearl_git_update(){
         git fetch --all
         git reset --hard origin/master
     fi
+
+    # Update of the modules
+    for modulepath in $(ls mods/*/.git | sed 's/\/\.git$//')
+    do
+        git submodule update $modulepath
+    done
     builtin cd $OLDPWD
 
 }
