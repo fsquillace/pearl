@@ -52,3 +52,6 @@
 [submodule "mods/vim-nerdcommenter"]
 	path = mods/vim-nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
+[submodule "mods/vim-zenburn"]
+	path = mods/vim-zenburn
+	url = https://github.com/jnurmine/Zenburn.git
