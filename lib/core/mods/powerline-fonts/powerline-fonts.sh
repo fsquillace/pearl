@@ -21,10 +21,20 @@ function post_install(){
     local font_name=$(echo "$res" | sed -e 's/.*\///' -e 's/\.ttf//' -e 's/\.otf//')
     local font_file="${root_path}${res}"
 
+    if [ ! -e "${font_file}" ]
+    then
+        echo "Error the font file ${font_file} does not exist"
+        return 1
+    fi
     cp "${font_file}" ~/.fonts
     fc-cache -vf ~/.fonts
 
-    apply "urxvt.font: xft:$font_name:pixelsize=22:antialias=true:hinting=true" "${HOME}/.Xdefaults" false
+    local default_size="22"
+    local res
+    read -p "Type the pixelsize (default: $default_size)> " res
+    [ "$res" == "" ] && res="${default_size}"
+
+    apply "urxvt.font: xft:$font_name:pixelsize=${res}:antialias=true:hinting=true" "${HOME}/.Xdefaults" false
 
     echo "You may need to restart the X server"
     return 0

@@ -219,3 +219,5 @@ URxvt.color15: #E6E6E6
 !URxvt.color14: #769293
 !URxvt.color7: #9ba0a7
 !URxvt.color15: #6e7383
+
+# vim: ft=xdefaults
