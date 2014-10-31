@@ -2,7 +2,7 @@
 function post_install(){
     mkdir -p ~/.fonts
     mkdir -p ~/.fonts.conf.d/
-    cp ${PEARL_ROOT}/mods/powerline/font/PowerlineSymbols.otf ~/.fonts
+    ln -s ${PEARL_ROOT}/mods/powerline/font/PowerlineSymbols.otf ~/.fonts
     fc-cache -vf ~/.fonts
 
     cp ${PEARL_ROOT}/mods/powerline/font/10-powerline-symbols.conf ~/.fonts.conf.d/

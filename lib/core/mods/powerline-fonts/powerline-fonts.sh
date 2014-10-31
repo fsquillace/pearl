@@ -23,10 +23,10 @@ function post_install(){
 
     if [ ! -e "${font_file}" ]
     then
-        echo "Error the font file ${font_file} does not exist"
+        error "Error the font file ${font_file} does not exist"
         return 1
     fi
-    cp "${font_file}" ~/.fonts
+    ln -s "${font_file}" ~/.fonts
     fc-cache -vf ~/.fonts
 
     local default_size="22"
@@ -36,7 +36,7 @@ function post_install(){
 
     apply "urxvt.font: xft:$font_name:pixelsize=${res}:antialias=true:hinting=true" "${HOME}/.Xdefaults" false
 
-    echo "You may need to restart the X server"
+    info "You may need to restart the X server"
     return 0
 }
 
@@ -61,6 +61,6 @@ function pre_uninstall(){
 
     fc-cache -vf ~/.fonts
 
-    echo "You may need to restart the X server"
+    info "You may need to restart the X server"
     return 0
 }
