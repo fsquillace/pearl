@@ -1,40 +1,29 @@
 #!/bin/sh
 
-
-hexencode(){
-    local length=${#1}
-    [ ${length} -eq 0 ] && length=1
-    echo "$1" | od -w$length -t x1 | head -n1 | sed -e 's/^[0]* / /' -e 's/ /\\x/g'
+echoerr() {
+    # $@: msg (mandatory) - str: Message to print
+    echo "$@" 1>&2;
 }
 
-hexdecode() {
-# urldecode <string>
-printf '%b' ${1}
+function die(){
+    # $@: msg (mandatory) - str: Message to print
+    error $@
+    exit 1
 }
 
-urlencode() {
-# urlencode <string>
-# TODO encode the \t properly
-# TODO make the encode faster with xargs
-
-local length="${#1}"
-for (( i = 0 ; i < length ; i++ )); do
-local c="${1:i:1}"
-
-case "$c" in
-[a-zA-Z0-9.~_-]) printf "$c" ;;
-' ') printf '%%20' ;;
-$'\n') printf '%%0A' ;;
-*) printf '%%%X' "'$c"
-esac
-done
+function error(){
+    # $@: msg (mandatory) - str: Message to print
+    echoerr -e "\033[1;31m$@\033[0m"
 }
 
+function warn(){
+    # $@: msg (mandatory) - str: Message to print
+    echoerr -e "\033[1;33m$@\033[0m"
+}
 
-urldecode() {
-# urldecode <string>
-
-printf '%b' "${1//%/\x}"
+function info(){
+    # $@: msg (mandatory) - str: Message to print
+    echo -e "\033[1;37m$@\033[0m"
 }
 
 
@@ -107,59 +96,6 @@ function unapply(){
 
 function pearl_logo(){
 cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
-}
-
-# Switch to a particular context
-# $1: context file in etc/context/
-# If the context doesn't exists it gives an error
-#function pearl_switch(){
-    #local context="$PEARL_ROOT/etc/context/$1"
-    #[ -f $context ] || context="$PEARL_HOME/etc/context/$1"
-
-    #if [ ! -f "$context" ]
-    #then
-        #echo "Error: the context doesn't exist."
-        #return 128
-    #fi
-    #source $PEARL_ROOT/pearl
-    #source $context
-#}
-
-
-notifier(){
-## Check out the log files $TEMPORARY/pearl.out $TEMPORARY/pearl.err and notify the user
-## -e show the error
-## -o show the output
-## -a show all
-## no option return the notify !!
-#if [ -f $TEMPORARY/notify.* ]
-#then
-
-    #difout=$(diff $TEMPORARY/pearl.out $TEMPORARY/notify.out)
-    #diferr=$(diff $TEMPORARY/pearl.err $TEMPORARY/notify.err)
-
-#else
-    #difout=""
-    #diferr=""
-#fi
-
-    #if [ "$difout" -ne "" -a "$diferr" -ne "" ]
-    #then
-	#echo -e "\e[1;31m! \e[0m \e[1;33m! \e[0m"
-    #elif [ "$difout" -ne "" ]
-    #then
-	#echo -e "\e[1;31m! \e[0m"
-    #elif [ "$diferr" -ne "" ]
-    #then
-	#echo -e "\e[1;33m! \e[0m"
-    #fi
-
-
-## Update 
-    #cp $TEMPORARY/pearl.out $TEMPORARY/notify.out
-    #cp $TEMPORARY/pearl.err $TEMPORARY/notify.err
-
-    echo -e "\e[1;31m! \e[0m \e[1;33m! \e[0m"
 }
 
 
