@@ -9,12 +9,12 @@ function post_install(){
 
 
     info "Vim binding applied"
-    if ask "Do you want Powerline binding also for Bash?"
+    if ask "Do you want Powerline binding also for Bash?" "N"
 
     then
         apply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/bash/powerline.sh" "${HOME}/.bashrc" false
     fi
-    if ask "Do you want Powerline binding also for Tmux?"
+    if ask "Do you want Powerline binding also for Tmux?" "N"
     then
         apply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/tmux/powerline.conf" "${HOME}/.tmux.conf" false
     fi
