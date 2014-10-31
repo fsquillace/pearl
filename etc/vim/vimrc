@@ -263,7 +263,7 @@ map <C-n> :tabnext<cr>
 map <C-q> :tabclose<cr>
 
 " Search, replace
-map <Leader>r :%s/old/new/gc
+map <Leader>s :%s/old/new/gc
 
 " Block indentation
 " Allow to let indent the selection as many time as you want
@@ -280,22 +280,6 @@ nnoremap <silent> <Leader>e :Explore<CR>
 " hide .pyc and hidden files
 let g:explHideFiles='^\.,.*\.pyc$'
 let g:netrw_list_hide='^\.,.*\.pyc$'
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-" Ranger Chooser
-"""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! RangerChooser()
-    exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
-    if filereadable('/tmp/chosenfile')
-        exec 'edit ' . system('cat /tmp/chosenfile')
-        call system('rm /tmp/chosenfile')
-    endif
-    redraw!
-endfun
-map <Leader>o :call RangerChooser()<CR>
-
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -368,5 +352,3 @@ for config_path in split(globpath($PEARL_ROOT."/lib/core/mods/*", '*.vim'), "\n"
         endif
     endif
 endfor
-
-

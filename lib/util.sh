@@ -284,44 +284,6 @@ function check_sync(){
 }
 
 
-# cd to last path after exit
-# This functionallows to change the directory 
-# to the last visited one after ranger quits.
-# You can always type "cd -" to go back
-# to the original one.
-function ranger(){
-
-    # The following command add tags for the files synced. The problem is that is takes time
-    #check_sync
-
-    local ranger_command="$(which ranger 2> /dev/null)"
-    [ "$ranger_command" == "" ] && ranger_command="python ${PEARL_ROOT}/mods/ranger/ranger.py"
-
-    # Checks out into the jobs if the user pressed the C-z key
-    local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')
-    if [ "$id" != "" ]
-    then
-        fg $id
-        return
-    fi
-
-    # Checks out if the user pressed S key
-    if [ "$RANGER_LEVEL" != "" ]
-    then
-        exit
-        return # Ensures that it returns anyway if there are jobs stopped
-    fi
-
-    local tempfile='/tmp/chosendir'
-    $ranger_command --choosedir="$tempfile" "${@:-$(pwd)}"
-    test -f "$tempfile" &&
-    if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
-        echo $(cat "$tempfile")
-        builtin cd -- "$(cat "$tempfile")"
-    fi
-    rm -f -- "$tempfile"
-}
-
 
 # Create a sync with Dropbox/Ubuntu One folder using 
 # absolute path to maintain the same structure
