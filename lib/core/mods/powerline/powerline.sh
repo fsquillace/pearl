@@ -8,16 +8,13 @@ function post_install(){
     cp ${PEARL_ROOT}/mods/powerline/font/10-powerline-symbols.conf ~/.fonts.conf.d/
 
 
-    if ask "Do you want Powerline for Vim?"
-    then
-        apply "source ${PEARL_ROOT}/etc/vim/vim.d/settings/powerline.vim" "${HOME}/.vimrc" false
-    fi
-    if ask "Do you want Powerline for Bash?"
+    info "Vim binding applied"
+    if ask "Do you want Powerline binding also for Bash?"
 
     then
         apply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/bash/powerline.sh" "${HOME}/.bashrc" false
     fi
-    if ask "Do you want Powerline for Tmux?"
+    if ask "Do you want Powerline binding also for Tmux?"
     then
         apply "source ${PEARL_ROOT}/mods/powerline/powerline/bindings/tmux/powerline.conf" "${HOME}/.tmux.conf" false
     fi

@@ -37,7 +37,7 @@ function ask(){
     local other="n"
     [ "$default" == "N" ] && other="y"
 
-    local prompt="$1 (${default}/${other})> "
+    local prompt=$(info "$1 (${default}/${other})> ")
 
     local res="none"
     while [ "$res" != "Y" ] && [ "$res" != "N"  ] && [ "$res" != "" ];
