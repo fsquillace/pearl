@@ -46,7 +46,6 @@ alias sudo="sudo "
 
 alias go="ping 8.8.8.8"
 alias goo="ping www.google.com"
-alias isconnect="python -c \"import util.net;print(util.net.is_connect())\""
 
 # Grep-based aliases
 alias grep='grep --color=auto'
@@ -67,9 +66,6 @@ alias less="less -i"
 
 # If the system has htop use it!
 [ -e /usr/bin/htop ] && alias top="/usr/bin/htop"
-
-# Call PDB when an exception is raised
-alias pypdb="python -m util.pdb_on_error"
 
 # Enhanced ssh for X11 forwarding and 256 colors
 alias sshx="TERM=xterm-256color LANG=en_US.UTF-8 ssh -Y"
