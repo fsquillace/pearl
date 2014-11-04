@@ -12,6 +12,7 @@ tmux:source $PEARL_ROOT/etc/tmux.conf:$HOME/.tmux.conf
 muttrc:source $PEARL_ROOT/etc/mutt/muttrc:$HOME/.muttrc
 muttrc-sidebar:source $PEARL_ROOT/etc/mutt/muttrc-sidebar:$HOME/.muttrc
 xdefaults:# include \"$PEARL_ROOT/etc/Xdefaults\":$HOME/.Xdefaults
+liquidprompt:source \"$PEARL_ROOT/etc/liquidprompt/liquidpromptrc\":$HOME/.liquidpromptrc
 gitconfig:[include] path = \"$PEARL_ROOT/etc/git/gitconfig\":$HOME/.gitconfig
 gitignore:[core] excludesfile = $PEARL_ROOT/etc/git/gitignore:$HOME/.gitconfig"
 
