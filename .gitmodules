@@ -1,62 +1,59 @@
-[submodule "mods/ranger"]
-	path = mods/ranger
+[submodule "mods/misc/ranger"]
+	path = mods/misc/ranger
 	url = git://git.savannah.nongnu.org/ranger.git
-[submodule "mods/vim-airline"]
-	path = mods/vim-airline
+[submodule "mods/vim/airline"]
+	path = mods/vim/airline
 	url = https://github.com/bling/vim-airline.git
-[submodule "mods/vim-syntastic"]
-	path = mods/vim-syntastic
+[submodule "mods/vim/syntastic"]
+	path = mods/vim/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-[submodule "mods/vim-fugitive"]
-	path = mods/vim-fugitive
+[submodule "mods/vim/fugitive"]
+	path = mods/vim/fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule "mods/vim-python-mode"]
-	path = mods/vim-python-mode
+[submodule "mods/vim/python-mode"]
+	path = mods/vim/python-mode
 	url = git://github.com/klen/python-mode.git
-[submodule "mods/vim-jedi"]
-	path = mods/vim-jedi
+[submodule "mods/vim/jedi"]
+	path = mods/vim/jedi
 	url = https://github.com/davidhalter/jedi-vim.git
-[submodule "mods/vim-gnupg"]
-	path = mods/vim-gnupg
+[submodule "mods/vim/gnupg"]
+	path = mods/vim/gnupg
 	url = https://github.com/jamessan/vim-gnupg.git
-[submodule "mods/pearl-man"]
-	path = mods/pearl-man
+[submodule "mods/pearl/man"]
+	path = mods/pearl/man
 	url = https://github.com/fsquillace/pearl-man.git
-[submodule "mods/powerline"]
-	path = mods/powerline
+[submodule "mods/misc/powerline"]
+	path = mods/misc/powerline
 	url = https://github.com/Lokaltog/powerline.git
-[submodule "mods/powerline-fonts"]
-	path = mods/powerline-fonts
+[submodule "mods/misc/powerline-fonts"]
+	path = mods/misc/powerline-fonts
 	url = https://github.com/Lokaltog/powerline-fonts.git
-[submodule "mods/vim-gitgutter"]
-	path = mods/vim-gitgutter
+[submodule "mods/vim/gitgutter"]
+	path = mods/vim/gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
-[submodule "mods/vim-solarized"]
-	path = mods/vim-solarized
+[submodule "mods/vim/solarized"]
+	path = mods/vim/solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
-[submodule "mods/vim-signify"]
-	path = mods/vim-signify
+[submodule "mods/vim/signify"]
+	path = mods/vim/signify
 	url = https://github.com/mhinz/vim-signify.git
-[submodule "mods/pearl-ssh"]
-	path = mods/pearl-ssh
+[submodule "mods/pearl/ssh"]
+	path = mods/pearl/ssh
 	url = https://github.com/fsquillace/pearl-ssh.git
-[submodule "mods/ls-colors"]
-	path = mods/ls-colors
+[submodule "mods/misc/ls-colors"]
+	path = mods/misc/ls-colors
 	url = https://github.com/trapd00r/LS_COLORS.git
-[submodule "mods/vim-bufexplorer"]
-	path = mods/vim-bufexplorer
+[submodule "mods/vim/bufexplorer"]
+	path = mods/vim/bufexplorer
 	url = https://github.com/jlanzarotta/bufexplorer.git
-[submodule "mods/vim-supertab"]
-	path = mods/vim-supertab
+[submodule "mods/vim/supertab"]
+	path = mods/vim/supertab
 	url = https://github.com/ervandew/supertab.git
-[submodule "mods/vim-nerdcommenter"]
-	path = mods/vim-nerdcommenter
+[submodule "mods/vim/nerdcommenter"]
+	path = mods/vim/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
-[submodule "mods/vim-zenburn"]
-	path = mods/vim/zenburn
-	url = https://github.com/jnurmine/Zenburn.git
-[submodule "mods/liquidprompt"]
-	path = mods/liquidprompt
+[submodule "mods/misc/liquidprompt"]
+	path = mods/misc/liquidprompt
 	url = https://github.com/nojhan/liquidprompt.git
 [submodule "mods/vim/zenburn"]
 	path = mods/vim/zenburn
