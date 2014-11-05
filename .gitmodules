@@ -53,8 +53,11 @@
 	path = mods/vim-nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
 [submodule "mods/vim-zenburn"]
-	path = mods/vim-zenburn
+	path = mods/vim/zenburn
 	url = https://github.com/jnurmine/Zenburn.git
 [submodule "mods/liquidprompt"]
 	path = mods/liquidprompt
 	url = https://github.com/nojhan/liquidprompt.git
+[submodule "mods/vim/zenburn"]
+	path = mods/vim/zenburn
+	url = https://github.com/jnurmine/Zenburn.git
