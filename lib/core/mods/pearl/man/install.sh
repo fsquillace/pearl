@@ -1,6 +1,6 @@
 
 function post_install(){
-    local root_path="${PEARL_ROOT}/mods/pearl-man/"
+    local root_path="${PEARL_ROOT}/mods/pearl/man/"
     OLD_PWD=$(pwd)
     builtin cd "$root_path"
     git submodule update --init --force --rebase

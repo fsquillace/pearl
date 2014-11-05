@@ -63,13 +63,16 @@ source $PEARL_ROOT/lib/ops.sh
 source $PEARL_ROOT/lib/misc.sh
 
 # Set the modules
-for mod in $(ls ${PEARL_ROOT}/lib/core/mods/)
+for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
 do
-    if [ "$(ls -A "${PEARL_ROOT}/mods/${mod}")" ]; then
-        if [ -e $PEARL_ROOT/lib/core/mods/${mod}/config ]; then
-            source $PEARL_ROOT/lib/core/mods/${mod}/config
+    for mod in $(ls ${PEARL_ROOT}/lib/core/mods/${category})
+    do
+        if [ "$(ls -A "${PEARL_ROOT}/mods/${category}/${mod}")" ]; then
+            if [ -e $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh ]; then
+                source $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh
+            fi
         fi
-    fi
+    done
 done
 
 # Install pearl if it is not installed yet

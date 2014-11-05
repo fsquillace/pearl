@@ -71,7 +71,7 @@ function _pearl_git_update(){
     fi
 
     # Update of the modules
-    for modulepath in $(ls mods/*/.git | sed 's/\/\.git$//')
+    for modulepath in $(ls mods/*/*/.git | sed 's/\/\.git$//')
     do
         git submodule update $modulepath
     done

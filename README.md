@@ -80,9 +80,9 @@ if `git` has been installed into the machine.
 - To list the modules
   ``pearl_module_list``
 - To install *ranger* module
-  ``pearl_module_install_update ranger``
+  ``pearl_module_install_update misc/ranger``
 - To uninstall the *ranger* module
-  ``pearl_module_uninstall ranger``
+  ``pearl_module_uninstall misc/ranger``
 
 List of main modules are:
 

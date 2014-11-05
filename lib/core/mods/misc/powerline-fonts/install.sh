@@ -2,7 +2,7 @@
 
 function post_install(){
     mkdir -p ~/.fonts
-    local root_path="${PEARL_ROOT}/mods/powerline-fonts/"
+    local root_path="${PEARL_ROOT}/mods/misc/powerline-fonts/"
     local default_font="DejaVuSansMono/DejaVu Sans Mono for Powerline.ttf"
 
     OLD_PWD=$(pwd)
@@ -41,7 +41,7 @@ function post_install(){
 }
 
 function pre_uninstall(){
-    local root_path="${PEARL_ROOT}/mods/powerline-fonts/"
+    local root_path="${PEARL_ROOT}/mods/misc/powerline-fonts/"
     builtin cd "$root_path"
     local ttf_list="$(find . -name "*.ttf" | sed -e 's/.*\///' -e 's/\.ttf//')"
     local otf_list=$(find . -name "*.otf" | sed -e 's/.*\///' -e 's/\.otf//')

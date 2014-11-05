@@ -8,7 +8,7 @@
 # To undo the effect of this function, you can type "cd -" to return to the
 # original directory.
 
-export PATH=$PATH:$PEARL_ROOT/mods/ranger/scripts
+export PATH=$PATH:$PEARL_ROOT/mods/misc/ranger/scripts
 
 # cd to last path after exit
 # This functionallows to change the directory 
@@ -16,7 +16,7 @@ export PATH=$PATH:$PEARL_ROOT/mods/ranger/scripts
 # You can always type "cd -" to go back
 # to the original one.
 function ranger-cd(){
-    local ranger_command="python ${PEARL_ROOT}/mods/ranger/scripts/ranger"
+    local ranger_command="python ${PEARL_ROOT}/mods/misc/ranger/scripts/ranger"
 
     # Checks out into the jobs if the user pressed the C-z key
     local id=$(jobs | grep ranger | awk -F "[][]" '{print $2}')

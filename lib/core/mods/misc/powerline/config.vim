@@ -1,5 +1,5 @@
 
-set rtp+=$PEARL_ROOT/mods/powerline/powerline/bindings/vim/
+set rtp+=$PEARL_ROOT/mods/misc/powerline/powerline/bindings/vim/
 
 " Always show statusline
 set laststatus=2
