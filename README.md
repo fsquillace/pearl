@@ -47,6 +47,7 @@ Type the following commands:
 
     $ git clone 'git://github.com/fsquillace/pearl.git' $HOME/.pearl
     $ source $HOME/.pearl/pearl
+    $ pearl_module_install_update pearl/utils
 
 ### ...Or without Git ###
 

@@ -7,6 +7,7 @@
 # (update 27-01-2013 working in Dublin)
 # (update 06-02-2013 still in Dublin and big day changing the name in pearl!)
 # (update 31-12-2013 modularized the pearl script in Milan!)
+# (update 08-09-2014 making pearl even more modularized in Dublin :)
 # Usage: source pearl OR bash --rcfile pearl
 
 # If not running interactively, don't do anything
@@ -48,10 +49,6 @@ source $PEARL_ROOT/lib/utils.sh
 source $PEARL_ROOT/lib/core/make.sh
 source $PEARL_ROOT/lib/core/makemods.sh
 source $PEARL_ROOT/lib/core/configs.sh
-
-source $PEARL_ROOT/lib/core.sh
-source $PEARL_ROOT/lib/aliases.sh
-source $PEARL_ROOT/lib/ops.sh
 
 # Set the modules
 for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
