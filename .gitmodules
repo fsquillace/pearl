@@ -61,3 +61,6 @@
 [submodule "mods/pearl/utils"]
 	path = mods/pearl/utils
 	url = git@github.com:fsquillace/pearl-utils.git
+[submodule "mods/pearl/dotfiles"]
+	path = mods/pearl/dotfiles
+	url = git@github.com:fsquillace/pearl-dotfiles.git

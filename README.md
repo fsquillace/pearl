@@ -48,6 +48,7 @@ Type the following commands:
     $ git clone 'git://github.com/fsquillace/pearl.git' $HOME/.pearl
     $ source $HOME/.pearl/pearl
     $ pearl_module_install_update pearl/utils
+    $ pearl_module_install_update pearl/dotfiles
 
 ### ...Or without Git ###
 
@@ -97,7 +98,8 @@ List of main modules are:
 - [pearl-man](https://github.com/fsquillace/pearl-man)
 - and much more...
 
-### Configs ###
+### Dotfiles ###
+After installed the pearl mod [pearl-dotfiles](https://github.com/fsquillace/pearl-dotfiles):
 - To list all the configurations
   ``pearl_config_list``
 - To enable the vim configuration
