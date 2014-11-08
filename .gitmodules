@@ -58,3 +58,6 @@
 [submodule "mods/vim/zenburn"]
 	path = mods/vim/zenburn
 	url = https://github.com/jnurmine/Zenburn.git
+[submodule "mods/pearl/utils"]
+	path = mods/pearl/utils
+	url = git@github.com:fsquillace/pearl-utils.git

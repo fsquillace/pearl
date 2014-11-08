@@ -10,7 +10,8 @@ Please *note* that this example will use tmux as terminal but the same feature
 are implemented for GNU screen as well.
 
 Moreover, this tutorial suppose that you already have installed
-[pearl framework](https://github.com/fsquillace/pearl).
+[pearl framework](https://github.com/fsquillace/pearl)
+and [pearl utils mod](https://github.com/fsquillace/pearl-utils).
 
 
 ## Setup the workspace ##

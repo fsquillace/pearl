@@ -59,6 +59,8 @@ if `git` has been installed into the machine.
     $ source $HOME/.pearl/pearl
 
 ## Quickstart ##
+- Install the pearl utils mod:
+  ``pearl_module_install_update pearl/utils``
 - Trash safely a file/directory instead of deleting it through rm:
   ``trash myfile``
 - Add a directory to a bookmark:
