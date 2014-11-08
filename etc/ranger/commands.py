@@ -235,7 +235,7 @@ class trash(Command):
 
     def execute(self):
         trash_dir = os.environ['PEARL_TEMPORARY']
-        misc_lib = os.environ['PEARL_ROOT']+'/lib/util.sh'
+        misc_lib = os.environ['PEARL_ROOT']+'mods/pearl-utils/lib/utils.sh'
 
         os.system('mkdir -p '+ trash_dir)
 
