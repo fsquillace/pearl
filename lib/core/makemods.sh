@@ -27,12 +27,23 @@ function pearl_module_install_update(){
     git submodule update --init --force --rebase "mods/$modulename"
     type -t post_install &> /dev/null && post_install
 
+    set_category $modulename
+
     source ${PEARL_ROOT}/pearl
     builtin cd $OLD_PWD
 
     unset pre_install post_install
     unset pre_uninstall post_uninstall
     return 0
+}
+
+function set_category(){
+if [[ $1 =~ (.*)/.* ]]
+then
+    local category=${BASH_REMATCH[1]}
+    [ $category == "vim" ] && \
+        apply "source $PEARL_ROOT/lib/core/category/vim/vimrc" "${HOME}/.vimrc"
+fi
 }
 
 function pearl_module_uninstall(){
