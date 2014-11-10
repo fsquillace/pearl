@@ -150,6 +150,44 @@ else
 fi
 }
 
+function pearl_init(){
+    if [ -e $PEARL_HOME/pearlrc ]
+    then
+        source $PEARL_HOME/pearlrc
+    else
+        pearl_logo
+        # Shows informations system
+        echo ""
+        (uname -m && cat /etc/*release)
+
+        echo ""
+        echo "The pearl configurations are not mandatory but they are strongly recommended."
+        echo "They consist of vim, bash, readline and much more made by pearl."
+        echo "You can easily change or reset the settings of pearl whenever you want executing:"
+        echo ">> pearl_config_list"
+        echo ">> pearl_config_enable <configname>"
+        echo ""
+
+        pearl_config_enable bashrc
+
+        echo "Creating ~/.config/pearl directory ..."
+        mkdir -p $PEARL_HOME/bkp
+        mkdir -p $PEARL_HOME/envs
+        mkdir -p $PEARL_HOME/mans
+        mkdir -p $PEARL_HOME/etc
+        mkdir -p $PEARL_HOME/opt
+
+        echo "#!/bin/bash" > $PEARL_HOME/pearlrc
+        echo "#This script is used to override the pearl settings. " >> $PEARL_HOME/pearlrc
+        chmod +x $PEARL_HOME/pearlrc
+
+        echo ""
+        echo "For more information: man pearl"
+
+    fi
+
+}
+
 
 if [ "${BASH_ARGV}" == "" ]; then
     # If pearl is not installed, install it to HOME
