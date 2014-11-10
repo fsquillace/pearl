@@ -1,5 +1,3 @@
-
-
 function post_install(){
     mkdir -p ~/.fonts
     local root_path="${PEARL_ROOT}/mods/misc/powerline-fonts/"

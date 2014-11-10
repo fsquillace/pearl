@@ -7,7 +7,6 @@ function post_install(){
 
     cp ${PEARL_ROOT}/mods/misc/powerline/font/10-powerline-symbols.conf ~/.fonts.conf.d/
 
-
     info "Vim binding applied"
     if ask "Do you want Powerline binding also for Bash?" "N"
 

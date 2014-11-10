@@ -38,12 +38,10 @@ function pearl_module_install_update(){
 }
 
 function set_category(){
-if [[ $1 =~ (.*)/.* ]]
-then
-    local category=${BASH_REMATCH[1]}
-    [ $category == "vim" ] && \
+    if [ -e $PEARL_ROOT/lib/core/mods/$1/*.vim ]
+    then
         apply "source $PEARL_ROOT/lib/core/category/vim/vimrc" "${HOME}/.vimrc"
-fi
+    fi
 }
 
 function pearl_module_uninstall(){
