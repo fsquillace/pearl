@@ -64,3 +64,6 @@
 [submodule "mods/pearl/dotfiles"]
 	path = mods/pearl/dotfiles
         url = https://github.com/fsquillace/pearl-dotfiles.git
+[submodule "mods/vim/nerdtree"]
+	path = mods/vim/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
