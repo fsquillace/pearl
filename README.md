@@ -1,7 +1,6 @@
-# pearl(1) #
+# Pearl #
 
-## Name ##
-pearl - An enhanced shell bash framework
+*pearl* - The enhanced shell bash framework
 
 ```
        _/_/_/     _/_/_/_/    _/_/_/     _/_/_/         _/
@@ -32,33 +31,20 @@ them as much as you want.
 Only in the best shell you will find a pearl!
 
 ## Installation ##
+
+Just clone the Pearl repo somewhere (for example in ~/.pearl):
+
+    $ git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
+    $ source $HOME/.pearl/pearl
+    $ pearl_module_install_update pearl/utils
+    $ pearl_module_install_update pearl/dotfiles
+
 *pearl* should work with many recent release of bash. The minimum recommended
 version is 4.3.9.
 
 Usually all git releases are ok,
 but for uninstalling modules the minimum recommended version is >=1.8 since
 the previous git releases don't support the "submodule deinit" command.
-
-### Using Git (Recommended)... ###
-
-For sure the best way of installing *pearl* is to place it
-in a hidden subdirectory of HOME (by default ~/.pearl).
-Type the following commands:
-
-    $ git clone 'git://github.com/fsquillace/pearl.git' $HOME/.pearl
-    $ source $HOME/.pearl/pearl
-    $ pearl_module_install_update pearl/utils
-    $ pearl_module_install_update pearl/dotfiles
-
-### ...Or without Git ###
-
-Using the *make.sh* script, pearl can be installed even on a
-machine that doesn't have git installed!
-*make.sh* installs or updates pearl with either `git` or `wget` depending
-if `git` has been installed into the machine.
-
-    $ wget --no-check-certificate -O - https://raw.github.com/fsquillace/pearl/master/lib/core/make.sh | bash
-    $ source $HOME/.pearl/pearl
 
 ## Quickstart ##
 - Install the pearl utils mod:
