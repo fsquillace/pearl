@@ -1,0 +1,157 @@
+#!/usr/bin/env bash
+#
+# This file is part of Pearl (https://github.com/fsquillace/pearl).
+#
+# Copyright (c) 2008-2015
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Library General Public License as published
+# by the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+NAME='Pearl'
+CMD='pearl'
+DESCRIPTION='The enhanced Bash shell framework'
+AUTHOR='Filippo Squillace <feel dot squally at gmail.com>'
+HOMEPAGE='https://github.com/fsquillace/pearl'
+COPYRIGHT='2008-2015'
+
+source "$(dirname $0)/../lib/utils.sh"
+source "$(dirname $0)/../lib/core/system.sh"
+source "$(dirname $0)/../lib/core/module.sh"
+
+
+###################################
+### General functions           ###
+###################################
+
+usage() {
+    echo -e "$NAME: $DESCRIPTION"
+    echo -e "Usage: $CMD [options] [session] [command]"
+    echo -e "Sessions:"
+    echo -e "  module                   Session for $NAME module settings"
+    echo -e "    Commands:"
+    echo -e "      list                 List the available $NAME modules"
+    echo -e "      install [module]     Install a specific module"
+    echo -e "      update [module]      Update a specific module"
+    echo -e "      uninstall [module]   Uninstall a specific module"
+	echo
+    echo -e "  system                   Session for $NAME system settings"
+    echo -e "    Commands:"
+    echo -e "      update               Update $NAME and its modules"
+    echo -e "      uninstall            Uninstall $NAME"
+	echo
+    echo -e "Options:"
+    echo -e "  -h, --help               Show this help message"
+}
+
+check_cli(){
+    if $OPT_HELP
+    then
+        if $COMMAND_SYSTEM_UNINSTALL || $COMMAND_MODULE_LIST || $COMMAND_MODULE_INSTALL || \
+			$COMMAND_MODULE_UPDATE || $COMMAND_SYSTEM_UPDATE || $COMMAND_SYSTEM_UNINSTALL
+        then
+            die "The help option must be used exclusively"
+        fi
+    fi
+    if [ "$ARGS" != "" ]
+    then
+        die "No arguments are needed. For the CLI syntax run: $CMD --help"
+    fi
+
+    return 0
+}
+
+
+function parse_arguments(){
+    COMMAND_MODULE_LIST=false
+    COMMAND_MODULE_INSTALL=false
+    COMMAND_MODULE_UPDATE=false
+    COMMAND_MODULE_UNINSTALL=false
+    COMMAND_SYSTEM_UPDATE=false
+    COMMAND_SYSTEM_UNINSTALL=false
+	COMMAND_ARGS=()
+	OPT_HELP=false
+
+	for opt in "$@"
+	do
+		case "$1" in
+			module)
+				shift
+				case "$1" in
+					list)
+						COMMAND_MODULE_LIST=true; shift ;;
+					install)
+						COMMAND_MODULE_INSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+					update)
+						COMMAND_MODULE_UPDATE=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+					uninstall)
+						COMMAND_MODULE_UNINSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+				esac
+				;;
+
+			system)
+				shift
+				case "$1" in
+					update)
+						COMMAND_SYSTEM_UPDATE=true; shift ;;
+					uninstall)
+						COMMAND_SYSTEM_UNINSTALL=true; shift ;;
+				esac
+				;;
+						
+			-h|--help) OPT_HELP=true ; shift ;;
+
+			--) shift ; break ;;
+			-*) die "Invalid option $1" ;;
+			*) break ;;
+		esac
+	done
+
+	ARGS=()
+	for arg in "$@"
+	do
+		ARGS+=("$arg")
+	done
+}
+
+function execute_operation(){
+	$OPT_HELP && usage && return
+
+	if $COMMAND_MODULE_LIST; then
+		pearl_module_list
+	elif $COMMAND_MODULE_INSTALL; then
+		for module in ${COMMAND_ARGS[@]}
+		do
+		    pearl_module_install module
+		done
+	elif $COMMAND_MODULE_UPDATE; then
+		for module in ${COMMAND_ARGS[@]}
+		do
+		    pearl_module_update module
+		done
+	elif $COMMAND_MODULE_UNINSTALL; then
+		for module in ${COMMAND_ARGS[@]}
+		do
+		    pearl_module_uninstall module
+		done
+	elif $COMMAND_SYSTEM_UPDATE; then
+		pearl_update
+	elif $COMMAND_SYSTEM_UNINSTALL; then
+		pearl_uninstall
+	fi
+}
+
+parse_arguments "$@"
+check_cli
+execute_operation
+# vim: set ts=4 sw=4 noet:

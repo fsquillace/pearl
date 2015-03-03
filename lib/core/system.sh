@@ -46,20 +46,7 @@ function pearl_uninstall(){
 
 }
 
-function pearl_install(){
-    git_command=$(which git);
-
-    if [ "$git_command" != "" ];
-    then
-        git clone git://github.com/fsquillace/pearl $PEARL_ROOT;
-    else
-        _pearl_wget_install
-    fi
-}
-
-
-function _pearl_git_update(){
-    git_command=$(which git);
+function pearl_update(){
     builtin cd $PEARL_ROOT
     if [ "$1" = "soft"  ]
     then
@@ -76,78 +63,7 @@ function _pearl_git_update(){
         git submodule update $modulepath
     done
     builtin cd $OLDPWD
-
-}
-
-function _pearl_wget_install(){
-    local pearl_install=$(mktemp -d pearl-XXXXX -p /tmp)
-    builtin cd $pearl_install
-    wget -q https://github.com/fsquillace/pearl/archive/current.tar.gz
-    tar xzvf current.tar.gz;
-
-    mv pearl-current $PEARL_ROOT
-    md5sum current.tar.gz > $PEARL_ROOT/pearl.sum
-    cd $PEARL_ROOT;
-    rm -rf $pearl_install
-}
-
-function _pearl_wget_update(){
-    newSum=$(wget -q -O - https://github.com/fsquillace/pearl/archive/current.tar.gz | md5sum)
-    oldSum=$(cat $PEARL_ROOT/pearl.sum)
-
-    if [ "$newSum" != "$oldSum" ]
-    then
-        _pearl_wget_install
-    fi
-}
-
-function pearl_update(){
-    function up_help(){
-        echo "Usage: pearl_update [soft/hard]"
-        echo "hard (default): overwrite the changes you might have done in pearl folder"
-        echo "soft: try to merge with the changes you made. In case of conflict it raises an error."
-    }
-
-    if [ ${#@} -gt 1 ]; then
-        echo "pearl_update: unrecognized options '$@'"
-        up_help
-        return 128
-    fi
-
-    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-        up_help
-        return 0
-    fi
-
-    git_command=$(which git);
-    if [ "$git_command" != "" ] && [ -d "$PEARL_ROOT/.git" ];
-    then
-        _pearl_git_update $1
-        source $PEARL_ROOT/pearl
-    elif [ -f "$PEARL_ROOT/pearl.sum" ]
-    then
-        _pearl_wget_update
-        source $PEARL_ROOT/pearl
-    else
-        echo "pearl wasn't installed using either wget or Git."
-        echo "May be it was installed by the package manager of the system."
-        echo "Use it if you want to update Pearl."
-        return 1
-    fi
-
-    return 0
-}
-
-
-# This function is able to install/update pearl
-# with either git or wget
-function pearl_install_update(){
-if [ -d $PEARL_ROOT ];
-then
-    pearl_update
-else
-    pearl_install
-fi
+    source $PEARL_ROOT/pearl
 }
 
 function pearl_init(){
@@ -187,22 +103,3 @@ function pearl_init(){
     fi
 
 }
-
-
-if [ "${BASH_ARGV}" == "" ]; then
-    # If pearl is not installed, install it to HOME
-    # and ensure the user has the right permissions
-    if [ -z $PEARL_ROOT ]
-    then
-        PEARL_ROOT=$HOME/.pearl
-        if [ ! -x $HOME ];
-        then
-            echo "Home folder doesn't exist. Creating it!";
-            sudo mkdir $HOME;
-            sudo chown $HOME;
-        fi;
-    fi
-    [ -z $PEARL_HOME ] && PEARL_HOME=$HOME/.config/pearl
-    pearl_install_update
-fi
-

@@ -46,8 +46,6 @@ export PEARL_DEBUG=0
 
 # Import the functions from the modules in lib/
 source $PEARL_ROOT/lib/utils.sh
-source $PEARL_ROOT/lib/core/make.sh
-source $PEARL_ROOT/lib/core/makemods.sh
 
 # Set the modules
 for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
