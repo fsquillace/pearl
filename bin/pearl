@@ -127,28 +127,35 @@ function parse_arguments(){
 function execute_operation(){
 	$OPT_HELP && usage && return
 
-	if $COMMAND_MODULE_LIST; then
-		pearl_module_list
-	elif $COMMAND_MODULE_INSTALL; then
+	$COMMAND_MODULE_LIST && pearl_module_list && return
+
+	if $COMMAND_MODULE_INSTALL; then
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_install module
+		    pearl_module_install "$module"
 		done
 	elif $COMMAND_MODULE_UPDATE; then
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_update module
+		    pearl_module_update "$module"
 		done
 	elif $COMMAND_MODULE_UNINSTALL; then
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_uninstall module
+		    pearl_module_uninstall "$module"
 		done
 	elif $COMMAND_SYSTEM_UPDATE; then
 		pearl_update
 	elif $COMMAND_SYSTEM_UNINSTALL; then
 		pearl_uninstall
 	fi
+
+	source_pearl
+}
+
+function source_pearl(){
+	# Send signal to parent in order to (re)source pearl
+    [ -z "$PEARL_ROOT" ] || kill -USR1 $PPID
 }
 
 parse_arguments "$@"

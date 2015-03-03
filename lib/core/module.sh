@@ -1,4 +1,20 @@
 # This module handles the pearl modules
+#
+
+function pearl_load_modules(){
+    # Load the installed modules
+    for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
+    do
+        for mod in $(ls ${PEARL_ROOT}/lib/core/mods/${category})
+        do
+            if [ "$(ls -A "${PEARL_ROOT}/mods/${category}/${mod}")" ]; then
+                if [ -e $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh ]; then
+                    source $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh
+                fi
+            fi
+        done
+    done
+}
 
 function pearl_module_install(){
     local modulename=$1
@@ -8,10 +24,10 @@ function pearl_module_install(){
     OLD_PWD=$(pwd)
     builtin cd $PEARL_ROOT
     type -t pre_install &> /dev/null && pre_install
-    git submodule init -- "mods/$modulename"
+    git submodule update --init --force --rebase "mods/$modulename"
     type -t post_install &> /dev/null && post_install
 
-    set_category $modulename
+    pearl_set_category $modulename
 
     source ${PEARL_ROOT}/pearl
     builtin cd $OLD_PWD
@@ -28,13 +44,13 @@ function pearl_module_update(){
     git submodule update --init --force --rebase "mods/$modulename"
     type -t post_update &> /dev/null && post_update
 
-    set_category $modulename
+    pearl_set_category $modulename
 
     source ${PEARL_ROOT}/pearl
     builtin cd $OLD_PWD
 }
 
-function set_category(){
+function pearl_set_category(){
     if [ -e $PEARL_ROOT/lib/core/mods/$1/*.vim ]
     then
         apply "source $PEARL_ROOT/lib/core/category/vim/vimrc" "${HOME}/.vimrc"
