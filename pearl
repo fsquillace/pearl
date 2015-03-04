@@ -19,11 +19,6 @@
 #
 # Usage: source pearl OR bash --rcfile pearl
 
-################################ IMPORTS #################################
-source $PEARL_ROOT/lib/utils.sh
-source $PEARL_ROOT/lib/core/system.sh
-source $PEARL_ROOT/lib/core/module.sh
-
 ################################ CHECKS #################################
 
 # If not running interactively, don't do anything
@@ -37,12 +32,17 @@ fi
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-################################# VARIABLES ##############################
+################################ IMPORTS #################################
 export PEARL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
 if [ ! -d "$PEARL_ROOT" ]; then
     error "Error: Could not set PEARL_ROOT env because $PEARL_ROOT does not exist."
     return 1
 fi
+source $PEARL_ROOT/lib/utils.sh
+source $PEARL_ROOT/lib/core/system.sh
+source $PEARL_ROOT/lib/core/module.sh
+
+################################# VARIABLES ##############################
 export PEARL_HOME=~/.config/pearl
 export PEARL_TEMPORARY=$PEARL_HOME/tmp/`tty`
 mkdir -p $PEARL_TEMPORARY
