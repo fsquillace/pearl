@@ -94,7 +94,3 @@ function unapply(){
     echo -e "$original" > $2
 }
 
-function pearl_logo(){
-cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
-}
-
