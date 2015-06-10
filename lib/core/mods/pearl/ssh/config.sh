@@ -1,7 +1,7 @@
 
 MANPATH=$MANPATH:$PEARL_ROOT/mods/pearl/ssh/man
 PEARL_SSH_ROOT="${PEARL_ROOT}/mods/pearl/ssh"
-source ${PEARL_ROOT}/mods/pearl/ssh/lib/ssh.sh
+source ${PEARL_ROOT}/mods/pearl/ssh/lib/ssh_pearl.sh
 
 
 mkdir -p "${PEARL_HOME}/sshrc.d/"
