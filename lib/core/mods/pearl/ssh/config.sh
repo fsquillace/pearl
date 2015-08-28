@@ -22,4 +22,9 @@ mkdir -p "${PEARL_HOME}/sshinputrc.d/"
     [ -f "$PEARL_ROOT/mods/pearl/dotfiles/etc/inputrc" ] && \
     ln -s "$PEARL_ROOT/mods/pearl/dotfiles/etc/inputrc" "${PEARL_HOME}/sshinputrc.d/pearl_inputrc"
 
+mkdir -p "${PEARL_HOME}/sshvimrc.d/"
+[ ! -f "${PEARL_HOME}/sshvimrc.d/pearl_vimrc" ] && \
+    [ -f "$PEARL_ROOT/mods/pearl/dotfiles/etc/vim/vimrc" ] && \
+    ln -s "$PEARL_ROOT/mods/pearl/dotfiles/etc/vim/vimrc" "${PEARL_HOME}/sshvimrc.d/pearl_vimrc"
+
 # vim: ft=sh
