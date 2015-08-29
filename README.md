@@ -34,14 +34,14 @@ Only in the best shell you will find a pearl!
 
 Just clone the Pearl repo somewhere (for example in ~/.pearl):
 
-    $ git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
-    $ source $HOME/.pearl/pearl
+    git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
+    source $HOME/.pearl/pearl
 
 
 Some useful Pearl modules to install:
 
-    $ pearl module install pearl/utils
-    $ pearl module install pearl/dotfiles
+    pearl module install pearl/utils
+    pearl module install pearl/dotfiles
 
 *pearl* should work with many recent release of bash. The minimum recommended
 version is 4.3.9.
@@ -53,51 +53,51 @@ the previous git releases don't support the "submodule deinit" command.
 ## Quickstart ##
 - Install the pearl utils mod:
 
-    pearl module install pearl/utils
+    `pearl module install pearl/utils`
 
 - Trash safely a file/directory instead of deleting it through rm:
 
-    trash myfile
+    `trash myfile`
 
 - Add a directory to a bookmark:
 
-    cd -a mytag ~/documents
+    `cd -a mytag ~/documents`
 
 - To cd to a marked directory:
 
-    cd -g mytag
+    `cd -g mytag`
 
 - To open tmux session on a marked directory:
 
-    tmux -g mytag
+    `tmux -g mytag`
 
 - How to use [pearl as an IDE](https://github.com/fsquillace/pearl/blob/master/doc/pearl-as-ide.md)
 
 - much much more… take a look at the list of modules for what 'pearl' offers…
 
-    pearl module list
+    `pearl module list`
 
 ## Usage ##
 - To update pearl:
 
-    pearl system update
+    `pearl system update`
 
 - To uninstall completely and safely pearl:
 
-    pearl system uninstall
+    `pearl system uninstall`
 
 ### Modules ###
 - To list the modules
 
-    pearl module list
+    `pearl module list`
 
 - To install *ranger* module
 
-    pearl module install misc/ranger
+    `pearl module install misc/ranger`
 
 - To uninstall the *ranger* module
 
-    pearl module uninstall misc/ranger
+    `pearl module uninstall misc/ranger`
 
 List of main modules are:
 
@@ -114,20 +114,20 @@ After installed the pearl mod [pearl-dotfiles](https://github.com/fsquillace/pea
 
 - To list all the configurations
 
-    pearl-dotfiles list
+    `pearl-dotfiles list`
 
 - To enable the vim configuration
 
-    pearl-dotfiles enable vimrc
+    `pearl-dotfiles enable vimrc`
 
 - To disable the vim configuration
 
-    pearl-dotfiles enable vimrc
+    `pearl-dotfiles enable vimrc`
 
 The file ``$HOME/.config/pearl/pearlrc`` is the user-defined config
 that contains all the settings done from the user.
 This can be useful when you want to override some aliases,
-variables or pearl's script.
+variables or pearl scripts.
 
 ## Help ##
 Just type one of the manuals you need in:

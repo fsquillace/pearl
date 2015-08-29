@@ -9,14 +9,21 @@ pearl as your personal IDE.
 Please *note* that this example will use tmux as terminal but the same feature
 are implemented for GNU screen as well.
 
-Moreover, this tutorial suppose that you already have installed
-[pearl framework](https://github.com/fsquillace/pearl)
-and [pearl utils mod](https://github.com/fsquillace/pearl-utils).
+Moreover, this tutorial supposes that you already have installed
+[pearl framework](https://github.com/fsquillace/pearl) with the essential modules:
+
+- [pearl utils mod](https://github.com/fsquillace/pearl-utils)
+
+    `pearl module install pearl/utils`
+
+- [pearl dotfiles mod](https://github.com/fsquillace/pearl-dotfiles)
+
+    `pearl module install pearl/dotfiles`
 
 
 ## Setup the workspace ##
 
-First of all you need choose your workspace directory and mark it using `cd` command.
+First of all you need is to choose your workspace directory and mark it using `cd` command.
 
     cd -a mydjango /this/is/a/very/long/path
 
@@ -29,7 +36,7 @@ to the directory:
 ## Setup the terminal ##
 
 This is the funny part. Once your workspace has been marked with `cd`, you can
-use either TMUX in order to create a sessionto the directory
+use either TMUX in order to create a session to the directory:
 
     tmux -g mydjango
 
@@ -39,7 +46,7 @@ you create a new window, the directory will be changed automatically according t
 Also, you can use the awesome pearl configuration for TMUX, that allow to have
 several essentials keybindings and much more:
 
-    pearl_config_install_update tmux
+    pearl-dotfiles enable tmux
 
 
 ### Environment in tmux session ###
@@ -47,9 +54,9 @@ several essentials keybindings and much more:
 Usually, when you have to reboot you machine, you need to reopen several programs
 in tmux located in different windows. With pearl you can set it once for all.
 
-In '~/.config/pearl/envs' it is possible
+In `~/.config/pearl/envs` it is possible
 to add environments that describe the window structure and the program to execute
-for each session.
+for each TMUX session.
 
 For example, your django project uses virtualenv and you need to activate it for
 each window you are creating. Moreover, let's suppose you want to have
@@ -74,36 +81,36 @@ $PEARL\_WINDOW\_INDEX and $PEARL\_PANE\_INDEX.
 
 There is also a special file named *default* you can create in the same directory
 *~/.config/pearl/envs*, which allow to define the generic environment
-for any tmux session.
+for any tmux sessions.
 
 
 ## Setup vim ##
 
 Just use the awesome pearl configuration for vim and enjoy it!
 
-    pearl_config_install_update vim
+    pearl-dotfiles enable vimrc
 
 To install the [vim-python-mode](https://github.com/klen/python-mode):
 
-    pearl_module_install_update vim-python-mode
+    pearl module install vim/python-mode
 
-To get the list of all plugins for vim and more in pearl use:
+To get the list of all plugins for vim in pearl use:
 
-    pearl_module_list
+    pearl module list
 
 
 ## Setup git ##
 
 Just use the awesome pearl configuration for git and enjoy it!
 
-    pearl_config_install_update gitconfig
+    pearl-dotfiles enable gitconfig
 
 
 ## Install ranger ##
 
 `ranger` is a ncurses file manager with vim like keybindings. I strongly suggest it.
 
-    pearl_module_install_update ranger
+    pearl module install misc/ranger
 
 
 ## Trash files ##
@@ -128,5 +135,5 @@ To list all TODOs contained in the files of the directory marked as `mydjango:`
 ## Conclusion ##
 
 There are many other functions, config files and modules to check out.
-Take a look at the code and enjoy pearl!
+Take a look at the code and enjoy **pearl**!
 
