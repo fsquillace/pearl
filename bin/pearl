@@ -21,7 +21,7 @@
 NAME='Pearl'
 CMD='pearl'
 DESCRIPTION='The enhanced Bash shell framework'
-AUTHOR='Filippo Squillace <feel dot squally at gmail.com>'
+AUTHOR='Filippo Squillace <feel dot sqoox at gmail.com>'
 HOMEPAGE='https://github.com/fsquillace/pearl'
 COPYRIGHT='2008-2015'
 
