@@ -1,23 +1,5 @@
-#!/usr/bin/env bash
-#
-# This file is part of Pearl (https://github.com/fsquillace/pearl).
-#
-# Copyright (c) 2008-2015
-#
-# This program is free software; you can redistribute it and/or modify it
-# under the terms of the GNU Library General Public License as published
-# by the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Usage: source pearl OR bash --rcfile pearl
+# Usage: source pearl OR in Bash: bash --rcfile pearl
+# vim: set ft=sh ts=4 sw=4 noet:
 
 ################################ CHECKS #################################
 
@@ -25,38 +7,38 @@
 [ -z "$PS1" ] && return
 [[ $- != *i* ]] && return
 
-if [ "${BASH_ARGV}" = "" ]; then
-    die "Error the correct usage is: source $0 OR bash --rcfile $0"
-fi
-
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-################################ IMPORTS #################################
-export PEARL_ROOT=$(dirname $(readlink -f "${BASH_ARGV[0]}"))
-if [ ! -d "$PEARL_ROOT" ]; then
-    error "Error: Could not set PEARL_ROOT env because $PEARL_ROOT does not exist."
+####################### VARIABLES & IMPORTS ############################
+export PEARL_HOME=~/.config/pearl
+export PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
+mkdir -p ${PEARL_TEMPORARY}
+
+source ${PEARL_HOME}/.install
+source ${PEARL_ROOT}/lib/utils.sh
+
+if [ ! -d "${PEARL_ROOT}" ]; then
+    error "Error: Could not set PEARL_ROOT env because ${PEARL_ROOT} does not exist."
     return 1
 fi
-source $PEARL_ROOT/lib/utils.sh
-source $PEARL_ROOT/lib/core/system.sh
-source $PEARL_ROOT/lib/core/module.sh
 
-################################# VARIABLES ##############################
-export PEARL_HOME=~/.config/pearl
-export PEARL_TEMPORARY=$PEARL_HOME/tmp/`tty`
-mkdir -p $PEARL_TEMPORARY
-export PATH=$PEARL_ROOT/bin:$PATH
+export PATH=${PEARL_ROOT}/bin:${PATH}
+export MANPATH=${MANPATH}:${PEARL_ROOT}/man
 
 ################################# MAIN ##############################
-pearl_init
-
-pearl_load_modules
-
-# Remove all pearl_* functions
-for func in $(compgen -abck pearl_ | tr "\n" " ")
+for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
 do
-    unset -f "$func"
+    for mod in $(ls ${PEARL_ROOT}/lib/core/mods/${category})
+    do
+        if [ "$(ls -A "${PEARL_ROOT}/mods/${category}/${mod}")" ]; then
+            if [ -e ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.sh ]; then
+                source ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.sh
+            fi
+        fi
+    done
 done
 
-trap "source $PEARL_ROOT/pearl" USR1
+trap "source ${PEARL_ROOT}/pearl" USR1
+
+source ${PEARL_HOME}/pearlrc

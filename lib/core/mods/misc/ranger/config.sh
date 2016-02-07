@@ -44,7 +44,7 @@ function ranger-cd(){
 }
 
 # This binds Ctrl-O to ranger-cd:
-bind '"\C-o":"\C-u\C-k ranger-cd\C-m"'
+[ -z "$BASH" ] || bind '"\C-o":"\C-u\C-k ranger-cd\C-m"'
 
 
 [ -n "$RANGER_LEVEL" ] && PS1='(in ranger)'"$PS1"

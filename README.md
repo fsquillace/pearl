@@ -43,12 +43,10 @@ Some useful Pearl modules to install:
     pearl module install pearl/utils
     pearl module install pearl/dotfiles
 
-*pearl* should work with many recent release of bash. The minimum recommended
-version is 4.3.9.
+The main Pearl dependencies are:
 
-Usually all git releases are ok,
-but for uninstalling modules the minimum recommended version is >=1.8 since
-the previous git releases don't support the "submodule deinit" command.
+- bash (minimum recommended version 4.2)
+- git (>=1.8)
 
 ## Quickstart ##
 - Install the pearl utils mod:
@@ -157,7 +155,7 @@ The commands are stored in ``~/.config/pearl/commands``.
 
 ## Copyright ##
 
-    Copyright  (C) 2008-2015 Free  Software Foundation, Inc.
+    Copyright  (C) 2008-2016 Free  Software Foundation, Inc.
 
     Permission  is  granted to make and distribute verbatim copies
     of this document provided the copyright notice and  this  per‐

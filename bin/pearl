@@ -2,7 +2,7 @@
 #
 # This file is part of Pearl (https://github.com/fsquillace/pearl).
 #
-# Copyright (c) 2008-2015
+# Copyright (c) 2008-2016
 #
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Library General Public License as published
@@ -23,11 +23,12 @@ CMD='pearl'
 DESCRIPTION='The enhanced Bash shell framework'
 AUTHOR='Filippo Squillace <feel dot sqoox at gmail.com>'
 HOMEPAGE='https://github.com/fsquillace/pearl'
-COPYRIGHT='2008-2015'
+COPYRIGHT='2008-2016'
+PEARL_ROOT="$(dirname $0)/.."
 
-source "$(dirname $0)/../lib/utils.sh"
-source "$(dirname $0)/../lib/core/system.sh"
-source "$(dirname $0)/../lib/core/module.sh"
+source "${PEARL_ROOT}/lib/utils.sh"
+source "${PEARL_ROOT}/lib/core/system.sh"
+source "${PEARL_ROOT}/lib/core/module.sh"
 
 
 ###################################
@@ -47,6 +48,7 @@ usage() {
 	echo
     echo -e "  system                   Session for $NAME system settings"
     echo -e "    Commands:"
+    echo -e "      install              Install $NAME"
     echo -e "      update               Update $NAME and its modules"
     echo -e "      uninstall            Uninstall $NAME"
 	echo
@@ -58,7 +60,8 @@ check_cli(){
     if $OPT_HELP
     then
         if $COMMAND_SYSTEM_UNINSTALL || $COMMAND_MODULE_LIST || $COMMAND_MODULE_INSTALL || \
-			$COMMAND_MODULE_UPDATE || $COMMAND_SYSTEM_UPDATE || $COMMAND_SYSTEM_UNINSTALL
+			$COMMAND_MODULE_UPDATE || $COMMAND_SYSTEM_INSTALL || $COMMAND_SYSTEM_UPDATE || \
+			$COMMAND_SYSTEM_UNINSTALL
         then
             die "The help option must be used exclusively"
         fi
@@ -77,6 +80,7 @@ function parse_arguments(){
     COMMAND_MODULE_INSTALL=false
     COMMAND_MODULE_UPDATE=false
     COMMAND_MODULE_UNINSTALL=false
+    COMMAND_SYSTEM_INSTALL=false
     COMMAND_SYSTEM_UPDATE=false
     COMMAND_SYSTEM_UNINSTALL=false
 	COMMAND_ARGS=()
@@ -102,6 +106,8 @@ function parse_arguments(){
 			system)
 				shift
 				case "$1" in
+					install)
+						COMMAND_SYSTEM_INSTALL=true; shift ;;
 					update)
 						COMMAND_SYSTEM_UPDATE=true; shift ;;
 					uninstall)
@@ -144,6 +150,8 @@ function execute_operation(){
 		do
 		    pearl_module_uninstall "$module"
 		done
+	elif $COMMAND_SYSTEM_INSTALL; then
+		pearl_install ${PEARL_ROOT}
 	elif $COMMAND_SYSTEM_UPDATE; then
 		pearl_update
 	elif $COMMAND_SYSTEM_UNINSTALL; then

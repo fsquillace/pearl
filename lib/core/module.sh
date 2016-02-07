@@ -1,21 +1,6 @@
 # This module handles the pearl modules
 #
 
-function pearl_load_modules(){
-    # Load the installed modules
-    for category in $(ls ${PEARL_ROOT}/lib/core/mods/)
-    do
-        for mod in $(ls ${PEARL_ROOT}/lib/core/mods/${category})
-        do
-            if [ "$(ls -A "${PEARL_ROOT}/mods/${category}/${mod}")" ]; then
-                if [ -e $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh ]; then
-                    source $PEARL_ROOT/lib/core/mods/${category}/${mod}/config.sh
-                fi
-            fi
-        done
-    done
-}
-
 function pearl_module_install(){
     local modulename=$1
     local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh

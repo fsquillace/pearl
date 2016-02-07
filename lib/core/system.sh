@@ -1,39 +1,38 @@
 #!/bin/bash
 
-function pearl_init(){
-    if [ -e $PEARL_HOME/pearlrc ]
-    then
-        source $PEARL_HOME/pearlrc
-    else
-        pearl_logo
-        # Shows informations system
-        echo ""
-        (uname -m && cat /etc/*release)
+function pearl_install(){
+    [ -e $PEARL_HOME/.install ] && error "Pearl seems already been installed. Check ${PEARL_HOME}/.install file."
+    PEARL_ROOT=$1
 
-        echo ""
-        echo "The pearl configurations are not mandatory but they are strongly recommended."
-        echo "They consist of vim, bash, readline and much more made by pearl."
-        echo "You can easily change or reset the settings of pearl whenever you want executing:"
-        echo ">> pearl_config_list"
-        echo ">> pearl_config_enable <configname>"
-        echo ""
+    echo "Creating ~/.config/pearl directory ..."
+    mkdir -p $PEARL_HOME/envs
+    mkdir -p $PEARL_HOME/mans
+    mkdir -p $PEARL_HOME/etc
+    mkdir -p $PEARL_HOME/opt
 
-        pearl_config_enable bashrc
+    echo "# The following line is used to identify the pearl location (do not change it!):" > $PEARL_HOME/.install
+    echo "export PEARL_ROOT=$PEARL_ROOT" >> $PEARL_HOME/.install
 
-        echo "Creating ~/.config/pearl directory ..."
-        mkdir -p $PEARL_HOME/bkp
-        mkdir -p $PEARL_HOME/envs
-        mkdir -p $PEARL_HOME/mans
-        mkdir -p $PEARL_HOME/etc
-        mkdir -p $PEARL_HOME/opt
+    echo "#This script is used to override the pearl settings. " > $PEARL_HOME/pearlrc
 
-        echo "#!/bin/bash" > $PEARL_HOME/pearlrc
-        echo "#This script is used to override the pearl settings. " >> $PEARL_HOME/pearlrc
-        chmod +x $PEARL_HOME/pearlrc
+    pearl_logo
+    # Shows information system
+    echo ""
+    (uname -m && cat /etc/*release)
 
-        echo ""
-        echo "For more information: man pearl"
-    fi
+    echo ""
+    echo "The pearl configurations are not mandatory but they are strongly recommended."
+    echo "They consist of vim, bash, readline and much more made by pearl."
+    echo "You can easily change or reset the settings of pearl whenever you want executing:"
+    echo ">> pearl module install dotfiles"
+    echo ">> pearl-dotfiles list"
+    echo ">> pearl-dotfiles enable <configname>"
+    echo ""
+    echo "In order to have pearl at shell startup,"
+    echo "put the following in your shell config file (i.e. .bashrc or .zshrc)"
+    echo "source ${PEARL_ROOT}/pearl"
+    echo ""
+    echo "For more information: man pearl"
 }
 
 function pearl_logo(){
