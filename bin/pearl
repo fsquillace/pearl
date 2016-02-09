@@ -24,7 +24,7 @@ DESCRIPTION='The enhanced Bash shell framework'
 AUTHOR='Filippo Squillace <feel dot sqoox at gmail.com>'
 HOMEPAGE='https://github.com/fsquillace/pearl'
 COPYRIGHT='2008-2016'
-PEARL_ROOT="$(dirname $0)/.."
+PEARL_ROOT=$(realpath "$(dirname $0)/..")
 
 source "${PEARL_ROOT}/lib/utils.sh"
 source "${PEARL_ROOT}/lib/core/system.sh"

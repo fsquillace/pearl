@@ -4,17 +4,6 @@ function pearl_install(){
     [ -e $PEARL_HOME/.install ] && error "Pearl seems already been installed. Check ${PEARL_HOME}/.install file."
     PEARL_ROOT=$1
 
-    echo "Creating ~/.config/pearl directory ..."
-    mkdir -p $PEARL_HOME/envs
-    mkdir -p $PEARL_HOME/mans
-    mkdir -p $PEARL_HOME/etc
-    mkdir -p $PEARL_HOME/opt
-
-    echo "# The following line is used to identify the pearl location (do not change it!):" > $PEARL_HOME/.install
-    echo "export PEARL_ROOT=$PEARL_ROOT" >> $PEARL_HOME/.install
-
-    echo "#This script is used to override the pearl settings. " > $PEARL_HOME/pearlrc
-
     pearl_logo
     # Shows information system
     echo ""
@@ -29,10 +18,23 @@ function pearl_install(){
     echo ">> pearl-dotfiles enable <configname>"
     echo ""
     echo "In order to have pearl at shell startup,"
-    echo "put the following in your shell config file (i.e. .bashrc or .zshrc)"
+    echo "put the following in your shell config file (i.e. .bashrc, .zshrc or config.fish)"
     echo "source ${PEARL_ROOT}/pearl"
     echo ""
     echo "For more information: man pearl"
+
+    echo "Creating ~/.config/pearl directory ..."
+    mkdir -p $PEARL_HOME/envs
+    mkdir -p $PEARL_HOME/mans
+    mkdir -p $PEARL_HOME/etc
+    mkdir -p $PEARL_HOME/opt
+
+    echo "# The following line is used to identify the pearl location (do not change it!):" > $PEARL_HOME/.install
+    echo "export PEARL_ROOT=$PEARL_ROOT" >> $PEARL_HOME/.install
+
+   [ -e $PEARL_HOME/pearlrc ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc
+   [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
+
 }
 
 function pearl_logo(){
