@@ -1,0 +1,14 @@
+# vim: ft=yaml
+language: bash
+
+addons:
+  apt:
+    packages:
+    - zsh
+    - fish
+
+install:
+  - PATH=$PWD/bin:$PATH
+
+script:
+  - ./tests/full_tests.sh $PWD

@@ -18,17 +18,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# Detect if pearl has been invoked from a pearl environment. In that case
+# the USR1 signal can be sent.
+ENABLE_SIGNAL=false
+[ -z "$PEARL_ROOT" ] || ENABLE_SIGNAL=true
+
+set -e
+
 NAME='Pearl'
 CMD='pearl'
 DESCRIPTION='The enhanced Bash shell framework'
 AUTHOR='Filippo Squillace <feel dot sqoox at gmail.com>'
 HOMEPAGE='https://github.com/fsquillace/pearl'
 COPYRIGHT='2008-2016'
-PEARL_ROOT=$(realpath "$(dirname $0)/..")
+PEARL_ROOT="$(readlink -f $(dirname $(readlink -f "$0"))/..)"
+PEARL_HOME="${HOME}/.config/pearl"
 
 source "${PEARL_ROOT}/lib/utils.sh"
-source "${PEARL_ROOT}/lib/core/system.sh"
 source "${PEARL_ROOT}/lib/core/module.sh"
+source "${PEARL_ROOT}/lib/core/system.sh"
 
 
 ###################################
@@ -158,7 +166,8 @@ function execute_operation(){
 		pearl_uninstall
 	fi
 
-	source_pearl
+	$ENABLE_SIGNAL && source_pearl
+	return 0
 }
 
 function source_pearl(){

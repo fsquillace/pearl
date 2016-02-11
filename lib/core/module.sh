@@ -31,7 +31,6 @@ function pearl_module_update(){
 
     pearl_set_category $modulename
 
-    source ${PEARL_ROOT}/pearl
     builtin cd $OLD_PWD
 }
 
@@ -54,7 +53,6 @@ function pearl_module_uninstall(){
     git submodule deinit -f "mods/${modulename}"
     type -t post_uninstall &> /dev/null && post_uninstall
 
-    source ${PEARL_ROOT}/pearl
     #[ -d "mods/${modulename}/" ] && rm -rf "mods/${modulename}/*"
     #[ -d ".git/modules/mods/$modulename" ] && rm -rf ".git/modules/mods/$modulename"
     builtin cd $OLD_PWD

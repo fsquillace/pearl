@@ -1,29 +1,30 @@
 #!/bin/bash
 
 function pearl_install(){
-    [ -e $PEARL_HOME/.install ] && error "Pearl seems already been installed. Check ${PEARL_HOME}/.install file."
+    [ -e $PEARL_HOME/.install ] && die "Pearl seems already been installed. Check ${PEARL_HOME}/.install file."
     PEARL_ROOT=$1
 
     pearl_logo
     # Shows information system
     echo ""
-    (uname -m && cat /etc/*release)
+    command -v uname && uname -m
+    cat /etc/*release
+    echo ""
 
-    echo ""
-    echo "The pearl configurations are not mandatory but they are strongly recommended."
-    echo "They consist of vim, bash, readline and much more made by pearl."
-    echo "You can easily change or reset the settings of pearl whenever you want executing:"
-    echo ">> pearl module install dotfiles"
-    echo ">> pearl-dotfiles list"
-    echo ">> pearl-dotfiles enable <configname>"
-    echo ""
-    echo "In order to have pearl at shell startup,"
-    echo "put the following in your shell config file (i.e. .bashrc, .zshrc or config.fish)"
-    echo "source ${PEARL_ROOT}/pearl"
-    echo ""
-    echo "For more information: man pearl"
+    info "The pearl configurations are not mandatory but they are strongly recommended."
+    info "They consist of vim, bash, readline and much more made by pearl."
+    info "You can easily change or reset the settings of pearl whenever you want executing:"
+    info ">> pearl module install dotfiles"
+    info ">> pearl-dotfiles list"
+    info ">> pearl-dotfiles enable <configname>"
+    info ""
+    info "In order to have pearl at shell startup,"
+    info "put the following in your shell config file (i.e. .bashrc, .zshrc or config.fish)"
+    info "source ${PEARL_ROOT}/pearl"
+    info ""
+    info "For more information: man pearl"
 
-    echo "Creating ~/.config/pearl directory ..."
+    info "Creating $PEARL_HOME directory ..."
     mkdir -p $PEARL_HOME/envs
     mkdir -p $PEARL_HOME/mans
     mkdir -p $PEARL_HOME/etc
@@ -34,6 +35,7 @@ function pearl_install(){
 
    [ -e $PEARL_HOME/pearlrc ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc
    [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
+   info "Directory $PEARL_HOME created successfully."
 
 }
 
@@ -42,49 +44,19 @@ cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 }
 
 function pearl_uninstall(){
-    if [ ${#@} -ne 0 ]; then
-        echo "pearl_uninstall: unrecognized options '$@'"
-        echo "Usage: pearl_uninstall"
-        return 128
-    fi
-
-    if [ ! -d $PEARL_ROOT/.git ]
-    then
-        echo "pearl wasn't installed using Git."
-        echo "May be it was installed by the package manager of the system."
-        echo "Use it if you want to uninstall Pearl."
-        return 1
-    fi
-
-    if ask "Are you sure to DELETE completely Pearl?" "N"
-    then
-        echo "Resetting all the configuration files..."
-        # TODO refactor this:
-        # Bash
-        unapply "source $PEARL_ROOT/pearl" $HOME/.bashrc
-        # Vim
-        unapply "source $PEARL_ROOT/etc/vim/vimrc" $HOME/.vimrc
-        # Inputrc
-        unapply "\$include $PEARL_ROOT/etc/inputrc" $HOME/.inputrc
-        # Ranger
-        unapply "exec(open('$PEARL_ROOT/etc/ranger/commands.py').read())" $HOME/.config/ranger/commands.py
-        # Screenrc
-        unapply "source $PEARL_ROOT/etc/screenrc" $HOME/.screenrc
-        # XDefautls
-        unapply "# include \"$PEARL_ROOT/etc/Xdefaults\"" $HOME/.Xdefaults
-        # Gitconfig
-        unapply "\[include\] path = \"$PEARL_ROOT/etc/git/gitconfig\"" $HOME/.gitconfig
-        [ -f $HOME/.gitignore ] && rm -f $HOME/.gitignore
-
-        echo "Removing Pearl on the system..."
-        rm -rf $PEARL_ROOT
-    fi
-
+    builtin cd $PEARL_ROOT
+    #if ask "Are you sure to UNINSTALL all the Pearl modules in $PEARL_ROOT folder?" "N"
+    #then
+        #for module in $(git submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///')
+        #do
+            #pearl_module_uninstall $module
+        #done
+    #fi
     if ask "Are you sure to DELETE the Pearl config folder too ($PEARL_HOME folder)?" "N"
     then
        rm -rf $PEARL_HOME
    fi
-
+    builtin cd $OLDPWD
 }
 
 function pearl_update(){
@@ -104,6 +76,5 @@ function pearl_update(){
         git submodule update $modulepath
     done
     builtin cd $OLDPWD
-    source $PEARL_ROOT/pearl
 }
 
