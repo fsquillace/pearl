@@ -19,8 +19,11 @@ function pearl_install(){
     info ">> pearl-dotfiles enable <configname>"
     info ""
     info "In order to have pearl at shell startup,"
-    info "put the following in your shell config file (i.e. .bashrc, .zshrc or config.fish)"
+    info "put the following in your bash/zsh config file:"
     info "source ${PEARL_ROOT}/pearl"
+    info ""
+    info "or for fish shell:"
+    info "source ${PEARL_ROOT}/pearl.fish"
     info ""
     info "For more information: man pearl"
 
