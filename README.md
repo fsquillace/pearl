@@ -1,5 +1,7 @@
 # Pearl #
 
+[![Build status](https://api.travis-ci.org/fsquillace/pearl.png?branch=master)](https://travis-ci.org/fsquillace/pearl)
+
 *pearl* - The Linux shell made easy
 
 ```
