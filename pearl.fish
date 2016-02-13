@@ -8,7 +8,16 @@ set PEARL_HOME ~/.config/pearl
 set PEARL_TEMPORARY $PEARL_HOME/tmp/(tty)
 mkdir -p $PEARL_TEMPORARY
 
-source $PEARL_HOME/.install
+if [ -e $PEARL_HOME/.install ]
+    source $PEARL_HOME/.install
+else
+	echo "Error: Pearl is not installed. Type: 'pearl system install' first."
+	exit 1
+end
+if [ ! -d "$PEARL_ROOT" ]
+    echo "Error: Could not set PEARL_ROOT env because $PEARL_ROOT does not exist."
+    exit 1
+end
 
 set PATH $PEARL_ROOT/bin $PATH
 set MANPATH $MANPATH $PEARL_ROOT/man
@@ -24,6 +33,6 @@ for category in (ls $PEARL_ROOT/lib/core/mods/)
     end
 end
 
-trap "source $PEARL_ROOT/pearl" USR1
+trap "source $PEARL_ROOT/pearl.fish" USR1
 
 source $PEARL_HOME/pearlrc.fish

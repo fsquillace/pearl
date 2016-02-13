@@ -1,6 +1,6 @@
 # Pearl #
 
-*pearl* - The enhanced shell bash framework
+*pearl* - The Linux shell made easy
 
 ```
        _/_/_/     _/_/_/_/    _/_/_/     _/_/_/         _/
@@ -14,7 +14,7 @@ _/          _/_/_/_/  _/      _/  _/          _/  _/_/_/_/_/
 
 ## Description ##
 *pearl* is an enhanced and lightweight shell framework that allows
-to improve the way of using the shell Bash GNU/Linux and automate many daily
+to improve the way of using the shell Bash/Zsh/Fish and automate many daily
 activities of the system administrator.
 *pearl* comes bundled with a ton of helpful functions, helpers, plugins,
 aliases, configuration files and commands, all out of the box.
@@ -31,22 +31,36 @@ them as much as you want.
 Only in the best shell you will find a pearl!
 
 ## Installation ##
+The main Pearl dependencies are:
 
+- bash (>=4.2)
+- git (>=1.8)
+
+### Installation for Bash/Zsh ###
 Just clone the Pearl repo somewhere (for example in ~/.pearl):
 
     git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
+    export PATH=$HOME/.pearl/bin:$PATH
+    pearl system install
+
+Put the following in your shell config file (i.e. ~/.bashrc, ~/.zshrc)"
     source $HOME/.pearl/pearl
 
+### Installation for Fish ###
+Just clone the Pearl repo somewhere (for example in ~/.pearl):
 
+    git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
+    set PATH $HOME/.pearl/bin $PATH
+    pearl system install
+
+Put the following in your shell config file (i.e. ~/.config/fish/config.fish)"
+    source $HOME/.pearl/pearl.fish
+
+### Additional Pearl modules to install ###
 Some useful Pearl modules to install:
 
     pearl module install pearl/utils
     pearl module install pearl/dotfiles
-
-The main Pearl dependencies are:
-
-- bash (minimum recommended version 4.2)
-- git (>=1.8)
 
 ## Quickstart ##
 - Install the pearl utils mod:

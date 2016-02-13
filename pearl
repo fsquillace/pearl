@@ -11,17 +11,24 @@
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 ####################### VARIABLES & IMPORTS ############################
-export PEARL_HOME=~/.config/pearl
-export PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
+PEARL_HOME=~/.config/pearl
+PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
 mkdir -p ${PEARL_TEMPORARY}
 
-source ${PEARL_HOME}/.install
-source ${PEARL_ROOT}/lib/utils.sh
-
+if [ -e ${PEARL_HOME}/.install ]
+then
+    source ${PEARL_HOME}/.install
+else
+	echo "Error: Pearl is not installed. Type: 'pearl system install' first."
+	return 1
+fi
 if [ ! -d "${PEARL_ROOT}" ]; then
     error "Error: Could not set PEARL_ROOT env because ${PEARL_ROOT} does not exist."
     return 1
 fi
+
+source ${PEARL_ROOT}/lib/utils.sh
+
 
 export PATH=${PEARL_ROOT}/bin:${PATH}
 export MANPATH=${MANPATH}:${PEARL_ROOT}/man
