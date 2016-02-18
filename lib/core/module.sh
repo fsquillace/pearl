@@ -88,19 +88,26 @@ function pearl_module_uninstall(){
 }
 
 function pearl_module_list(){
+    local pattern=".*"
+    [ -z "$1" ] || pattern="$1"
     builtin cd $PEARL_ROOT
-    local modlist=$(git submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///')
+    local modlist=$(git submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern")
     for module in $modlist
     do
-        info "$module"
-        echo "    ${descriptions[$module]}"
+        _pearl_module_print $module false
     done
-    local modlist=$(git submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///')
+    local modlist=$(git submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern")
     for module in $modlist
     do
-        info "$module [installed]"
-        echo "    ${descriptions[$module]}"
+        _pearl_module_print $module true
     done
     builtin cd $OLDPWD
 }
 
+function _pearl_module_print() {
+    local module=$1
+    local installed=""
+    $2 && installed="[installed]"
+    info "$module $installed"
+    echo "    ${descriptions[$module]}"
+}

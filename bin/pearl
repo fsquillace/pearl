@@ -49,7 +49,8 @@ usage() {
     echo -e "Sessions:"
     echo -e "  module                   Session for $NAME module settings"
     echo -e "    Commands:"
-    echo -e "      list                 List the available $NAME modules"
+    echo -e "      list                 List all the available $NAME modules"
+    echo -e "      search [pattern]     Search the available $NAME modules that match pattern"
     echo -e "      install [module]     Install a specific module"
     echo -e "      update [module]      Update a specific module"
     echo -e "      uninstall [module]   Uninstall a specific module"
@@ -67,7 +68,8 @@ usage() {
 check_cli(){
     if $OPT_HELP
     then
-        if $COMMAND_SYSTEM_UNINSTALL || $COMMAND_MODULE_LIST || $COMMAND_MODULE_INSTALL || \
+        if $COMMAND_SYSTEM_UNINSTALL || $COMMAND_MODULE_SEARCH || $COMMAND_MODULE_LIST || \
+			$COMMAND_MODULE_INSTALL || \
 			$COMMAND_MODULE_UPDATE || $COMMAND_SYSTEM_INSTALL || $COMMAND_SYSTEM_UPDATE || \
 			$COMMAND_SYSTEM_UNINSTALL
         then
@@ -85,6 +87,7 @@ check_cli(){
 
 function parse_arguments(){
     COMMAND_MODULE_LIST=false
+    COMMAND_MODULE_SEARCH=false
     COMMAND_MODULE_INSTALL=false
     COMMAND_MODULE_UPDATE=false
     COMMAND_MODULE_UNINSTALL=false
@@ -102,6 +105,8 @@ function parse_arguments(){
 				case "$1" in
 					list)
 						COMMAND_MODULE_LIST=true; shift ;;
+					search)
+						COMMAND_MODULE_SEARCH=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
 					install)
 						COMMAND_MODULE_INSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
 					update)
@@ -142,6 +147,7 @@ function execute_operation(){
 	$OPT_HELP && usage && return
 
 	$COMMAND_MODULE_LIST && pearl_module_list && return
+	$COMMAND_MODULE_SEARCH && pearl_module_list ${COMMAND_ARGS[@]} && return
 
 	if $COMMAND_MODULE_INSTALL; then
 		for module in ${COMMAND_ARGS[@]}
