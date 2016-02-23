@@ -11,8 +11,8 @@
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 ####################### VARIABLES & IMPORTS ############################
-PEARL_HOME=~/.config/pearl
-PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
+export PEARL_HOME=~/.config/pearl
+export PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
 mkdir -p ${PEARL_TEMPORARY}
 
 if [ -e ${PEARL_HOME}/.install ]
@@ -30,8 +30,8 @@ fi
 source ${PEARL_ROOT}/lib/utils.sh
 
 
-export PATH=${PEARL_ROOT}/bin:${PATH}
-export MANPATH=${MANPATH}:${PEARL_ROOT}/man
+PATH=${PEARL_ROOT}/bin:${PATH}
+MANPATH=${MANPATH}:${PEARL_ROOT}/man
 
 ################################# MAIN ##############################
 for category in $(ls ${PEARL_ROOT}/lib/core/mods/)

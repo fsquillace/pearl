@@ -4,8 +4,8 @@
 
 ####################### VARIABLES & IMPORTS ############################
 
-set PEARL_HOME ~/.config/pearl
-set PEARL_TEMPORARY $PEARL_HOME/tmp/(tty)
+set -x PEARL_HOME ~/.config/pearl
+set -x PEARL_TEMPORARY $PEARL_HOME/tmp/(tty)
 mkdir -p $PEARL_TEMPORARY
 
 if [ -e $PEARL_HOME/.install ]
