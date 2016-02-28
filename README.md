@@ -37,6 +37,7 @@ The main Pearl dependencies are:
 
 - bash (>=4.2)
 - git (>=1.8)
+- sed, grep and cat
 
 ### Installation for Bash/Zsh ###
 Just clone the Pearl repo somewhere (for example in ~/.pearl):
