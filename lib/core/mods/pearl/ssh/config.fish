@@ -8,12 +8,12 @@ mkdir -p "$PEARL_HOME/sshrc.d/"
     and ln -s "$PEARL_ROOT/mods/pearl/utils/lib/aliases.sh" "$PEARL_HOME/sshrc.d/pearl_aliases.sh"
 
 [ ! -f "$PEARL_HOME/sshrc.d/pearl_ops.sh" ]; \
-    and [ -f "$PEARL_ROOT/mods/pearl/utils/lib/ops.sh" ]; \
-    and ln -s "$PEARL_ROOT/mods/pearl/utils/lib/ops.sh" "$PEARL_HOME/sshrc.d/pearl_ops.sh"
+    and [ -f "$PEARL_ROOT/mods/pearl/utils/lib/ops.bash" ]; \
+    and ln -s "$PEARL_ROOT/mods/pearl/utils/lib/ops.bash" "$PEARL_HOME/sshrc.d/pearl_ops.sh"
 
 [ ! -f "$PEARL_HOME/sshrc.d/pearl_core.sh" ]; \
-    and [ -f "$PEARL_ROOT/mods/pearl/utils/lib/core.sh" ]; \
-    and ln -s "$PEARL_ROOT/mods/pearl/utils/lib/core.sh" "$PEARL_HOME/sshrc.d/pearl_core.sh"
+    and [ -f "$PEARL_ROOT/mods/pearl/utils/lib/core.bash" ]; \
+    and ln -s "$PEARL_ROOT/mods/pearl/utils/lib/core.bash" "$PEARL_HOME/sshrc.d/pearl_core.sh"
 
 mkdir -p "$PEARL_HOME/sshinputrc.d/"
 [ ! -f "$PEARL_HOME/sshinputrc.d/pearl_inputrc" ]; \
