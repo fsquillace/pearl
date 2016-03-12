@@ -20,9 +20,10 @@ pearl system install
 bash --rcfile "$PEARL_GIT_ROOT/pearl" -c "[ -e \$PEARL_ROOT ] && [ -e \$PEARL_HOME ]"
 zsh --version
 zsh -c "source $PEARL_GIT_ROOT/pearl && [ -e \$PEARL_ROOT ] && [ -e \$PEARL_HOME ]"
-
-# This will not work since travis has a old version of fish (1.23.1)
-#fish -c "source $PEARL_GIT_ROOT/pearl.fish; and [ -e \$PEARL_ROOT ]; and [ -e \$PEARL_HOME ]"
+fish --version
+# This will not work since travis has a old version of fish (1.23.1) and
+# source command does not work
+fish -c "source $PEARL_GIT_ROOT/pearl.fish; and [ -e \$PEARL_ROOT ]; and [ -e \$PEARL_HOME ]"
 
 yes | pearl system uninstall
 [ ! -e $PEARL_HOME ] || echo "$PEARL_HOME exists after uninstall"

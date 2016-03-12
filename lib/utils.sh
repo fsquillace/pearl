@@ -26,6 +26,21 @@ function info(){
     echo -e "\033[1;37m$@\033[0m"
 }
 
+function bold_white(){
+    echo -ne "\033[1;37m"
+}
+
+function bold_cyan(){
+    echo -ne "\033[1;36m"
+}
+
+function bold_red(){
+    echo -ne "\033[1;35m"
+}
+
+function normal(){
+    echo -ne "\033[0m"
+}
 
 function ask(){
     # $1: question string
@@ -60,7 +75,7 @@ function ask(){
 
 function apply(){
     # $1: String to apply
-    # $2: File path which the string must be applied
+    # $2: File path in which the string must be applied
     # $3: bool - put string at the beginning (default true)
     #
     # If the file doesn't exist create it and append the line
@@ -85,11 +100,12 @@ function apply(){
 }
 
 function is_applied(){
-    grep -F -x "$1" "$2" &> /dev/null
-    return $?
+    grep -q -F -x "$1" "$2"
 }
 
 function unapply(){
+    [ ! -e "$2" ] && return
+
     local original=$(grep -F -x -v "$1" "$2")
     echo -e "$original" > $2
 }
