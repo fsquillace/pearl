@@ -103,6 +103,12 @@ function test_unapply_on_empty_file(){
     assertEquals "" "$(cat $FILEPATH)"
 }
 
+function test_unapply_on_non_existing_file(){
+    unapply "mystring" "${FILEPATH}_no_existing"
+    [ ! -e "${FILEPATH}_no_existing" ]
+    assertEquals 0 $?
+}
+
 function test_unapply_with_match(){
     echo -e "myoldstring\nmystring\nmynewstring" > $FILEPATH
     unapply "mystring" $FILEPATH

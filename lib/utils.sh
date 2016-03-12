@@ -89,6 +89,8 @@ function is_applied(){
 }
 
 function unapply(){
+    [ ! -e "$2" ] && return
+
     local original=$(grep -F -x -v "$1" "$2")
     echo -e "$original" > $2
 }

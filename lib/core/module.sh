@@ -1,5 +1,8 @@
-# This module handles the pearl modules
-#
+# This module contains all functionalities needed for
+# handling the pearl modules.
+# vim: ft=sh
+
+GIT=git
 
 declare -A descriptions
 descriptions=( \
@@ -31,80 +34,112 @@ descriptions=( \
 )
 
 function pearl_module_install(){
-    local modulename=$1
-    local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh
-    [ -f "$hook_file" ] && source "$hook_file"
-
-    OLD_PWD=$(pwd)
-    builtin cd $PEARL_ROOT
-    type -t pre_install &> /dev/null && pre_install
-    git submodule update --init --force --rebase "mods/$modulename"
-    type -t post_install &> /dev/null && post_install
-
-    pearl_set_category $modulename
-
-    source ${PEARL_ROOT}/pearl
-    builtin cd $OLD_PWD
+    _pearl_module_install_update $1 pre_install post_install
 }
 
 function pearl_module_update(){
-    local modulename=$1
-    local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh
-    [ -f "$hook_file" ] && source "$hook_file"
-
-    OLD_PWD=$(pwd)
-    builtin cd $PEARL_ROOT
-    type -t pre_update &> /dev/null && pre_update
-    git submodule update --init --force --rebase "mods/$modulename"
-    type -t post_update &> /dev/null && post_update
-
-    pearl_set_category $modulename
-
-    builtin cd $OLD_PWD
+    _pearl_module_install_update $1 pre_update post_update
 }
 
-function pearl_set_category(){
+function pearl_module_uninstall(){
+    local modulename=$1
+    local pre_func=pre_uninstall
+    local post_func=post_uninstall
+
+    _init_module $modulename $pre_func $post_func
+
+    builtin cd $PEARL_ROOT
+    type -t $pre_func &> /dev/null && $pre_func
+    $GIT submodule deinit -f "mods/${modulename}"
+    type -t $post_func &> /dev/null && $post_func
+
+    _unset_category $modulename
+    _deinit_module $modulename $pre_func $post_func
+}
+
+function _pearl_module_install_update(){
+    local modulename=$1
+    local pre_func=$2
+    local post_func=$3
+
+    _init_module $modulename $pre_func $post_func
+
+    builtin cd $PEARL_ROOT
+    type -t $pre_func &> /dev/null && $pre_func
+    $GIT submodule update --init --force --rebase "mods/$modulename"
+    type -t $post_func &> /dev/null && $post_func
+
+    _set_category $modulename
+    _deinit_module $modulename $pre_func $post_func
+}
+
+function _init_module(){
+    local modulename=$1
+    local pre_func=$2
+    local post_func=$3
+
+    unset ${pre_func} ${post_func}
+    local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh
+    [ -f "$hook_file" ] && source "$hook_file"
+}
+
+function _deinit_module(){
+    local modulename=$1
+    local pre_func=$2
+    local post_func=$3
+    unset ${pre_func} ${post_func}
+}
+
+function _set_category(){
+    _set_vim_category $1
+}
+
+function _set_vim_category(){
     if [ -e $PEARL_ROOT/lib/core/mods/$1/*.vim ]
     then
         apply "source $PEARL_ROOT/lib/core/category/vim/vimrc" "${HOME}/.vimrc"
     fi
 }
 
-function pearl_module_uninstall(){
-    local modulename=$1
+function _unset_category(){
+    _unset_vim_category $1
+}
 
-    local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh
-    [ -f "$hook_file" ] && source "$hook_file"
-
-    OLD_PWD=$(pwd)
-    builtin cd $PEARL_ROOT
-    type -t pre_uninstall &> /dev/null && pre_uninstall
-    git submodule deinit -f "mods/${modulename}"
-    type -t post_uninstall &> /dev/null && post_uninstall
-
-    #[ -d "mods/${modulename}/" ] && rm -rf "mods/${modulename}/*"
-    #[ -d ".git/modules/mods/$modulename" ] && rm -rf ".git/modules/mods/$modulename"
-    builtin cd $OLD_PWD
+# Unset a category only if there are no mods for that category
+function _unset_vim_category(){
+    for module in $(_get_list_installed_modules)
+    do
+        [ -e $PEARL_ROOT/lib/core/mods/$module/*.vim ] && return
+    done
+    unapply "source $PEARL_ROOT/lib/core/category/vim/vimrc" "${HOME}/.vimrc"
 }
 
 function pearl_module_list(){
     local pattern=".*"
     [ -z "$1" ] || pattern="$1"
     builtin cd $PEARL_ROOT
-    local modlist=$(git submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern")
-    for module in $modlist
+    for module in $(_get_list_uninstalled_modules $pattern)
     do
-        _pearl_module_print $module false
+        _print_module $module false
     done
-    local modlist=$(git submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern")
-    for module in $modlist
+    for module in $(_get_list_installed_modules $pattern)
     do
-        _pearl_module_print $module true
+        _print_module $module true
     done
     builtin cd $OLDPWD
 }
 
-function _pearl_module_print() {
+function _get_list_installed_modules(){
+    local pattern=$1
+    $GIT submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern"
+}
+
+function _get_list_uninstalled_modules(){
+    local pattern=$1
+    $GIT submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern"
+}
+
+function _print_module() {
     local module=$1
     local installed=""
     $2 && installed="[installed]"
