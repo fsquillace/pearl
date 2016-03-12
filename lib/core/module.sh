@@ -143,6 +143,15 @@ function _print_module() {
     local module=$1
     local installed=""
     $2 && installed="[installed]"
-    info "$module $installed"
+    local module_array=(${module//\// })
+    local category=${module_array[0]}
+    local modulename=${module_array[1]}
+    bold_red
+    echo -n "$category/"
+    bold_white
+    echo -n "$modulename "
+    bold_cyan
+    echo "$installed"
+    normal
     echo "    ${descriptions[$module]}"
 }

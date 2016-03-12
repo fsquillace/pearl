@@ -187,22 +187,22 @@ EOF
 function test_pearl_module_list_empty_pattern(){
     scenario_misc_mods
     local out=$(pearl_module_list "")
-    echo $out | grep -q "pearl/utils"
+    echo $out | grep -qE "pearl.*utils"
     assertEquals 0 $?
-    echo $out | grep -qE "pearl/ssh .*[installed]"
+    echo $out | grep -qE "pearl.*ssh .*[installed]"
     assertEquals 0 $?
-    echo $out | grep -qE "misc/ls-colors .*[installed]"
+    echo $out | grep -qE "misc.*ls-colors .*[installed]"
     assertEquals 0 $?
 }
 
 function test_pearl_module_list_matching(){
     scenario_misc_mods
     local out=$(pearl_module_list "pearl")
-    echo $out | grep -q "pearl/utils"
+    echo $out | grep -qE "pearl.*utils"
     assertEquals 0 $?
-    echo $out | grep -qE "pearl/ssh .*[installed]"
+    echo $out | grep -qE "pearl.*ssh .*[installed]"
     assertEquals 0 $?
-    echo $out | grep -qE "misc/ls-colors .*[installed]"
+    echo $out | grep -qE "misc.*ls-colors .*[installed]"
     assertEquals 1 $?
 }
 
@@ -210,11 +210,11 @@ function test_pearl_module_list_matching(){
 function test_pearl_module_list_not_matching(){
     scenario_misc_mods
     local out=$(pearl_module_list "blahblah")
-    echo $out | grep -q "pearl/utils"
+    echo $out | grep -qE "pearl.*utils"
     assertEquals 1 $?
-    echo $out | grep -qE "pearl/ssh .*[installed]"
+    echo $out | grep -qE "pearl.*ssh .*[installed]"
     assertEquals 1 $?
-    echo $out | grep -qE "misc/ls-colors .*[installed]"
+    echo $out | grep -qE "misc.*ls-colors .*[installed]"
     assertEquals 1 $?
 }
 

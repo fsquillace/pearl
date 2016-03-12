@@ -26,6 +26,21 @@ function info(){
     echo -e "\033[1;37m$@\033[0m"
 }
 
+function bold_white(){
+    echo -ne "\033[1;37m"
+}
+
+function bold_cyan(){
+    echo -ne "\033[1;36m"
+}
+
+function bold_red(){
+    echo -ne "\033[1;35m"
+}
+
+function normal(){
+    echo -ne "\033[0m"
+}
 
 function ask(){
     # $1: question string
