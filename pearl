@@ -18,6 +18,7 @@ mkdir -p ${PEARL_TEMPORARY}
 if [ -e ${PEARL_HOME}/.install ]
 then
     source ${PEARL_HOME}/.install
+    export PEARL_ROOT
 else
 	echo "Error: Pearl is not installed. Type: 'pearl system install' first."
 	return 1

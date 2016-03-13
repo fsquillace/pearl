@@ -9,7 +9,7 @@ set -x PEARL_TEMPORARY $PEARL_HOME/tmp/(tty)
 mkdir -p $PEARL_TEMPORARY
 
 if [ -e $PEARL_HOME/.install ]
-    eval (cat $PEARL_HOME/.install | grep "export PEARL_ROOT=" | sed -e 's/^export/set -x/' -e 's/=/ /')
+    eval (cat $PEARL_HOME/.install | grep "PEARL_ROOT=" | sed -e 's/^/set -x /' -e 's/=/ /')
 else
     echo "Error: Pearl is not installed. Type: 'pearl system install' first."
     exit 1
