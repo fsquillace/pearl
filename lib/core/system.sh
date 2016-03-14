@@ -1,8 +1,18 @@
-#!/bin/bash
+# This module contains all functionalities needed for
+# handling the pearl core system.
+#
+# Dependencies:
+# - lib/utils.sh
+# - lib/core/module.sh
+#
+# vim: ft=sh
+
+GIT=git
 
 function pearl_install(){
     [ -e $PEARL_HOME/.install ] && die "Pearl seems already been installed. Check ${PEARL_HOME}/.install file."
-    PEARL_ROOT=$1
+    local PEARL_ROOT=$1
+    [ ! -d "$PEARL_ROOT" ] && die "Error: Could not set PEARL_ROOT env because ${PEARL_ROOT} does not exist."
 
     pearl_logo
     # Shows information system
@@ -10,22 +20,6 @@ function pearl_install(){
     command -v uname && uname -m
     cat /etc/*release
     echo ""
-
-    info "The pearl configurations are not mandatory but they are strongly recommended."
-    info "They consist of vim, bash, readline and much more made by pearl."
-    info "You can easily change or reset the settings of pearl whenever you want executing:"
-    info ">> pearl module install dotfiles"
-    info ">> pearl-dotfiles list"
-    info ">> pearl-dotfiles enable <configname>"
-    info ""
-    info "In order to have pearl at shell startup,"
-    info "put the following in your bash/zsh config file:"
-    info "source ${PEARL_ROOT}/pearl"
-    info ""
-    info "or for fish shell:"
-    info "source ${PEARL_ROOT}/pearl.fish"
-    info ""
-    info "For more information: man pearl"
 
     info "Creating $PEARL_HOME directory ..."
     mkdir -p $PEARL_HOME/envs
@@ -35,49 +29,54 @@ function pearl_install(){
 
     echo "# The following line is used to identify the pearl location (do not change it!):" > $PEARL_HOME/.install
     echo "PEARL_ROOT=$PEARL_ROOT" >> $PEARL_HOME/.install
+    [ -e $PEARL_HOME/pearlrc ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc
+    [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
+    info "Directory $PEARL_HOME created successfully."
 
-   [ -e $PEARL_HOME/pearlrc ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc
-   [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
-   info "Directory $PEARL_HOME created successfully."
-
+    info "In order to have Pearl running at shell startup,"
+    info "put the following in your BASH config file:"
+    info "echo \"source ${PEARL_ROOT}/pearl\" >> ~/.bashrc"
+    info ""
+    info "or for ZSH:"
+    info "echo \"source ${PEARL_ROOT}/pearl\" >> ~/.zshrc"
+    info ""
+    info "or for Fish shell:"
+    info "echo \"source ${PEARL_ROOT}/pearl.fish\" >> ~/.config/fish/config.fish"
+    info ""
+    info "Start by checking the list of Pearl modules available:"
+    info ">> pearl module list"
+    info ""
+    info "For more information:"
+    info ">> man pearl"
 }
 
 function pearl_logo(){
-cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
+    cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 }
 
 function pearl_uninstall(){
-    builtin cd $PEARL_ROOT
-    #if ask "Are you sure to UNINSTALL all the Pearl modules in $PEARL_ROOT folder?" "N"
-    #then
-        #for module in $(git submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///')
-        #do
-            #pearl_module_uninstall $module
-        #done
-    #fi
+    cd $PEARL_ROOT
+    if ask "Are you sure to UNINSTALL all the Pearl modules in $PEARL_ROOT folder?" "N"
+    then
+        for module in $(get_list_installed_modules)
+        do
+            pearl_module_uninstall $module
+        done
+    fi
     if ask "Are you sure to DELETE the Pearl config folder too ($PEARL_HOME folder)?" "N"
     then
        rm -rf $PEARL_HOME
-   fi
-    builtin cd $OLDPWD
+    fi
 }
 
 function pearl_update(){
-    builtin cd $PEARL_ROOT
-    if [ "$1" = "soft"  ]
-    then
-        git pull
-    elif [ "$1" = "" ] || [ "$1" = "hard" ]
-    then
-        git fetch --all
-        git reset --hard origin/master
-    fi
+    cd $PEARL_ROOT
+    $GIT fetch --all
+    $GIT reset --hard origin/master
 
-    # Update of the modules
-    for modulepath in $(ls mods/*/*/.git | sed 's/\/\.git$//')
+    for module in $(get_list_installed_modules)
     do
-        git submodule update $modulepath
+        pearl_module_update $module
     done
-    builtin cd $OLDPWD
 }
 

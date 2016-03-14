@@ -1,5 +1,9 @@
 # This module contains all functionalities needed for
 # handling the pearl modules.
+#
+# Dependencies:
+# - lib/utils.sh
+#
 # vim: ft=sh
 
 GIT=git
@@ -81,6 +85,7 @@ function _init_module(){
     unset ${pre_func} ${post_func}
     local hook_file=${PEARL_ROOT}/lib/core/mods/${modulename}/install.sh
     [ -f "$hook_file" ] && source "$hook_file"
+    return 0
 }
 
 function _deinit_module(){
@@ -107,7 +112,7 @@ function _unset_category(){
 
 # Unset a category only if there are no mods for that category
 function _unset_vim_category(){
-    for module in $(_get_list_installed_modules)
+    for module in $(get_list_installed_modules)
     do
         [ -e $PEARL_ROOT/lib/core/mods/$module/*.vim ] && return
     done
@@ -118,23 +123,23 @@ function pearl_module_list(){
     local pattern=".*"
     [ -z "$1" ] || pattern="$1"
     builtin cd $PEARL_ROOT
-    for module in $(_get_list_uninstalled_modules $pattern)
+    for module in $(get_list_uninstalled_modules $pattern)
     do
         _print_module $module false
     done
-    for module in $(_get_list_installed_modules $pattern)
+    for module in $(get_list_installed_modules $pattern)
     do
         _print_module $module true
     done
     builtin cd $OLDPWD
 }
 
-function _get_list_installed_modules(){
+function get_list_installed_modules(){
     local pattern=$1
     $GIT submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern"
 }
 
-function _get_list_uninstalled_modules(){
+function get_list_uninstalled_modules(){
     local pattern=$1
     $GIT submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern"
 }

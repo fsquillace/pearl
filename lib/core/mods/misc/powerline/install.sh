@@ -25,7 +25,8 @@ function pre_uninstall(){
     rm -f ~/.fonts/PowerlineSymbols.otf
     fc-cache -vf ~/.fonts
 
-    rm ~/.fonts.conf.d/10-powerline-symbols.conf
+    local powerline_conf_file="~/.fonts.conf.d/10-powerline-symbols.conf"
+    [ -f "$powerline_conf_file" ] && rm -f $powerline_conf_file
 
     unapply "source ${PEARL_ROOT}/etc/vim/vim.d/settings/powerline.vim" "${HOME}/.vimrc"
     unapply "source ${PEARL_ROOT}/mods/misc/powerline/powerline/bindings/bash/powerline.sh" "${HOME}/.bashrc"
