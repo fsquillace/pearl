@@ -45,21 +45,14 @@ source "${PEARL_ROOT}/lib/core/system.sh"
 
 usage() {
     echo -e "$NAME: $DESCRIPTION"
-    echo -e "Usage: $CMD [options] [session] [command]"
-    echo -e "Sessions:"
-    echo -e "  module                   Session for $NAME module settings"
-    echo -e "    Commands:"
-    echo -e "      list                 List all the available $NAME modules"
-    echo -e "      search [pattern]     Search the available $NAME modules that match pattern"
-    echo -e "      install [module]     Install a specific module"
-    echo -e "      update [module]      Update a specific module"
-    echo -e "      uninstall [module]   Uninstall a specific module"
+    echo -e "Usage: $CMD [options] [command] [args]"
 	echo
-    echo -e "  system                   Session for $NAME system settings"
-    echo -e "    Commands:"
-    echo -e "      install              Install $NAME"
-    echo -e "      update               Update $NAME and its modules"
-    echo -e "      uninstall            Uninstall $NAME"
+    echo -e "Commands:"
+    echo -e "  list                     List all the available $NAME modules"
+    echo -e "  search    <pattern>      Search the available $NAME modules that match pattern"
+    echo -e "  install   [module1...]   Install $NAME or the modules if specified"
+    echo -e "  update    [module1...]   Update $NAME or the modules if specified"
+    echo -e "  remove    [module1...]   Uninstall $NAME or the modules if specified"
 	echo
     echo -e "Options:"
     echo -e "  -h, --help               Show this help message"
@@ -68,10 +61,9 @@ usage() {
 check_cli(){
     if $OPT_HELP
     then
-        if $COMMAND_SYSTEM_UNINSTALL || $COMMAND_MODULE_SEARCH || $COMMAND_MODULE_LIST || \
-			$COMMAND_MODULE_INSTALL || \
-			$COMMAND_MODULE_UPDATE || $COMMAND_SYSTEM_INSTALL || $COMMAND_SYSTEM_UPDATE || \
-			$COMMAND_SYSTEM_UNINSTALL
+        if $COMMAND_SEARCH || $COMMAND_LIST || \
+			$COMMAND_INSTALL || \
+			$COMMAND_UPDATE || $COMMAND_REMOVE
         then
             die "The help option must be used exclusively"
         fi
@@ -86,48 +78,28 @@ check_cli(){
 
 
 function parse_arguments(){
-    COMMAND_MODULE_LIST=false
-    COMMAND_MODULE_SEARCH=false
-    COMMAND_MODULE_INSTALL=false
-    COMMAND_MODULE_UPDATE=false
-    COMMAND_MODULE_UNINSTALL=false
-    COMMAND_SYSTEM_INSTALL=false
-    COMMAND_SYSTEM_UPDATE=false
-    COMMAND_SYSTEM_UNINSTALL=false
+    COMMAND_LIST=false
+    COMMAND_SEARCH=false
+    COMMAND_INSTALL=false
+    COMMAND_UPDATE=false
+    COMMAND_REMOVE=false
 	COMMAND_ARGS=()
 	OPT_HELP=false
 
 	for opt in "$@"
 	do
 		case "$1" in
-			module)
-				shift
-				case "$1" in
-					list)
-						COMMAND_MODULE_LIST=true; shift ;;
-					search)
-						COMMAND_MODULE_SEARCH=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
-					install)
-						COMMAND_MODULE_INSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
-					update)
-						COMMAND_MODULE_UPDATE=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
-					uninstall)
-						COMMAND_MODULE_UNINSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
-				esac
-				;;
+			list)
+				COMMAND_LIST=true; shift ;;
+			search)
+				COMMAND_SEARCH=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+			install)
+				COMMAND_INSTALL=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+			update)
+				COMMAND_UPDATE=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
+			remove)
+				COMMAND_REMOVE=true; shift ; COMMAND_ARGS=("$@") ; shift ${#} ;;
 
-			system)
-				shift
-				case "$1" in
-					install)
-						COMMAND_SYSTEM_INSTALL=true; shift ;;
-					update)
-						COMMAND_SYSTEM_UPDATE=true; shift ;;
-					uninstall)
-						COMMAND_SYSTEM_UNINSTALL=true; shift ;;
-				esac
-				;;
-						
 			-h|--help) OPT_HELP=true ; shift ;;
 
 			--) shift ; break ;;
@@ -146,30 +118,30 @@ function parse_arguments(){
 function execute_operation(){
 	$OPT_HELP && usage && return
 
-	$COMMAND_MODULE_LIST && pearl_module_list && return
-	$COMMAND_MODULE_SEARCH && pearl_module_list ${COMMAND_ARGS[@]} && return
+	$COMMAND_LIST && pearl_module_list && return
+	$COMMAND_SEARCH && pearl_module_list ${COMMAND_ARGS[@]} && return
 
-	if $COMMAND_MODULE_INSTALL; then
+	if $COMMAND_INSTALL; then
+		[ -z "$COMMAND_ARGS" ] && pearl_install ${PEARL_ROOT} && return
+
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_install "$module"
 		done
-	elif $COMMAND_MODULE_UPDATE; then
+	elif $COMMAND_UPDATE; then
+		[ -z "$COMMAND_ARGS" ] && pearl_update && return
+
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_update "$module"
 		done
-	elif $COMMAND_MODULE_UNINSTALL; then
+	elif $COMMAND_REMOVE; then
+		[ -z "$COMMAND_ARGS" ] && pearl_uninstall && return
+
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_uninstall "$module"
 		done
-	elif $COMMAND_SYSTEM_INSTALL; then
-		pearl_install ${PEARL_ROOT}
-	elif $COMMAND_SYSTEM_UPDATE; then
-		pearl_update
-	elif $COMMAND_SYSTEM_UNINSTALL; then
-		pearl_uninstall
 	fi
 
 	$ENABLE_SIGNAL && source_pearl
