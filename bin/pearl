@@ -18,11 +18,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Detect if pearl has been invoked from a pearl environment. In that case
-# the USR1 signal can be sent.
-ENABLE_SIGNAL=false
-[ -z "$PEARL_ROOT" ] || ENABLE_SIGNAL=true
-
 set -e
 
 NAME='Pearl'
@@ -38,6 +33,7 @@ source "${PEARL_ROOT}/lib/utils.sh"
 source "${PEARL_ROOT}/lib/core/module.sh"
 source "${PEARL_ROOT}/lib/core/system.sh"
 
+KILL_CMD=kill
 
 ###################################
 ### General functions           ###
@@ -122,21 +118,21 @@ function execute_operation(){
 	$COMMAND_SEARCH && pearl_module_list ${COMMAND_ARGS[@]} && return
 
 	if $COMMAND_INSTALL; then
-		[ -z "$COMMAND_ARGS" ] && pearl_install ${PEARL_ROOT} && return
+		[ -z "$COMMAND_ARGS" ] && pearl_install ${PEARL_ROOT}
 
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_install "$module"
 		done
 	elif $COMMAND_UPDATE; then
-		[ -z "$COMMAND_ARGS" ] && pearl_update && return
+		[ -z "$COMMAND_ARGS" ] && pearl_update
 
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_update "$module"
 		done
 	elif $COMMAND_REMOVE; then
-		[ -z "$COMMAND_ARGS" ] && pearl_remove && return
+		[ -z "$COMMAND_ARGS" ] && pearl_remove
 
 		for module in ${COMMAND_ARGS[@]}
 		do
@@ -144,13 +140,14 @@ function execute_operation(){
 		done
 	fi
 
-	$ENABLE_SIGNAL && source_pearl
+	source_pearl
 	return 0
 }
 
 function source_pearl(){
 	# Send signal to parent in order to (re)source pearl
-    [ -z "$PEARL_ROOT" ] || kill -USR1 $PPID
+    [ -z "$PEARL_ROOT" ] || $KILL_CMD -USR1 $PPID
+	return 0
 }
 
 parse_arguments "$@"
