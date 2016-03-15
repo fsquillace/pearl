@@ -1,4 +1,6 @@
 #!/bin/bash
+source "$(dirname $0)/utils.sh"
+
 source "$(dirname $0)/../lib/utils.sh"
 source "$(dirname $0)/../lib/core/module.sh"
 source "$(dirname $0)/../lib/core/system.sh"
@@ -8,9 +10,14 @@ set +e
 
 OLD_PWD=$PWD
 
+function oneTimeSetUp(){
+    setUpUnitTests
+}
+
 function setUp(){
     PEARL_ROOT=/tmp/pearl-test-dir
-    mkdir -p $PEARL_ROOT
+    mkdir -p $PEARL_ROOT/share/logo/
+    touch  $PEARL_ROOT/share/logo/logo-ascii.txt
     HOME=/tmp/pearl-test-home-dir
     mkdir -p $HOME
     PEARL_HOME=/tmp/pearl-test-dir/.config/pearl
@@ -26,18 +33,16 @@ function tearDown(){
 
 function test_pearl_install_already_existing(){
     touch $PEARL_HOME/.install
-    $(pearl_install $PEARL_ROOT 2> /dev/null)
-    assertEquals 1 $?
+    assertCommandFail pearl_install $PEARL_ROOT
 }
 
 function test_pearl_install_not_existing_directory(){
-    $(pearl_install /tmp/not-existing-dirctory 2> /dev/null)
-    assertEquals 1 $?
+    assertCommandFail pearl_install /tmp/not-existing-dirctory
 }
 
 function test_pearl_install(){
-    pearl_install $PEARL_ROOT &> /dev/null
-    assertEquals 0 $?
+    assertCommandSuccess pearl_install $PEARL_ROOT
+    cat $STDERRF
     [ -d $PEARL_HOME/envs ]
     assertEquals 0 $?
     [ -d $PEARL_HOME/mans ]
@@ -61,8 +66,7 @@ function test_pearl_install(){
 function test_pearl_install_existing_pearlrc(){
     echo "exist" > $PEARL_HOME/pearlrc
     echo "exist" > $PEARL_HOME/pearlrc.fish
-    pearl_install $PEARL_ROOT &> /dev/null
-    assertEquals 0 $?
+    assertCommandSuccess pearl_install $PEARL_ROOT
 
     grep -q "exist" $PEARL_HOME/pearlrc
     assertEquals 0 $?
@@ -83,8 +87,7 @@ function test_pearl_update(){
         fi
     }
     GIT=git_mock
-    pearl_update
-    assertEquals $PEARL_ROOT $PWD
+    assertCommandSuccess pearl_update
 }
 
 function test_pearl_uninstall(){
@@ -103,10 +106,9 @@ function test_pearl_uninstall(){
         fi
     }
     GIT=git_mock
-    pearl_uninstall
+    assertCommandSuccess pearl_uninstall
     [ ! -e $PEARL_HOME ]
     assertEquals 0 $?
-    assertEquals $PEARL_ROOT $PWD
 }
 
 function test_pearl_uninstall_no(){
@@ -118,10 +120,9 @@ function test_pearl_uninstall_no(){
         assertTrue "The git command has been executed" 123
     }
     GIT=git_mock
-    pearl_uninstall
+    assertCommandSuccess pearl_uninstall
     [ -e $PEARL_HOME ]
     assertEquals 0 $?
-    assertEquals $PEARL_ROOT $PWD
 }
 
 source $(dirname $0)/shunit2

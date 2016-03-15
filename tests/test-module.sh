@@ -1,4 +1,6 @@
 #!/bin/bash
+source "$(dirname $0)/utils.sh"
+
 source "$(dirname $0)/../lib/utils.sh"
 source "$(dirname $0)/../lib/core/module.sh"
 
@@ -6,10 +8,7 @@ source "$(dirname $0)/../lib/core/module.sh"
 set +e
 
 function oneTimeSetUp(){
-    OUTPUT_DIR="${SHUNIT_TMPDIR}/output"
-    mkdir "${OUTPUT_DIR}"
-    STDOUTF="${OUTPUT_DIR}/stdout"
-    STDERRF="${OUTPUT_DIR}/stderr"
+    setUpUnitTests
 
     PEARL_ROOT=/tmp/pearl-test-dir
     HOME=/tmp/pearl-test-home-dir
@@ -51,13 +50,6 @@ function tearDown(){
     unset GIT
     [ -e $HOME/.vimrc ] && rm $HOME/.vimrc
     return 0
-}
-
-function assertCommandSuccess(){
-    $(set -e
-      $@ > $STDOUTF 2> $STDERRF
-    )
-    assertTrue "The command $1 did not return 0 exit status" $?
 }
 
 function git_two_vim_mods_mock(){
