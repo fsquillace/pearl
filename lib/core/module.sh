@@ -45,10 +45,10 @@ function pearl_module_update(){
     _pearl_module_install_update $1 pre_update post_update
 }
 
-function pearl_module_uninstall(){
+function pearl_module_remove(){
     local modulename=$1
-    local pre_func=pre_uninstall
-    local post_func=post_uninstall
+    local pre_func=pre_remove
+    local post_func=post_remove
 
     _init_module $modulename $pre_func $post_func
 
@@ -123,7 +123,7 @@ function pearl_module_list(){
     local pattern=".*"
     [ -z "$1" ] || pattern="$1"
     builtin cd $PEARL_ROOT
-    for module in $(get_list_uninstalled_modules $pattern)
+    for module in $(get_list_removed_modules $pattern)
     do
         _print_module $module false
     done
@@ -139,7 +139,7 @@ function get_list_installed_modules(){
     $GIT submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern"
 }
 
-function get_list_uninstalled_modules(){
+function get_list_removed_modules(){
     local pattern=$1
     $GIT submodule status | grep "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern"
 }

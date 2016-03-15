@@ -56,7 +56,7 @@ function git_two_vim_mods_mock(){
     case "$2" in
         "status") git_status_two_vim_mods_mock $@ ;;
         "update") git_install_mock $@ ;;
-        "deinit") git_uninstall_mock $@ ;;
+        "deinit") git_remove_mock $@ ;;
     esac
 }
 
@@ -64,7 +64,7 @@ function git_one_vim_mod_mock(){
     case "$2" in
         "status") git_status_one_vim_mod_mock $@ ;;
         "update") git_install_mock $@ ;;
-        "deinit") git_uninstall_mock $@ ;;
+        "deinit") git_remove_mock $@ ;;
     esac
 }
 
@@ -72,7 +72,7 @@ function git_misc_mods_mock(){
     case "$2" in
         "status") git_status_misc_mods_mock $@ ;;
         "update") git_install_mock $@ ;;
-        "deinit") git_uninstall_mock $@ ;;
+        "deinit") git_remove_mock $@ ;;
     esac
 }
 
@@ -96,26 +96,26 @@ function git_install_mock(){
     assertEquals 0 $?
 }
 
-function git_uninstall_mock(){
+function git_remove_mock(){
     echo "$@" | grep -q "deinit"
     assertEquals 0 $?
 }
 
 
-function get_pre_uninstall_func(){
+function get_pre_remove_func(){
     cat <<EOF
-function pre_uninstall(){
+function pre_remove(){
     assertEquals $PEARL_ROOT \${PWD}
-    echo "pre_uninstall"
+    echo "pre_remove"
 }
 EOF
 }
 
-function get_post_uninstall_func(){
+function get_post_remove_func(){
     cat <<EOF
-function post_uninstall(){
+function post_remove(){
     assertEquals $PEARL_ROOT \${PWD}
-    echo "post_uninstall"
+    echo "post_remove"
 }
 EOF
 }
@@ -145,9 +145,9 @@ $(get_pre_install_func)
 
 $(get_post_install_func)
 
-$(get_pre_uninstall_func)
+$(get_pre_remove_func)
 
-$(get_post_uninstall_func)
+$(get_post_remove_func)
 EOF
 )
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
@@ -171,19 +171,19 @@ EOF
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
 }
 
-function get_uninstall_post_install_only(){
+function get_remove_post_install_only(){
     local modulename=$1
     install_content=$(cat <<EOF
-$(get_post_uninstall_func)
+$(get_post_remove_func)
 EOF
 )
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
 }
 
-function get_uninstall_pre_install_only(){
+function get_remove_pre_install_only(){
     local modulename=$1
     install_content=$(cat <<EOF
-$(get_pre_uninstall_func)
+$(get_pre_remove_func)
 EOF
 )
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
@@ -275,46 +275,46 @@ function test_pearl_module_install_no_install(){
     assertEquals "" "$(cat "$STDOUTF")"
 }
 
-function test_pearl_module_uninstall(){
+function test_pearl_module_remove(){
     scenario_misc_mods
     get_install "pearl/utils"
-    assertCommandSuccess pearl_module_uninstall "pearl/utils"
-    cat "$STDOUTF" | grep -q "pre_uninstall"
+    assertCommandSuccess pearl_module_remove "pearl/utils"
+    cat "$STDOUTF" | grep -q "pre_remove"
     assertEquals 0 $?
-    cat "$STDOUTF" | grep -q "post_uninstall"
+    cat "$STDOUTF" | grep -q "post_remove"
     assertEquals 0 $?
 
-    pearl_module_uninstall "pearl/utils" > /dev/null
-    type -t pre_uninstall
+    pearl_module_remove "pearl/utils" > /dev/null
+    type -t pre_remove
     assertEquals 1 $?
-    type -t post_uninstall
+    type -t post_remove
     assertEquals 1 $?
 }
 
-function test_pearl_module_uninstall_no_install(){
+function test_pearl_module_remove_no_install(){
     scenario_misc_mods
     echo "" > $PEARL_ROOT/lib/core/mods/pearl/utils/install.sh
-    assertCommandSuccess pearl_module_uninstall "pearl/utils"
+    assertCommandSuccess pearl_module_remove "pearl/utils"
     assertEquals "" "$(cat "$STDOUTF")"
 }
 
-function test_pearl_module_uninstall_post_uninstall_only(){
+function test_pearl_module_remove_post_remove_only(){
     scenario_misc_mods
-    get_uninstall_post_install_only "pearl/utils"
-    assertCommandSuccess pearl_module_uninstall "pearl/utils"
-    cat "$STDOUTF" | grep -qv "pre_uninstall"
+    get_remove_post_install_only "pearl/utils"
+    assertCommandSuccess pearl_module_remove "pearl/utils"
+    cat "$STDOUTF" | grep -qv "pre_remove"
     assertEquals 0 $?
-    cat "$STDOUTF" | grep -q "post_uninstall"
+    cat "$STDOUTF" | grep -q "post_remove"
     assertEquals 0 $?
 }
 
-function test_pearl_module_uninstall_pre_uninstall_only(){
+function test_pearl_module_remove_pre_remove_only(){
     scenario_misc_mods
-    get_uninstall_pre_install_only "pearl/utils"
-    assertCommandSuccess pearl_module_uninstall "pearl/utils"
-    cat "$STDOUTF" | grep -q "pre_uninstall"
+    get_remove_pre_install_only "pearl/utils"
+    assertCommandSuccess pearl_module_remove "pearl/utils"
+    cat "$STDOUTF" | grep -q "pre_remove"
     assertEquals 0 $?
-    cat "$STDOUTF" | grep -qv "post_uninstall"
+    cat "$STDOUTF" | grep -qv "post_remove"
     assertEquals 0 $?
 }
 

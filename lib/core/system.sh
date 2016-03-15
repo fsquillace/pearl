@@ -55,13 +55,13 @@ function pearl_logo(){
     cat "$PEARL_ROOT/share/logo/logo-ascii.txt"
 }
 
-function pearl_uninstall(){
+function pearl_remove(){
     cd $PEARL_ROOT
-    if ask "Are you sure to UNINSTALL all the Pearl modules in $PEARL_ROOT folder?" "N"
+    if ask "Are you sure to REMOVE all the Pearl modules in $PEARL_ROOT folder?" "N"
     then
         for module in $(get_list_installed_modules)
         do
-            pearl_module_uninstall $module
+            pearl_module_remove $module
         done
     fi
     if ask "Are you sure to DELETE the Pearl config folder too ($PEARL_HOME folder)?" "N"

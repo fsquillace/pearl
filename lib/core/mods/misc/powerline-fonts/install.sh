@@ -38,7 +38,7 @@ function post_install(){
     return 0
 }
 
-function pre_uninstall(){
+function pre_remove(){
     # TODO The following has to be revisited
     #local root_path="${PEARL_ROOT}/mods/misc/powerline-fonts/"
     #builtin cd "$root_path"

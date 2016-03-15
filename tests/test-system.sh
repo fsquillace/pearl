@@ -90,7 +90,7 @@ function test_pearl_update(){
     assertCommandSuccess pearl_update
 }
 
-function test_pearl_uninstall(){
+function test_pearl_remove(){
     ask(){
         return 0
     }
@@ -106,12 +106,12 @@ function test_pearl_uninstall(){
         fi
     }
     GIT=git_mock
-    assertCommandSuccess pearl_uninstall
+    assertCommandSuccess pearl_remove
     [ ! -e $PEARL_HOME ]
     assertEquals 0 $?
 }
 
-function test_pearl_uninstall_no(){
+function test_pearl_remove_no(){
     ask(){
         return 1
     }
@@ -120,7 +120,7 @@ function test_pearl_uninstall_no(){
         assertTrue "The git command has been executed" 123
     }
     GIT=git_mock
-    assertCommandSuccess pearl_uninstall
+    assertCommandSuccess pearl_remove
     [ -e $PEARL_HOME ]
     assertEquals 0 $?
 }

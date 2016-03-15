@@ -97,9 +97,9 @@ Some useful Pearl modules to install:
 
     `pearl system update`
 
-- To uninstall completely and safely pearl:
+- To remove completely and safely pearl:
 
-    `pearl system uninstall`
+    `pearl system remove`
 
 ### Modules ###
 - To list the modules
@@ -110,9 +110,9 @@ Some useful Pearl modules to install:
 
     `pearl module install misc/ranger`
 
-- To uninstall the *ranger* module
+- To remove the *ranger* module
 
-    `pearl module uninstall misc/ranger`
+    `pearl module remove misc/ranger`
 
 List of main modules are:
 
@@ -150,7 +150,7 @@ Just type one of the manuals you need in:
     man pearl.<TAB>
 
 ## FAQ ##
-Q: I cannot uninstall modules: error: pathspec 'deinit' did not match any file(s) known to git.
+Q: I cannot remove modules: error: pathspec 'deinit' did not match any file(s) known to git.
 
 A: deinit command is available only for newer git releases >=1.8.
 

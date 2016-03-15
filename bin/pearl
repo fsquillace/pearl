@@ -52,7 +52,7 @@ usage() {
     echo -e "  search    <pattern>      Search the available $NAME modules that match pattern"
     echo -e "  install   [module1...]   Install $NAME or the modules if specified"
     echo -e "  update    [module1...]   Update $NAME or the modules if specified"
-    echo -e "  remove    [module1...]   Uninstall $NAME or the modules if specified"
+    echo -e "  remove    [module1...]   Remove $NAME or the modules if specified"
 	echo
     echo -e "Options:"
     echo -e "  -h, --help               Show this help message"
@@ -136,11 +136,11 @@ function execute_operation(){
 		    pearl_module_update "$module"
 		done
 	elif $COMMAND_REMOVE; then
-		[ -z "$COMMAND_ARGS" ] && pearl_uninstall && return
+		[ -z "$COMMAND_ARGS" ] && pearl_remove && return
 
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_uninstall "$module"
+		    pearl_module_remove "$module"
 		done
 	fi
 
