@@ -33,6 +33,7 @@ function pearl_install(){
     [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
     info "Directory $PEARL_HOME created successfully."
 
+    info ""
     info "In order to have Pearl running at shell startup,"
     info "put the following in your BASH config file:"
     info "echo \"source ${PEARL_ROOT}/pearl\" >> ~/.bashrc"

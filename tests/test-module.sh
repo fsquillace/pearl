@@ -6,6 +6,11 @@ source "$(dirname $0)/../lib/core/module.sh"
 set +e
 
 function oneTimeSetUp(){
+    OUTPUT_DIR="${SHUNIT_TMPDIR}/output"
+    mkdir "${OUTPUT_DIR}"
+    STDOUTF="${OUTPUT_DIR}/stdout"
+    STDERRF="${OUTPUT_DIR}/stderr"
+
     PEARL_ROOT=/tmp/pearl-test-dir
     HOME=/tmp/pearl-test-home-dir
     mkdir -p $HOME
@@ -45,6 +50,14 @@ function tearDown(){
     rm -rf $PEARL_ROOT/lib/
     unset GIT
     [ -e $HOME/.vimrc ] && rm $HOME/.vimrc
+    return 0
+}
+
+function assertCommandSuccess(){
+    $(set -e
+      $@ > $STDOUTF 2> $STDERRF
+    )
+    assertTrue "The command $1 did not return 0 exit status" $?
 }
 
 function git_two_vim_mods_mock(){
@@ -202,8 +215,8 @@ function test_pearl_module_list_matching(){
     assertEquals 0 $?
     echo $out | grep -qE "pearl.*ssh .*[installed]"
     assertEquals 0 $?
-    echo $out | grep -qE "misc.*ls-colors .*[installed]"
-    assertEquals 1 $?
+    echo $out | grep -qEv "misc.*ls-colors .*[installed]"
+    assertEquals 0 $?
 }
 
 
@@ -221,10 +234,10 @@ function test_pearl_module_list_not_matching(){
 function test_pearl_module_install(){
     scenario_misc_mods
     get_install "pearl/utils"
-    local out=$(pearl_module_install "pearl/utils")
-    echo $out | grep -q "pre_install"
+    assertCommandSuccess pearl_module_install "pearl/utils"
+    cat $STDOUTF | grep -q "pre_install"
     assertEquals 0 $?
-    echo $out | grep -q "post_install"
+    cat $STDOUTF | grep -q "post_install"
     assertEquals 0 $?
 
     pearl_module_install "pearl/utils" > /dev/null
@@ -234,43 +247,49 @@ function test_pearl_module_install(){
     assertEquals 1 $?
 }
 
+function test_pearl_module_install_no_install_file(){
+    scenario_misc_mods
+    assertCommandSuccess pearl_module_install "pearl/utils"
+    cat $STDOUTF | grep -q "pre_install"
+    assertEquals 1 $?
+    cat $STDOUTF | grep -q "post_install"
+    assertEquals 1 $?
+}
+
 function test_pearl_module_install_post_install_only(){
     scenario_misc_mods
     get_install_post_install_only "pearl/utils"
-    local out=$(pearl_module_install "pearl/utils")
-    echo $out | grep -qv "pre_install"
+    assertCommandSuccess pearl_module_install "pearl/utils"
+    cat $STDOUTF | grep -qv "pre_install"
     assertEquals 0 $?
-    echo $out | grep -q "post_install"
+    cat $STDOUTF | grep -q "post_install"
     assertEquals 0 $?
 }
 
 function test_pearl_module_install_pre_install_only(){
     scenario_misc_mods
     get_install_pre_install_only "pearl/utils"
-    local out=$(pearl_module_install "pearl/utils")
-    echo $out | grep -q "pre_install"
+    assertCommandSuccess pearl_module_install "pearl/utils"
+    cat $STDOUTF | grep -q "pre_install"
     assertEquals 0 $?
-    echo $out | grep -qv "post_install"
+    cat $STDOUTF | grep -qv "post_install"
     assertEquals 0 $?
 }
 
 function test_pearl_module_install_no_install(){
     scenario_misc_mods
     echo "" > $PEARL_ROOT/lib/core/mods/pearl/utils/install.sh
-    local out=$(pearl_module_install "pearl/utils")
-    echo $out | grep -qv "pre_install"
-    assertEquals 0 $?
-    echo $out | grep -qv "post_install"
-    assertEquals 0 $?
+    assertCommandSuccess pearl_module_install "pearl/utils"
+    assertEquals "" "$(cat "$STDOUTF")"
 }
 
 function test_pearl_module_uninstall(){
     scenario_misc_mods
     get_install "pearl/utils"
-    local out=$(pearl_module_uninstall "pearl/utils")
-    echo $out | grep -q "pre_uninstall"
+    assertCommandSuccess pearl_module_uninstall "pearl/utils"
+    cat "$STDOUTF" | grep -q "pre_uninstall"
     assertEquals 0 $?
-    echo $out | grep -q "post_uninstall"
+    cat "$STDOUTF" | grep -q "post_uninstall"
     assertEquals 0 $?
 
     pearl_module_uninstall "pearl/utils" > /dev/null
@@ -283,36 +302,33 @@ function test_pearl_module_uninstall(){
 function test_pearl_module_uninstall_no_install(){
     scenario_misc_mods
     echo "" > $PEARL_ROOT/lib/core/mods/pearl/utils/install.sh
-    local out=$(pearl_module_uninstall "pearl/utils")
-    echo $out | grep -qv "pre_uninstall"
-    assertEquals 0 $?
-    echo $out | grep -qv "post_uninstall"
-    assertEquals 0 $?
+    assertCommandSuccess pearl_module_uninstall "pearl/utils"
+    assertEquals "" "$(cat "$STDOUTF")"
 }
 
 function test_pearl_module_uninstall_post_uninstall_only(){
     scenario_misc_mods
     get_uninstall_post_install_only "pearl/utils"
-    local out=$(pearl_module_uninstall "pearl/utils")
-    echo $out | grep -qv "pre_uninstall"
+    assertCommandSuccess pearl_module_uninstall "pearl/utils"
+    cat "$STDOUTF" | grep -qv "pre_uninstall"
     assertEquals 0 $?
-    echo $out | grep -q "post_uninstall"
+    cat "$STDOUTF" | grep -q "post_uninstall"
     assertEquals 0 $?
 }
 
 function test_pearl_module_uninstall_pre_uninstall_only(){
     scenario_misc_mods
     get_uninstall_pre_install_only "pearl/utils"
-    local out=$(pearl_module_uninstall "pearl/utils")
-    echo $out | grep -q "pre_uninstall"
+    assertCommandSuccess pearl_module_uninstall "pearl/utils"
+    cat "$STDOUTF" | grep -q "pre_uninstall"
     assertEquals 0 $?
-    echo $out | grep -qv "post_uninstall"
+    cat "$STDOUTF" | grep -qv "post_uninstall"
     assertEquals 0 $?
 }
 
 function test_set_category(){
     scenario_two_vim_mods
-    _set_category "vim/fugitive"
+    assertCommandSuccess _set_category "vim/fugitive"
     cat $HOME/.vimrc | grep -q "source $PEARL_ROOT/lib/core/category/vim/vimrc"
     assertEquals 0 $?
     rm $PEARL_ROOT/lib/core/mods/vim/fugitive/config.vim
@@ -320,21 +336,21 @@ function test_set_category(){
 
 function test_set_category_no_category(){
     scenario_misc_mods
-    _set_category "vim/fugitive"
+    assertCommandSuccess _set_category "vim/fugitive"
     [ ! -e $HOME/.vimrc ]
     assertEquals 0 $?
 }
 
 function test_unset_category(){
     scenario_one_vim_mod
-    _unset_category "vim/gutter"
+    assertCommandSuccess _set_category "vim/gutter"
     cat $HOME/.vimrc | grep -qv "source $PEARL_ROOT/lib/core/category/vim/vimrc"
     assertEquals 0 $?
 }
 
 function test_unset_category_with_two_vim_mods(){
     scenario_two_vim_mods
-    _unset_category "vim/gutter"
+    assertCommandSuccess _set_category "vim/gutter"
     cat $HOME/.vimrc | grep -q "source $PEARL_ROOT/lib/core/category/vim/vimrc"
     assertEquals 0 $?
 }
