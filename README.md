@@ -2,7 +2,7 @@
 
 [![Build status](https://api.travis-ci.org/fsquillace/pearl.png?branch=master)](https://travis-ci.org/fsquillace/pearl)
 
-*pearl* - The Linux shell made easy
+*pearl* - The package manager for Linux shells
 
 ```
        _/_/_/     _/_/_/_/    _/_/_/     _/_/_/         _/
@@ -35,16 +35,16 @@ Only in the best shell you will find a pearl!
 ## Installation ##
 The main Pearl dependencies are:
 
-- bash (>=4.2)
-- git (>=1.8)
-- sed, grep and cat
+- [bash (>=4.2)](https://www.gnu.org/software/bash/)
+- [git (>=1.8)](https://git-scm.com/)
+- [coreutils](https://www.gnu.org/software/coreutils/)
 
 ### Installation for Bash/Zsh ###
 Just clone the Pearl repo somewhere (for example in ~/.pearl):
 
     git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
     export PATH=$HOME/.pearl/bin:$PATH
-    pearl system install
+    pearl install
 
 Put the following in your shell config file (i.e. ~/.bashrc, ~/.zshrc)"
     source $HOME/.pearl/pearl
@@ -54,7 +54,7 @@ Just clone the Pearl repo somewhere (for example in ~/.pearl):
 
     git clone 'https://github.com/fsquillace/pearl.git' $HOME/.pearl
     set PATH $HOME/.pearl/bin $PATH
-    pearl system install
+    pearl install
 
 Put the following in your shell config file (i.e. ~/.config/fish/config.fish)"
     source $HOME/.pearl/pearl.fish
@@ -62,13 +62,13 @@ Put the following in your shell config file (i.e. ~/.config/fish/config.fish)"
 ### Additional Pearl modules to install ###
 Some useful Pearl modules to install:
 
-    pearl module install pearl/utils
-    pearl module install pearl/dotfiles
+    pearl install pearl/utils
+    pearl install pearl/dotfiles
 
 ## Quickstart ##
 - Install the pearl utils mod:
 
-    `pearl module install pearl/utils`
+    `pearl install pearl/utils`
 
 - Trash safely a file/directory instead of deleting it through rm:
 
@@ -90,29 +90,29 @@ Some useful Pearl modules to install:
 
 - much much more… take a look at the list of modules for what 'pearl' offers…
 
-    `pearl module list`
+    `pearl list`
 
 ## Usage ##
 - To update pearl:
 
-    `pearl system update`
+    `pearl update`
 
 - To remove completely and safely pearl:
 
-    `pearl system remove`
+    `pearl remove`
 
 ### Modules ###
 - To list the modules
 
-    `pearl module list`
+    `pearl list`
 
 - To install *ranger* module
 
-    `pearl module install misc/ranger`
+    `pearl install misc/ranger`
 
 - To remove the *ranger* module
 
-    `pearl module remove misc/ranger`
+    `pearl remove misc/ranger`
 
 List of main modules are:
 
