@@ -1,6 +1,9 @@
 #!/bin/bash
 source "$(dirname $0)/utils.sh"
 
+# Set PEARL_ROOT before the pearl script so that
+# the ENABLE_SIGNAL will be enabled
+PEARL_ROOT="pearl-root-directory"
 source $(dirname $0)/../bin/pearl -h &> /dev/null
 
 # Disable the exiterr
@@ -8,7 +11,6 @@ set +e
 
 function oneTimeSetUp(){
     setUpUnitTests
-    PEARL_ROOT="pearl-root-directory"
 }
 
 function setUp(){

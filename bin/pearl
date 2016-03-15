@@ -18,6 +18,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# The variable PEARL_ROOT identify whether the pearl script has been invoked
+# from a Pearl environment. Before overriding PEARL_ROOT, another variable
+# ENABLE_SIGNAL identify whether the USR1 signal can be sent or not.
+ENABLE_SIGNAL=false
+[ -z "$PEARL_ROOT" ] || ENABLE_SIGNAL=true
+
 set -e
 
 NAME='Pearl'
@@ -146,7 +152,7 @@ function execute_operation(){
 
 function source_pearl(){
 	# Send signal to parent in order to (re)source pearl
-    [ -z "$PEARL_ROOT" ] || $KILL_CMD -USR1 $PPID
+    $ENABLE_SIGNAL && $KILL_CMD -USR1 $PPID
 	return 0
 }
 

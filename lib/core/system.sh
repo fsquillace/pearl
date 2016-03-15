@@ -45,7 +45,7 @@ function pearl_install(){
     info "echo \"source ${PEARL_ROOT}/pearl.fish\" >> ~/.config/fish/config.fish"
     info ""
     info "Start by checking the list of Pearl modules available:"
-    info ">> pearl module list"
+    info ">> pearl list"
     info ""
     info "For more information:"
     info ">> man pearl"

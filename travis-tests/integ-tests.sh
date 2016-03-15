@@ -23,6 +23,6 @@ zsh -c "source $PEARL_GIT_ROOT/pearl && [ -e \$PEARL_ROOT ] && [ -e \$PEARL_HOME
 fish --version
 fish -c "source $PEARL_GIT_ROOT/pearl.fish; and [ -e \$PEARL_ROOT ]; and [ -e \$PEARL_HOME ]"
 
-pearl update
+#pearl update
 yes | pearl remove
 [ ! -e $PEARL_HOME ] || echo "$PEARL_HOME exists after remove it"
