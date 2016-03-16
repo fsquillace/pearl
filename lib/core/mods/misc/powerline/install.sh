@@ -21,7 +21,7 @@ function post_install(){
     return 0
 }
 
-function pre_uninstall(){
+function pre_remove(){
     rm -f ~/.fonts/PowerlineSymbols.otf
     fc-cache -vf ~/.fonts
 
