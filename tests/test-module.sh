@@ -9,15 +9,17 @@ set +e
 
 function oneTimeSetUp(){
     setUpUnitTests
-
-    PEARL_ROOT=/tmp/pearl-test-dir
-    HOME=/tmp/pearl-test-home-dir
-    mkdir -p $HOME
 }
 
-function oneTimeTearDown(){
-    rm -rf $HOME
-    rm -rf $PEARL_ROOT
+function setUp(){
+    pearlSetUp
+}
+
+function tearDown(){
+    pearlTearDown
+    unset GIT
+    [ -e $HOME/.vimrc ] && rm $HOME/.vimrc
+    return 0
 }
 
 function scenario_misc_mods(){
@@ -39,17 +41,6 @@ function scenario_one_vim_mod(){
     touch $PEARL_ROOT/lib/core/mods/vim/gutter/config.vim
     echo "source $PEARL_ROOT/lib/core/category/vim/vimrc" > $HOME/.vimrc
     GIT=git_one_vim_mod_mock
-}
-
-function setUp(){
-    :
-}
-
-function tearDown(){
-    rm -rf $PEARL_ROOT/lib/
-    unset GIT
-    [ -e $HOME/.vimrc ] && rm $HOME/.vimrc
-    return 0
 }
 
 function git_two_vim_mods_mock(){

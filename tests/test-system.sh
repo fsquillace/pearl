@@ -15,20 +15,11 @@ function oneTimeSetUp(){
 }
 
 function setUp(){
-    PEARL_ROOT=/tmp/pearl-test-dir
-    mkdir -p $PEARL_ROOT/share/logo/
-    touch  $PEARL_ROOT/share/logo/logo-ascii.txt
-    HOME=/tmp/pearl-test-home-dir
-    mkdir -p $HOME
-    PEARL_HOME=/tmp/pearl-test-dir/.config/pearl
-    mkdir -p $PEARL_HOME
+    pearlSetUp
 }
 
 function tearDown(){
-    cd $OLD_PWD
-    rm -rf $PEARL_HOME
-    rm -rf $HOME
-    rm -rf $PEARL_ROOT
+    pearlTearDown
 }
 
 function test_pearl_install_already_existing(){
