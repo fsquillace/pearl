@@ -1,5 +1,5 @@
 function post_install(){
-    mkdir -p ~/.fonts
+    mkdir -p ${HOME}/.fonts
     local root_path="${PEARL_ROOT}/mods/misc/powerline-fonts/"
     local default_font="DejaVuSansMono/DejaVu Sans Mono for Powerline.ttf"
 
@@ -24,8 +24,8 @@ function post_install(){
         error "Error the font file ${font_file} does not exist"
         return 1
     fi
-    ln -s "${font_file}" ~/.fonts
-    fc-cache -vf ~/.fonts
+    ln -s "${font_file}" ${HOME}/.fonts
+    fc-cache -vf ${HOME}/.fonts
 
     local default_size="22"
     local res
@@ -52,13 +52,13 @@ function pre_remove(){
     #for font_name in $(echo -e "$total_list")
     #do
         #local real_name=$(echo "$font_name" | sed 's/ /\ /g')
-        #rm ~/.fonts/${real_name}.ttf &> /dev/null
-        #rm ~/.fonts/${real_name}.otf &> /dev/null
+        #rm ${HOME}/.fonts/${real_name}.ttf &> /dev/null
+        #rm ${HOME}/.fonts/${real_name}.otf &> /dev/null
         #unapply "urxvt.font: xft:$font_name:pixelsize=22:antialias=true:hinting=true" "${HOME}/.Xdefaults"
     #done
     #IFS=$ORIG_IFS
 
-    #fc-cache -vf ~/.fonts
+    #fc-cache -vf ${HOME}/.fonts
 
     #info "You may need to restart the X server"
     return 0

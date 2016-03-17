@@ -48,3 +48,5 @@ function ranger-cd(){
 
 
 [ -n "$RANGER_LEVEL" ] && PS1='(in ranger)'"$PS1"
+
+return 0

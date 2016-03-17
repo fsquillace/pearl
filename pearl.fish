@@ -4,7 +4,7 @@
 
 ####################### VARIABLES & IMPORTS ############################
 
-set -x PEARL_HOME ~/.config/pearl
+set -x PEARL_HOME $HOME/.config/pearl
 set -x PEARL_TEMPORARY $PEARL_HOME/tmp/(tty)
 mkdir -p $PEARL_TEMPORARY
 

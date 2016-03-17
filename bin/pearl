@@ -32,7 +32,7 @@ DESCRIPTION='The package manager for Linux shells'
 AUTHOR='Filippo Squillace <feel dot sqoox at gmail.com>'
 HOMEPAGE='https://github.com/fsquillace/pearl'
 COPYRIGHT='2008-2016'
-PEARL_ROOT="$(readlink -f $(dirname $(readlink -f "$0"))/..)"
+PEARL_ROOT=${PEARL_ROOT:-"$(readlink -f $(dirname $(readlink -f "$0"))/..)"}
 PEARL_HOME="${HOME}/.config/pearl"
 
 source "${PEARL_ROOT}/lib/utils.sh"
@@ -130,6 +130,7 @@ function execute_operation(){
 		do
 		    pearl_module_install "$module"
 		done
+	    source_pearl
 	elif $COMMAND_UPDATE; then
 		[ -z "$COMMAND_ARGS" ] && pearl_update
 
@@ -137,16 +138,18 @@ function execute_operation(){
 		do
 		    pearl_module_update "$module"
 		done
+	    source_pearl
 	elif $COMMAND_REMOVE; then
-		[ -z "$COMMAND_ARGS" ] && pearl_remove
+		# Do not send a signal if $NAME has been removed
+		[ -z "$COMMAND_ARGS" ] && pearl_remove && return 0
 
 		for module in ${COMMAND_ARGS[@]}
 		do
 		    pearl_module_remove "$module"
 		done
+	    source_pearl
 	fi
 
-	source_pearl
 	return 0
 }
 
