@@ -3,8 +3,8 @@ source "$(dirname $0)/utils.sh"
 
 # Set PEARL_ROOT before the pearl script so that
 # the ENABLE_SIGNAL will be enabled
-PEARL_ROOT="pearl-root-directory"
-source $(dirname $0)/../bin/pearl -h &> /dev/null
+PEARL_ROOT="$(dirname $0)/../.."
+source $PEARL_ROOT/bin/pearl -h &> /dev/null
 
 # Disable the exiterr
 set +e
@@ -85,7 +85,7 @@ function test_pearl_update(){
 
 function test_pearl_remove(){
     assertCommandSuccess pearl_wrap remove
-    assertEquals "$(outputWithKill "pearl_remove")" "$(cat $STDOUTF)"
+    assertEquals "pearl_remove" "$(cat $STDOUTF)"
 }
 function outputWithKill(){
     echo -e "$@\nkill -USR1 $PPID"

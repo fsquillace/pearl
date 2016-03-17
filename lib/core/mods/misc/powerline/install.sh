@@ -1,11 +1,11 @@
 
 function post_install(){
-    mkdir -p ~/.fonts
-    mkdir -p ~/.fonts.conf.d/
-    ln -s ${PEARL_ROOT}/mods/misc/powerline/font/PowerlineSymbols.otf ~/.fonts
-    fc-cache -vf ~/.fonts
+    mkdir -p ${HOME}/.fonts
+    mkdir -p ${HOME}/.fonts.conf.d/
+    ln -s ${PEARL_ROOT}/mods/misc/powerline/font/PowerlineSymbols.otf ${HOME}/.fonts
+    fc-cache -vf ${HOME}/.fonts
 
-    cp ${PEARL_ROOT}/mods/misc/powerline/font/10-powerline-symbols.conf ~/.fonts.conf.d/
+    cp ${PEARL_ROOT}/mods/misc/powerline/font/10-powerline-symbols.conf ${HOME}/.fonts.conf.d/
 
     info "Vim binding applied"
     if ask "Do you want Powerline binding also for Bash?" "N"
@@ -22,10 +22,10 @@ function post_install(){
 }
 
 function pre_remove(){
-    rm -f ~/.fonts/PowerlineSymbols.otf
-    fc-cache -vf ~/.fonts
+    rm -f ${HOME}/.fonts/PowerlineSymbols.otf
+    fc-cache -vf ${HOME}/.fonts
 
-    local powerline_conf_file="~/.fonts.conf.d/10-powerline-symbols.conf"
+    local powerline_conf_file="${HOME}/.fonts.conf.d/10-powerline-symbols.conf"
     [ -f "$powerline_conf_file" ] && rm -f $powerline_conf_file
 
     unapply "source ${PEARL_ROOT}/etc/vim/vim.d/settings/powerline.vim" "${HOME}/.vimrc"

@@ -1,9 +1,9 @@
 #!/bin/bash
 source "$(dirname $0)/utils.sh"
 
-source "$(dirname $0)/../lib/utils.sh"
-source "$(dirname $0)/../lib/core/module.sh"
-source "$(dirname $0)/../lib/core/system.sh"
+source "$(dirname $0)/../../lib/utils.sh"
+source "$(dirname $0)/../../lib/core/module.sh"
+source "$(dirname $0)/../../lib/core/system.sh"
 
 # Disable the exiterr
 set +e

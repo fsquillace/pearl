@@ -1,17 +1,8 @@
 # Usage: source pearl OR in Bash: bash --rcfile pearl
 # vim: set ft=sh ts=4 sw=4 noet:
 
-################################ CHECKS #################################
-
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
-[[ $- != *i* ]] && return
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
 ####################### VARIABLES & IMPORTS ############################
-export PEARL_HOME=~/.config/pearl
+export PEARL_HOME=${HOME}/.config/pearl
 export PEARL_TEMPORARY=${PEARL_HOME}/tmp/$(tty)
 mkdir -p ${PEARL_TEMPORARY}
 

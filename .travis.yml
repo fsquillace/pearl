@@ -1,15 +1,19 @@
 # vim: ft=yaml
 language: bash
 sudo: required
+git:
+  submodules: false
 
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y zsh
-  - ./travis-tests/install-fish.sh "2.1.1"
+  - ./tests/integ-tests/install-fish.sh "2.1.1"
 
 install:
   - PATH=$PWD/bin:$PATH
 
 script:
-  - ./tests/unit-tests.sh
-  - ./travis-tests/integ-tests.sh $PWD
+  - ./tests/unit-tests/unit-tests.sh
+  - bash ./tests/integ-tests/integ-tests.sh $PWD
+  - zsh ./tests/integ-tests/integ-tests.sh $PWD
+  - fish ./tests/integ-tests/integ-tests.fish $PWD
