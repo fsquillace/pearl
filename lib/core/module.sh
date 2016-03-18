@@ -13,6 +13,7 @@ descriptions=( \
     ["misc/fisherman"]="A fast, modern plugin manager for fish (https://github.com/fisherman/fisherman)" \
     ["misc/liquidprompt"]="A full-featured adaptive prompt (https://github.com/nojhan/liquidprompt) [bash][zsh]" \
     ["misc/ls-colors"]="A collection of LS_COLORS definitions (https://github.com/trapd00r/LS_COLORS) [bash][zsh][fish]" \
+    ["misc/oh-my-zsh"]="Framework for managing your zsh configuration (https://github.com/robbyrussell/oh-my-zsh) [zsh]" \
     ["misc/powerline"]="Powerline is a statusline plugin for vim, zsh, bash, tmux (https://github.com/powerline/powerline)" \
     ["misc/powerline-fonts"]="Patched fonts for Powerline (https://github.com/powerline/fonts)" \
     ["misc/ranger"]="A VIM-inspired filemanager for the console (http://ranger.nongnu.org/)" \

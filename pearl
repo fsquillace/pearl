@@ -21,7 +21,6 @@ fi
 
 source ${PEARL_ROOT}/lib/utils.sh
 
-
 PATH=${PEARL_ROOT}/bin:${PATH}
 MANPATH=${MANPATH}:${PEARL_ROOT}/man
 
@@ -33,6 +32,12 @@ do
         if [ "$(ls -A "${PEARL_ROOT}/mods/${category}/${mod}")" ]; then
             if [ -e ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.sh ]; then
                 source ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.sh
+            fi
+            if [ -n "$BASH" ] && [ -e ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.bash ]; then
+                source ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.bash
+            fi
+            if [ -n "$ZSH_NAME" ] && [ -e ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.zsh ]; then
+                source ${PEARL_ROOT}/lib/core/mods/${category}/${mod}/config.zsh
             fi
         fi
     done
