@@ -10,6 +10,7 @@ GIT=git
 
 declare -A descriptions
 descriptions=( \
+    ["misc/fisherman"]="A fast, modern plugin manager for fish (https://github.com/fisherman/fisherman)" \
     ["misc/liquidprompt"]="A full-featured adaptive prompt (https://github.com/nojhan/liquidprompt) [bash][zsh]" \
     ["misc/ls-colors"]="A collection of LS_COLORS definitions (https://github.com/trapd00r/LS_COLORS) [bash][zsh][fish]" \
     ["misc/powerline"]="Powerline is a statusline plugin for vim, zsh, bash, tmux (https://github.com/powerline/powerline)" \

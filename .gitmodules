@@ -73,3 +73,6 @@
 [submodule "mods/pearl/p4merge"]
 	path = mods/pearl/p4merge
 	url = https://github.com/fsquillace/pearl-p4merge.git
+[submodule "mods/misc/fisherman"]
+	path = mods/misc/fisherman
+	url = https://github.com/fisherman/fisherman
