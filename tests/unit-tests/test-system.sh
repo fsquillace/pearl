@@ -52,6 +52,13 @@ function test_pearl_install(){
     assertEquals 0 $?
     [ -e $PEARL_HOME/pearlrc.fish ]
     assertEquals 0 $?
+
+    cat $HOME/.bashrc | grep -q "source ${PEARL_ROOT}/pearl"
+    assertEquals 0 $?
+    cat $HOME/.zshrc | grep -q "source ${PEARL_ROOT}/pearl"
+    assertEquals 0 $?
+    cat $HOME/.config/fish/config.fish | grep -q "source ${PEARL_ROOT}/pearl.fish"
+    assertEquals 0 $?
 }
 
 function test_pearl_install_existing_pearlrc(){
