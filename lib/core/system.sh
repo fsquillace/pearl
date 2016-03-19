@@ -21,7 +21,6 @@ function pearl_install(){
     cat /etc/*release
     echo ""
 
-    info "Creating $PEARL_HOME directory ..."
     mkdir -p $PEARL_HOME/envs
     mkdir -p $PEARL_HOME/mans
     mkdir -p $PEARL_HOME/etc
@@ -31,24 +30,22 @@ function pearl_install(){
     echo "PEARL_ROOT=$PEARL_ROOT" >> $PEARL_HOME/.install
     [ -e $PEARL_HOME/pearlrc ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc
     [ -e $PEARL_HOME/pearlrc.fish ] || echo "#This script is used to override the pearl settings." > $PEARL_HOME/pearlrc.fish
-    info "Directory $PEARL_HOME created successfully."
+    echo "* Created the configuration in $PEARL_HOME"
 
+    apply "source ${PEARL_ROOT}/pearl" ${HOME}/.bashrc
+    echo "* Activated Pearl for Bash"
+    apply "source ${PEARL_ROOT}/pearl" ${HOME}/.zshrc
+    echo "* Activated Pearl for Zsh"
+    apply "source ${PEARL_ROOT}/pearl.fish" ${HOME}/.config/fish/config.fish
+    echo "* Activated Pearl for Fish shell"
     info ""
-    info "In order to have Pearl running at shell startup,"
-    info "put the following in your BASH config file:"
-    info "echo \"source ${PEARL_ROOT}/pearl\" >> ~/.bashrc"
+    info "Done! Open a new terminal and have fun!"
     info ""
-    info "or for ZSH:"
-    info "echo \"source ${PEARL_ROOT}/pearl\" >> ~/.zshrc"
-    info ""
-    info "or for Fish shell:"
-    info "echo \"source ${PEARL_ROOT}/pearl.fish\" >> ~/.config/fish/config.fish"
-    info ""
-    info "Start by checking the list of Pearl modules available:"
-    info ">> pearl list"
+    info "To get the list of Pearl modules available:"
+    echo "    >> pearl list"
     info ""
     info "For more information:"
-    info ">> man pearl"
+    echo "    >> man pearl"
 }
 
 function pearl_logo(){
