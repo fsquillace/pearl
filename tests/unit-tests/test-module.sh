@@ -129,12 +129,34 @@ function post_install(){
 EOF
 }
 
+function get_pre_update_func(){
+    cat <<EOF
+function pre_update(){
+    assertEquals $PEARL_ROOT \${PWD}
+    echo "pre_update"
+}
+EOF
+}
+
+function get_post_update_func(){
+    cat <<EOF
+function post_update(){
+    assertEquals $PEARL_ROOT \${PWD}
+    echo "post_update"
+}
+EOF
+}
+
 function get_install(){
     local modulename=$1
     local install_content=$(cat <<EOF
 $(get_pre_install_func)
 
 $(get_post_install_func)
+
+$(get_pre_update_func)
+
+$(get_post_update_func)
 
 $(get_pre_remove_func)
 
@@ -162,7 +184,7 @@ EOF
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
 }
 
-function get_remove_post_install_only(){
+function get_remove_post_remove_only(){
     local modulename=$1
     install_content=$(cat <<EOF
 $(get_post_remove_func)
@@ -171,10 +193,28 @@ EOF
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
 }
 
-function get_remove_pre_install_only(){
+function get_remove_pre_remove_only(){
     local modulename=$1
     install_content=$(cat <<EOF
 $(get_pre_remove_func)
+EOF
+)
+    echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
+}
+
+function get_update_post_update_only(){
+    local modulename=$1
+    install_content=$(cat <<EOF
+$(get_post_update_func)
+EOF
+)
+    echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
+}
+
+function get_update_pre_update_only(){
+    local modulename=$1
+    install_content=$(cat <<EOF
+$(get_pre_update_func)
 EOF
 )
     echo "$install_content" > $PEARL_ROOT/lib/core/mods/${modulename}/install.sh
@@ -230,6 +270,12 @@ function test_pearl_module_install(){
     assertEquals 1 $?
 }
 
+function test_pearl_module_install_already_installed(){
+    scenario_misc_mods
+    get_install "misc/ls-colors"
+    assertCommandFail pearl_module_install "misc/ls-colors"
+}
+
 function test_pearl_module_install_no_install_file(){
     scenario_misc_mods
     assertCommandSuccess pearl_module_install "pearl/utils"
@@ -268,31 +314,41 @@ function test_pearl_module_install_no_install(){
 
 function test_pearl_module_remove(){
     scenario_misc_mods
-    get_install "pearl/utils"
-    assertCommandSuccess pearl_module_remove "pearl/utils"
+    local modulename="misc/ls-colors"
+    get_install $modulename
+    assertCommandSuccess pearl_module_remove $modulename
     cat "$STDOUTF" | grep -q "pre_remove"
     assertEquals 0 $?
     cat "$STDOUTF" | grep -q "post_remove"
     assertEquals 0 $?
 
-    pearl_module_remove "pearl/utils" > /dev/null
+    pearl_module_remove $modulename > /dev/null
     type -t pre_remove
     assertEquals 1 $?
     type -t post_remove
     assertEquals 1 $?
 }
 
+function test_pearl_module_remove_not_installed(){
+    scenario_misc_mods
+    local modulename="pearl/utils"
+    get_install $modulename
+    assertCommandFail pearl_module_remove $modulename
+}
+
 function test_pearl_module_remove_no_install(){
     scenario_misc_mods
+    local modulename="misc/ls-colors"
     echo "" > $PEARL_ROOT/lib/core/mods/pearl/utils/install.sh
-    assertCommandSuccess pearl_module_remove "pearl/utils"
+    assertCommandSuccess pearl_module_remove $modulename
     assertEquals "" "$(cat "$STDOUTF")"
 }
 
 function test_pearl_module_remove_post_remove_only(){
     scenario_misc_mods
-    get_remove_post_install_only "pearl/utils"
-    assertCommandSuccess pearl_module_remove "pearl/utils"
+    local modulename="misc/ls-colors"
+    get_remove_post_remove_only $modulename
+    assertCommandSuccess pearl_module_remove $modulename
     cat "$STDOUTF" | grep -qv "pre_remove"
     assertEquals 0 $?
     cat "$STDOUTF" | grep -q "post_remove"
@@ -301,11 +357,66 @@ function test_pearl_module_remove_post_remove_only(){
 
 function test_pearl_module_remove_pre_remove_only(){
     scenario_misc_mods
-    get_remove_pre_install_only "pearl/utils"
-    assertCommandSuccess pearl_module_remove "pearl/utils"
+    local modulename="misc/ls-colors"
+    get_remove_pre_remove_only $modulename
+    assertCommandSuccess pearl_module_remove $modulename
     cat "$STDOUTF" | grep -q "pre_remove"
     assertEquals 0 $?
     cat "$STDOUTF" | grep -qv "post_remove"
+    assertEquals 0 $?
+}
+
+function test_pearl_module_update(){
+    scenario_misc_mods
+    local modulename="misc/ls-colors"
+    get_install $modulename
+    assertCommandSuccess pearl_module_update $modulename
+    cat "$STDOUTF" | grep -q "pre_update"
+    assertEquals 0 $?
+    cat "$STDOUTF" | grep -q "post_update"
+    assertEquals 0 $?
+
+    pearl_module_update $modulename > /dev/null
+    type -t pre_update
+    assertEquals 1 $?
+    type -t post_update
+    assertEquals 1 $?
+}
+
+function test_pearl_module_update_not_installed(){
+    scenario_misc_mods
+    local modulename="pearl/utils"
+    get_install $modulename
+    assertCommandFail pearl_module_update $modulename
+}
+
+function test_pearl_module_update_no_install(){
+    scenario_misc_mods
+    local modulename="misc/ls-colors"
+    echo "" > $PEARL_ROOT/lib/core/mods/pearl/utils/install.sh
+    assertCommandSuccess pearl_module_update $modulename
+    assertEquals "" "$(cat "$STDOUTF")"
+}
+
+function test_pearl_module_update_post_update_only(){
+    scenario_misc_mods
+    local modulename="misc/ls-colors"
+    get_update_post_update_only $modulename
+    assertCommandSuccess pearl_module_update $modulename
+    cat "$STDOUTF" | grep -qv "pre_update"
+    assertEquals 0 $?
+    cat "$STDOUTF" | grep -q "post_update"
+    assertEquals 0 $?
+}
+
+function test_pearl_module_update_pre_update_only(){
+    scenario_misc_mods
+    local modulename="misc/ls-colors"
+    get_update_pre_update_only $modulename
+    assertCommandSuccess pearl_module_update $modulename
+    cat "$STDOUTF" | grep -q "pre_update"
+    assertEquals 0 $?
+    cat "$STDOUTF" | grep -qv "post_update"
     assertEquals 0 $?
 }
 

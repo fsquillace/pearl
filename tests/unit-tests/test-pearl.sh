@@ -96,14 +96,44 @@ function test_pearl_module_install(){
     assertEquals "$(outputWithKill "pearl_module_install vim/fugitive\npearl_module_install misc/ranger")" "$(cat $STDOUTF)"
 }
 
+function test_pearl_module_install_already_installed(){
+    pearl_module_install(){
+        [ "$1" == "misc/ranger" ] && return 1
+        echo "pearl_module_install $@"
+        return 0
+    }
+    assertCommandFail pearl_wrap install vim/fugitive misc/ranger
+    assertEquals "$(outputWithKill "pearl_module_install vim/fugitive")" "$(cat $STDOUTF)"
+}
+
 function test_pearl_module_update(){
     assertCommandSuccess pearl_wrap update vim/fugitive misc/ranger
     assertEquals "$(outputWithKill "pearl_module_update vim/fugitive\npearl_module_update misc/ranger")" "$(cat $STDOUTF)"
 }
 
+function test_pearl_module_update_not_installed(){
+    pearl_module_update(){
+        [ "$1" == "misc/ranger" ] && return 1
+        echo "pearl_module_update $@"
+        return 0
+    }
+    assertCommandFail pearl_wrap update vim/fugitive misc/ranger
+    assertEquals "$(outputWithKill "pearl_module_update vim/fugitive")" "$(cat $STDOUTF)"
+}
+
 function test_pearl_module_remove(){
     assertCommandSuccess pearl_wrap remove vim/fugitive misc/ranger
     assertEquals "$(outputWithKill "pearl_module_remove vim/fugitive\npearl_module_remove misc/ranger")" "$(cat $STDOUTF)"
+}
+
+function test_pearl_module_remove_not_installed(){
+    pearl_module_remove(){
+        [ "$1" == "misc/ranger" ] && return 1
+        echo "pearl_module_remove $@"
+        return 0
+    }
+    assertCommandFail pearl_wrap remove vim/fugitive misc/ranger
+    assertEquals "$(outputWithKill "pearl_module_remove vim/fugitive")" "$(cat $STDOUTF)"
 }
 
 function test_pearl_module_list(){

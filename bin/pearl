@@ -123,12 +123,13 @@ function execute_operation(){
 	$COMMAND_LIST && pearl_module_list && return
 	$COMMAND_SEARCH && pearl_module_list ${COMMAND_ARGS[@]} && return
 
+	local final_res=0
 	if $COMMAND_INSTALL; then
 		[ -z "$COMMAND_ARGS" ] && pearl_install ${PEARL_ROOT}
 
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_install "$module"
+		    pearl_module_install "$module" || final_res=$?
 		done
 	    source_pearl
 	elif $COMMAND_UPDATE; then
@@ -136,7 +137,7 @@ function execute_operation(){
 
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_update "$module"
+		    pearl_module_update "$module" || final_res=$?
 		done
 	    source_pearl
 	elif $COMMAND_REMOVE; then
@@ -145,12 +146,12 @@ function execute_operation(){
 
 		for module in ${COMMAND_ARGS[@]}
 		do
-		    pearl_module_remove "$module"
+		    pearl_module_remove "$module" || final_res=$?
 		done
 	    source_pearl
 	fi
 
-	return 0
+	return $final_res
 }
 
 function source_pearl(){
