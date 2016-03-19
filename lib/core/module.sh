@@ -40,10 +40,12 @@ descriptions=( \
 )
 
 function pearl_module_install(){
+    _is_installed $1 && { warn "Skipping $1 since it is already installed."; return 1; }
     _pearl_module_install_update $1 pre_install post_install
 }
 
 function pearl_module_update(){
+    ! _is_installed $1 && { warn "Skipping $1 since it has not been installed."; return 1; }
     _pearl_module_install_update $1 pre_update post_update
 }
 
@@ -51,6 +53,8 @@ function pearl_module_remove(){
     local modulename=$1
     local pre_func=pre_remove
     local post_func=post_remove
+
+    ! _is_installed $1 && { warn "Skipping $1 since it has not been installed."; return 1; }
 
     _init_module $modulename $pre_func $post_func
 
@@ -61,6 +65,10 @@ function pearl_module_remove(){
 
     _unset_category $modulename
     _deinit_module $modulename $pre_func $post_func
+}
+
+function _is_installed() {
+    $GIT submodule status | grep $1 | grep -qv "^-"
 }
 
 function _pearl_module_install_update(){
