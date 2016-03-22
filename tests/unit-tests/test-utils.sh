@@ -92,7 +92,11 @@ function test_apply_create_directory(){
 }
 
 function test_is_not_applied(){
-    assertCommandFail is_applied "mystring" $FILEPATH
+    assertCommandFailOnStatus 1 is_applied "mystring" $FILEPATH
+}
+
+function test_is_applied_file_not_exist(){
+    assertCommandFailOnStatus 2 is_applied "mystring" /tmp/file-does-not-exist
 }
 
 function test_is_applied(){
