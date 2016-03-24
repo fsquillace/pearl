@@ -146,7 +146,7 @@ function pearl_module_list(){
 
 function get_list_installed_modules(){
     local pattern=$1
-    $GIT submodule status | grep -v "^-" | cut -d' ' -f3 | sed -e 's/^mods\///' | grep "$pattern"
+    $GIT submodule status | sed -e 's/^ //' | grep -v "^-" | cut -d' ' -f2 | sed -e 's/^mods\///' | grep "$pattern"
 }
 
 function get_list_removed_modules(){
