@@ -24,13 +24,17 @@ function tearDown(){
 
 function scenario_misc_mods(){
     mkdir -p $PEARL_ROOT/lib/core/mods/pearl/utils
+    mkdir -p $PEARL_ROOT/mods/pearl/utils
     mkdir -p $PEARL_ROOT/lib/core/mods/pearl/ssh
+    mkdir -p $PEARL_ROOT/mods/pearl/ssh/.git
     mkdir -p $PEARL_ROOT/lib/core/mods/misc/ls-colors
+    mkdir -p $PEARL_ROOT/mods/misc/ls-colors/.git
     GIT=git_misc_mods_mock
 }
 
 function scenario_two_vim_mods(){
     mkdir -p $PEARL_ROOT/lib/core/mods/vim/fugitive
+    mkdir -p $PEARL_ROOT/mods/vim/fugitive/.git
     touch $PEARL_ROOT/lib/core/mods/vim/fugitive/config.vim
     scenario_one_vim_mod
     GIT=git_two_vim_mods_mock
@@ -38,6 +42,7 @@ function scenario_two_vim_mods(){
 
 function scenario_one_vim_mod(){
     mkdir -p $PEARL_ROOT/lib/core/mods/vim/gutter
+    mkdir -p $PEARL_ROOT/mods/vim/gutter
     touch $PEARL_ROOT/lib/core/mods/vim/gutter/config.vim
     echo "source $PEARL_ROOT/lib/core/category/vim/vimrc" > $HOME/.vimrc
     GIT=git_one_vim_mod_mock
@@ -71,6 +76,8 @@ function git_status_misc_mods_mock(){
     echo "-dbe3c15026afdb8b35d5a758081fdf7c2c860ad0 mods/pearl/utils"
     echo " 06ccb64c5a8721012c5c9af5b46977d2e456b47e mods/misc/ls-colors (remotes/origin/HEAD)"
     echo " 6f9cb1bb29e65e69200161217175e79b28b4e422 mods/pearl/ssh (remotes/origin/HEAD)"
+    echo "+6f9cb1bb29e65e69200161217175e79b28b4e422 mods/pearl/dotfiles (remotes/origin/HEAD)"
+    echo "U6f9cb1bb29e65e69200161217175e79b28b4e422 mods/pearl/p4merge (remotes/origin/HEAD)"
 }
 
 function git_status_two_vim_mods_mock(){
@@ -228,6 +235,10 @@ function test_pearl_module_list_empty_pattern(){
     echo $out | grep -qE "pearl.*ssh .*[installed]"
     assertEquals 0 $?
     echo $out | grep -qE "misc.*ls-colors .*[installed]"
+    assertEquals 0 $?
+    echo $out | grep -qE "pearl.*p4merge .*[installed]"
+    assertEquals 0 $?
+    echo $out | grep -qE "pearl.*dotfiles .*[installed]"
     assertEquals 0 $?
 }
 
