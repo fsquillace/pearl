@@ -36,9 +36,6 @@ source $PEARL_GIT_ROOT/pearl
 [ -e "$PEARL_ROOT" ] || echo "$PEARL_ROOT does not exist"
 [ -e "$PEARL_HOME" ] || echo "$PEARL_HOME does not exist"
 [ -e "$PEARL_TEMPORARY" ] || echo "$PEARL_TEMPORARY does not exist"
-echo "$PEARL_ROOT"
-echo "$PEARL_HOME"
-echo "$PEARL_TEMPORARY"
 
 info Install ALL pearl modules
 for module in $(get_all_modules)
@@ -51,6 +48,8 @@ for module in $(get_all_modules)
 do
     yes "" | pearl update $module
 done
+
+source ./tests/integ-tests/categories/pearl-modules-tests.sh
 
 info Remove ALL pearl modules
 for module in $(get_all_modules)

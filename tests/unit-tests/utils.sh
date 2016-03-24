@@ -38,3 +38,14 @@ function assertCommandFail(){
     )
     assertFalse "The command $1 returned 0 exit status" $?
 }
+
+# $1: expected exit status
+# $2-: The command under test
+function assertCommandFailOnStatus(){
+    local status=$1
+    shift
+    $(set -e
+      $@ > $STDOUTF 2> $STDERRF
+    )
+    assertEquals $status $?
+}

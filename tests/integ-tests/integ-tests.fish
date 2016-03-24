@@ -51,6 +51,8 @@ for module in (get_all_modules)
     yes "" | pearl update $module; or die "Error on pearl update $module"
 end
 
+source ./tests/integ-tests/categories/pearl-modules-tests.sh
+
 info Remove ALL pearl modules
 for module in (get_all_modules)
     pearl remove $module; or die "Error on pearl remove $module"

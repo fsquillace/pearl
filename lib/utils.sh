@@ -99,6 +99,10 @@ function apply(){
     fi
 }
 
+# Returns the exit status:
+# - 0 if $1 is matching a line in $2 file.
+# - 1 if $1 is not available in $2 file.
+# - 2 if $2 file does not exist.
 function is_applied(){
     grep -q -F -x "$1" "$2"
 }
