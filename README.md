@@ -1,5 +1,7 @@
 # Pearl #
 
+**DEPRECATED**: Please take a look at the newer version of pearl here https://github.com/pearl-core/pearl
+
 [![Build status](https://api.travis-ci.org/fsquillace/pearl.png?branch=master)](https://travis-ci.org/fsquillace/pearl)
 
 *pearl* - The package manager for Linux shells
